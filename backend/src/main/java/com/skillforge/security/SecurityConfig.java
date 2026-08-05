@@ -6,7 +6,6 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 /**
  * Backend Security & API Standards v1 (Avani):
@@ -30,7 +29,15 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable()) // stateless JWT API, no cookies/CSRF exposure
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/swagger-ui/**", "/api-docs/**", "/api/auth/**").permitAll()
+                        .requestMatchers(
+                                "/swagger-ui.html",
+                                "/swagger-ui/**",
+                                "/api-docs/**",
+                                "/api/auth/**"
+                        ).permitAll()
+                        // TEMPORARY for local dev testing only — remove once Monica's
+                        // JwtAuthenticationFilter is wired in, so GETs actually authenticate properly.
+                        .requestMatchers(org.springframework.http.HttpMethod.GET, "/api/**").permitAll()
                         .anyRequest().authenticated()
                 );
                 // .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
