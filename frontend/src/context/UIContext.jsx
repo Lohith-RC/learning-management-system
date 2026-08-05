@@ -35,6 +35,16 @@ export const UIProvider = ({ children }) => {
     setUnreadCount(0);
   }, []);
 
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  const toggleMobileMenu = useCallback(() => {
+    setIsMobileMenuOpen(prev => !prev);
+  }, []);
+
+  const closeMobileMenu = useCallback(() => {
+    setIsMobileMenuOpen(false);
+  }, []);
+
   const value = useMemo(() => ({
     activeTab,
     setActiveTab,
@@ -46,6 +56,10 @@ export const UIProvider = ({ children }) => {
     toast,
     setToast,
     showToast,
+    isMobileMenuOpen,
+    setIsMobileMenuOpen,
+    toggleMobileMenu,
+    closeMobileMenu,
   }), [
     activeTab,
     notifications,
@@ -53,6 +67,9 @@ export const UIProvider = ({ children }) => {
     markAllNotificationsRead,
     toast,
     showToast,
+    isMobileMenuOpen,
+    toggleMobileMenu,
+    closeMobileMenu,
   ]);
 
   return (
