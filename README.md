@@ -1,306 +1,469 @@
-# SkillForge — Learning Management System
+<div align="center">
 
-SkillForge is a full-stack Learning Management System (LMS) built as a monorepo. It provides a rich student-facing web app for browsing and taking courses, a practice coding sandbox, a resume AI optimizer, and a leaderboard — all backed by a secure Java/Spring Boot REST API connected to a PostgreSQL database.
+![SkillForge Hero](docs/images/hero_banner.png)
 
----
+<br/>
 
-## Table of Contents
+![Java](https://img.shields.io/badge/Java-17-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white)
+![Spring Boot](https://img.shields.io/badge/Spring_Boot-3.3.2-6DB33F?style=for-the-badge&logo=spring&logoColor=white)
+![React](https://img.shields.io/badge/React-19-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
+![Vite](https://img.shields.io/badge/Vite-6-646CFF?style=for-the-badge&logo=vite&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Latest-4169E1?style=for-the-badge&logo=postgresql&logoColor=white)
+![TailwindCSS](https://img.shields.io/badge/Tailwind_CSS-3-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
+![Maven](https://img.shields.io/badge/Maven-Build-C71A36?style=for-the-badge&logo=apachemaven&logoColor=white)
 
-- [Project Overview](#project-overview)
-- [Tech Stack](#tech-stack)
-- [Project Structure](#project-structure)
-- [Frontend](#frontend)
-  - [Pages & Features](#pages--features)
-  - [State Management](#state-management)
-  - [Running the Frontend](#running-the-frontend)
-- [Backend](#backend)
-  - [API Endpoints](#api-endpoints)
-  - [Security](#security)
-  - [Database](#database)
-  - [Running the Backend](#running-the-backend)
-- [Environment Variables](#environment-variables)
-- [Running the Full Stack](#running-the-full-stack)
-- [Deployment (Render)](#deployment-render)
+<br/>
 
----
+> **SkillForge** is a full-stack Learning Management System for students to browse courses, practice coding, optimize their resume with AI, and compete on leaderboards — all in one premium experience.
 
-## Project Overview
+<br/>
 
-SkillForge is designed to help students learn technical skills through:
-- Structured **courses** with modules and articles
-- A **practice sandbox** for solving coding problems
-- An **AI Resume Optimizer** for career readiness
-- A **Leaderboard** for community engagement
-- An **AI Chatbot Widget** for real-time learning assistance
+[🚀 Getting Started](#-getting-started) · [🏗 Architecture](#-architecture) · [✨ Features](#-features) · [📡 API Reference](#-api-reference) · [🚢 Deployment](#-deployment)
+
+</div>
 
 ---
 
-## Tech Stack
+## 📋 Table of Contents
 
-| Layer       | Technology                                           |
-|-------------|------------------------------------------------------|
-| Frontend    | React 19, Vite 6, Tailwind CSS 3, Framer Motion      |
-| Backend     | Java 17, Spring Boot 3.3.2, Spring Security, JPA     |
-| Database    | PostgreSQL                                           |
-| Build Tools | Maven (backend), npm (frontend)                      |
-| API Docs    | Springdoc OpenAPI / Swagger UI                       |
-| Other       | Lombok, OWASP HTML Sanitizer, concurrently           |
+- [✨ Features](#-features)
+- [🏗 Architecture](#-architecture)
+- [🗂 Project Structure](#-project-structure)
+- [🎨 Frontend](#-frontend)
+- [⚙️ Backend](#️-backend)
+- [📡 API Reference](#-api-reference)
+- [🔐 Security](#-security)
+- [🗃 Database](#-database)
+- [🚀 Getting Started](#-getting-started)
+- [🌍 Environment Variables](#-environment-variables)
+- [🚢 Deployment](#-deployment)
 
 ---
 
-## Project Structure
+## ✨ Features
+
+![SkillForge Features](docs/images/features.png)
+
+<br/>
+
+| Feature | Description |
+|---|---|
+| 📚 **Course Catalog** | Browse, filter, and enroll in structured courses with modules & articles |
+| 💻 **Practice Sandbox** | Solve coding problems in an in-browser code editor |
+| 🤖 **AI Resume Optimizer** | AI-powered resume analysis with keyword suggestions |
+| 🏆 **Leaderboard** | Community ranking board to track progress against peers |
+| 💬 **AI Chatbot Widget** | Floating AI assistant available across all views |
+| 📊 **Student Dashboard** | Unified view of enrolled courses, progress, and streaks |
+| 🔐 **Auth System** | Sign in / Sign up with role-based access control |
+| 🔔 **Notifications** | Real-time notification feed with unread count |
+
+---
+
+## 🏗 Architecture
+
+![SkillForge Architecture](docs/images/architecture.png)
+
+<br/>
+
+```mermaid
+graph TD
+    subgraph "🖥 Frontend — React 19 + Vite"
+        A[LandingPage] --> B[AppContext]
+        B --> C[StudentDashboard]
+        B --> D[CourseCatalog]
+        B --> E[PracticeSandbox]
+        B --> F[ResumeAIOptimizer]
+        B --> G[Leaderboard]
+        B --> H[AIChatbotWidget]
+    end
+
+    subgraph "⚙️ Backend — Spring Boot 3.3.2"
+        I[CourseController] --> J[CourseService]
+        K[ModuleController] --> L[ModuleService]
+        M[ArticleController] --> N[ArticleService]
+        O[EnrollmentController] --> P[EnrollmentService]
+        J & L & N & P --> Q[(JPA Repositories)]
+    end
+
+    subgraph "🗄 Database"
+        Q --> R[(PostgreSQL)]
+    end
+
+    B -- "HTTP/JSON REST" --> I & K & M & O
+    style A fill:#1e1b4b,color:#fff
+    style R fill:#1e3a5f,color:#fff
+```
+
+### Data Flow
+
+```mermaid
+sequenceDiagram
+    participant U as 🧑 User (Browser)
+    participant F as ⚛️ React Frontend
+    participant A as 🔒 Spring Security
+    participant S as ☕ Spring Service
+    participant D as 🐘 PostgreSQL
+
+    U->>F: Clicks "Enroll in Course"
+    F->>A: POST /api/courses/{id}/enroll
+    A->>A: Validate JWT Token
+    A->>S: Forward authenticated request
+    S->>D: INSERT into enrollments
+    D-->>S: Saved enrollment
+    S-->>F: 200 EnrollmentResponse JSON
+    F-->>U: Show success toast 🎉
+```
+
+---
+
+## 🗂 Project Structure
 
 ```
-learning-management-system/
-├── package.json               # Root workspace scripts (runs both frontend & backend)
-├── frontend/                  # React + Vite web application
-│   ├── src/
-│   │   ├── App.jsx            # Root component, tab-based routing
-│   │   ├── main.jsx           # React entry point
-│   │   ├── index.css          # Global styles
-│   │   ├── components/        # All UI components
-│   │   │   ├── LandingPage.jsx
-│   │   │   ├── Header.jsx
-│   │   │   ├── Sidebar.jsx
-│   │   │   ├── StudentDashboard.jsx
-│   │   │   ├── CourseCatalog.jsx
-│   │   │   ├── PracticeSandbox.jsx
-│   │   │   ├── ResumeAIOptimizer.jsx
-│   │   │   ├── Leaderboard.jsx
-│   │   │   ├── AIChatbotWidget.jsx
-│   │   │   ├── SignInModal.jsx
-│   │   │   ├── SignUpModal.jsx
-│   │   │   ├── BackgroundShader.jsx
-│   │   │   └── Toast.jsx
-│   │   ├── context/
-│   │   │   └── AppContext.jsx  # Global state (user, courses, auth, navigation)
-│   │   └── data/
-│   │       └── mockData.js     # Mock data for offline/dev use
-│   ├── index.html
-│   ├── vite.config.js
-│   ├── tailwind.config.js
-│   └── package.json
-└── backend/                   # Spring Boot REST API
-    ├── pom.xml
-    └── src/main/
-        ├── java/com/skillforge/
-        │   ├── SkillForgeApplication.java
-        │   ├── course/              # Course, Module, Article, Enrollment domain
-        │   │   ├── Course.java
-        │   │   ├── CourseController.java
-        │   │   ├── CourseService.java
-        │   │   ├── CourseRepository.java
-        │   │   ├── Module.java
-        │   │   ├── ModuleController.java
-        │   │   ├── ModuleService.java
-        │   │   ├── ModuleRepository.java
-        │   │   ├── Article.java
-        │   │   ├── ArticleController.java
-        │   │   ├── ArticleService.java
-        │   │   ├── ArticleRepository.java
+📦 learning-management-system/
+├── 📄 package.json                  # Root monorepo — run both services together
+├── 📄 README.md
+│
+├── 🎨 frontend/                     # React 19 + Vite web application
+│   ├── 📄 index.html
+│   ├── 📄 vite.config.js
+│   ├── 📄 tailwind.config.js
+│   └── 📁 src/
+│       ├── 📄 App.jsx               # Root — tab-based router
+│       ├── 📄 main.jsx
+│       ├── 📄 index.css
+│       ├── 📁 components/
+│       │   ├── 🏠 LandingPage.jsx   # Public marketing page
+│       │   ├── 🧭 Header.jsx        # Top navigation bar
+│       │   ├── 🗃 Sidebar.jsx       # Left navigation panel
+│       │   ├── 📊 StudentDashboard.jsx
+│       │   ├── 📚 CourseCatalog.jsx
+│       │   ├── 💻 PracticeSandbox.jsx
+│       │   ├── 🤖 ResumeAIOptimizer.jsx
+│       │   ├── 🏆 Leaderboard.jsx
+│       │   ├── 💬 AIChatbotWidget.jsx
+│       │   ├── 🔑 SignInModal.jsx
+│       │   ├── 📝 SignUpModal.jsx
+│       │   ├── 🌌 BackgroundShader.jsx
+│       │   └── 🔔 Toast.jsx
+│       ├── 📁 context/
+│       │   └── 🧠 AppContext.jsx    # Global state (user, courses, auth, nav)
+│       └── 📁 data/
+│           └── 📄 mockData.js       # Fallback data when backend is offline
+│
+└── ⚙️ backend/                      # Java 17 + Spring Boot REST API
+    ├── 📄 pom.xml
+    └── 📁 src/main/
+        ├── 📁 java/com/skillforge/
+        │   ├── 🚀 SkillForgeApplication.java
+        │   ├── 📁 course/           # Course / Module / Article / Enrollment domain
+        │   │   ├── Course.java  ·  CourseController.java  ·  CourseService.java
+        │   │   ├── Module.java  ·  ModuleController.java  ·  ModuleService.java
+        │   │   ├── Article.java ·  ArticleController.java ·  ArticleService.java
+        │   │   ├── Enrollment.java  ·  EnrollmentController.java
         │   │   ├── ArticleProgress.java
-        │   │   ├── ArticleProgressRepository.java
-        │   │   ├── Enrollment.java
-        │   │   ├── EnrollmentController.java
-        │   │   ├── EnrollmentService.java
-        │   │   ├── EnrollmentRepository.java
-        │   │   └── dto/             # Request/Response DTOs
-        │   │       ├── CourseRequest.java / CourseResponse.java
-        │   │       ├── ModuleRequest.java / ModuleResponse.java
-        │   │       ├── ArticleRequest.java / ArticleResponse.java
-        │   │       └── EnrollmentResponse.java
-        │   ├── common/              # Shared utilities & error handling
-        │   │   ├── ApiError.java
+        │   │   └── 📁 dto/          # Request & Response records (no raw entities on API)
+        │   ├── 📁 common/           # Shared cross-cutting concerns
+        │   │   ├── ApiError.java            # Consistent error response shape
         │   │   ├── GlobalExceptionHandler.java
-        │   │   ├── ContentSanitizer.java
-        │   │   ├── CurrentUser.java
-        │   │   └── AccessDeniedExceptionCustom.java
-        │   └── security/
-        │       └── SecurityConfig.java
-        └── resources/
-            └── application.yml
+        │   │   ├── ContentSanitizer.java    # OWASP XSS sanitizer
+        │   │   └── CurrentUser.java         # Principal extraction helper
+        │   └── 📁 security/
+        │       └── SecurityConfig.java      # Spring Security + JWT hooks
+        └── 📁 resources/
+            └── application.yml             # All config via env vars
 ```
 
 ---
 
-## Frontend
+## 🎨 Frontend
 
-### Pages & Features
+The frontend is a **React 19 SPA** built with **Vite 6** and styled with **Tailwind CSS 3**. Navigation is tab-based (no URL routing) — the active view is managed through global `AppContext`.
 
-| View               | Description                                                       |
-|--------------------|-------------------------------------------------------------------|
-| **Landing Page**   | Marketing page with hero section, features, and CTA              |
-| **Sign In/Sign Up**| Authentication modals                                             |
-| **Dashboard**      | Student overview — enrolled courses, progress, streaks            |
-| **Course Catalog** | Browse, filter, and enroll in courses                            |
-| **Practice Sandbox** | Solve coding problems with an in-browser code editor           |
-| **Resume AI Optimizer** | AI-powered resume feedback and keyword analysis            |
-| **Leaderboard**    | Community ranking board                                           |
-| **AI Chatbot**     | Floating chat widget for learning assistance                      |
+### Views
 
-Navigation is **tab-based** (no URL routing) managed through global `AppContext`.
+```mermaid
+stateDiagram-v2
+    [*] --> LandingPage
 
-### State Management
+    LandingPage --> SignIn : "Sign In" click
+    LandingPage --> SignUp : "Get Started" click
+    SignIn --> Dashboard : Login success
+    SignUp --> Dashboard : Register success
 
-Global state lives in [`AppContext.jsx`](frontend/src/context/AppContext.jsx) using React Context API. It manages:
-
-- `user` — authenticated user profile
-- `isAuthenticated` — auth state
-- `activeTab` — current view/page
-- `courses` — course list with progress
-- `practiceProblems` — coding problems list
-- `notifications` — notification feed with unread count
-- `toast` — global toast notification system
-
-On load, `AppContext` attempts to fetch live data from the backend API. If the backend is offline, it gracefully falls back to **mock data** from [`mockData.js`](frontend/src/data/mockData.js).
-
-### Running the Frontend
-
-```bash
-cd frontend
-npm install
-npm run dev
+    Dashboard --> CourseCatalog : "Courses" nav
+    Dashboard --> PracticeSandbox : "Practice" nav
+    Dashboard --> ResumeAIOptimizer : "Resume AI" nav
+    Dashboard --> Leaderboard : "Leaderboard" nav
+    Dashboard --> LandingPage : Logout
 ```
 
-Runs at `http://localhost:5173` by default.
+### State Management — `AppContext`
+
+All global state is managed via a single **React Context**, with graceful fallback to mock data when the backend is offline:
+
+| State Slice | Description |
+|---|---|
+| `user` | Authenticated user profile |
+| `isAuthenticated` | Boolean auth state |
+| `activeTab` | Controls which view is rendered |
+| `courses` | Course list + each course's progress |
+| `practiceProblems` | Coding challenge list |
+| `notifications` | Notification feed + unread badge count |
+| `toast` | Global toast notification queue |
+
+### Key Libraries
+
+| Library | Version | Purpose |
+|---|---|---|
+| `react` | 19 | UI framework |
+| `framer-motion` | 12 | Animations & transitions |
+| `lucide-react` | 0.475 | Icon library |
+| `canvas-confetti` | 1.9 | Celebration effects |
+| `tailwindcss` | 3.4 | Utility-first styling |
 
 ---
 
-## Backend
+## ⚙️ Backend
 
-The backend is a **Spring Boot 3.3.2** REST API using Java 17. It follows a layered architecture:
+The backend is a **Spring Boot 3.3.2** REST API following strict layered architecture:
 
 ```
-Controller → Service → Repository → Entity (JPA/PostgreSQL)
+Controller → Service → Repository → JPA Entity → PostgreSQL
 ```
 
-All API responses use dedicated **DTO records** — raw JPA entities are never exposed on the API surface.
+> Raw JPA entities are **never exposed** on the API — every endpoint uses dedicated DTO records.
 
-### API Endpoints
+### Entity Relationship Diagram
 
-#### Courses
-| Method | Endpoint                          | Description              | Auth         |
-|--------|-----------------------------------|--------------------------|--------------|
-| GET    | `/api/courses`                    | List all courses         | Public       |
-| POST   | `/api/courses`                    | Create a course          | Admin only   |
-| GET    | `/api/courses/{id}`               | Get course by ID         | Public       |
-| PUT    | `/api/courses/{id}`               | Update course            | Admin only   |
-| DELETE | `/api/courses/{id}`               | Delete course            | Admin only   |
+```mermaid
+erDiagram
+    COURSE {
+        uuid id PK
+        string title
+        string description
+        string instructor
+        string level
+    }
+    MODULE {
+        uuid id PK
+        uuid course_id FK
+        string title
+        int order_index
+    }
+    ARTICLE {
+        uuid id PK
+        uuid module_id FK
+        string title
+        text content
+        int order_index
+    }
+    ENROLLMENT {
+        uuid id PK
+        uuid course_id FK
+        uuid user_id
+        int progress_percent
+        timestamp enrolled_at
+    }
+    ARTICLE_PROGRESS {
+        uuid id PK
+        uuid article_id FK
+        uuid user_id
+        boolean is_read
+    }
 
-#### Modules
-| Method | Endpoint                                  | Description           | Auth       |
-|--------|-------------------------------------------|-----------------------|------------|
-| GET    | `/api/courses/{courseId}/modules`         | List modules          | Public     |
-| POST   | `/api/courses/{courseId}/modules`         | Add module            | Admin only |
-| PUT    | `/api/modules/{id}`                       | Update module         | Admin only |
-| DELETE | `/api/modules/{id}`                       | Delete module         | Admin only |
+    COURSE ||--o{ MODULE : "has"
+    MODULE ||--o{ ARTICLE : "contains"
+    COURSE ||--o{ ENROLLMENT : "has"
+    ARTICLE ||--o{ ARTICLE_PROGRESS : "tracked by"
+```
 
-#### Articles
-| Method | Endpoint                                    | Description              | Auth       |
-|--------|---------------------------------------------|--------------------------|------------|
-| GET    | `/api/modules/{moduleId}/articles`          | List articles in module  | Public     |
-| POST   | `/api/modules/{moduleId}/articles`          | Add article              | Admin only |
-| PUT    | `/api/articles/{id}`                        | Update article           | Admin only |
-| DELETE | `/api/articles/{id}`                        | Delete article           | Admin only |
-| PATCH  | `/api/articles/{id}/read`                   | Mark article as read & recalculate enrollment progress | Authenticated |
+---
 
-#### Enrollments
-| Method | Endpoint                              | Description              | Auth          |
-|--------|---------------------------------------|--------------------------|---------------|
-| POST   | `/api/courses/{courseId}/enroll`      | Enroll in a course       | Authenticated |
-| GET    | `/api/me/enrollments`                 | Get my enrollments       | Authenticated |
+## 📡 API Reference
 
-**Swagger UI** (once running): `http://localhost:8080/swagger-ui.html`
+![API Map](docs/images/api_map.png)
 
-### Security
+### Courses
 
-- Spring Security is configured in [`SecurityConfig.java`](backend/src/main/java/com/skillforge/security/SecurityConfig.java)
-- Admin-only endpoints use `@PreAuthorize("hasRole('ADMIN')")`
-- **JWT authentication filter** — placeholder is wired for integration (see `SecurityConfig` TODO)
-- Article content is sanitized against stored-XSS on every write using [`ContentSanitizer.java`](backend/src/main/java/com/skillforge/common/ContentSanitizer.java) (OWASP HTML Sanitizer)
-- All validation errors, 404s, and forbidden responses return a consistent `ApiError` JSON shape via `GlobalExceptionHandler`
+| Method | Endpoint | Description | Role |
+|---|---|---|---|
+| `GET` | `/api/courses` | List all courses | Public |
+| `POST` | `/api/courses` | Create a course | 🔴 Admin |
+| `GET` | `/api/courses/{id}` | Get course by ID | Public |
+| `PUT` | `/api/courses/{id}` | Update course | 🔴 Admin |
+| `DELETE` | `/api/courses/{id}` | Delete course | 🔴 Admin |
 
-### Database
+### Modules
 
-- **PostgreSQL** is the database
-- JPA is configured with `ddl-auto: validate` — the app validates against an existing schema and **never auto-generates tables**
-- Database migrations are managed externally (outside this repo)
+| Method | Endpoint | Description | Role |
+|---|---|---|---|
+| `GET` | `/api/courses/{courseId}/modules` | List modules | Public |
+| `POST` | `/api/courses/{courseId}/modules` | Add module | 🔴 Admin |
+| `PUT` | `/api/modules/{id}` | Update module | 🔴 Admin |
+| `DELETE` | `/api/modules/{id}` | Delete module | 🔴 Admin |
 
-### Running the Backend
+### Articles
 
-Requirements: **JDK 17+** and **Maven 3.x**
+| Method | Endpoint | Description | Role |
+|---|---|---|---|
+| `GET` | `/api/modules/{moduleId}/articles` | List articles | Public |
+| `POST` | `/api/modules/{moduleId}/articles` | Add article | 🔴 Admin |
+| `PUT` | `/api/articles/{id}` | Update article | 🔴 Admin |
+| `DELETE` | `/api/articles/{id}` | Delete article | 🔴 Admin |
+| `PATCH` | `/api/articles/{id}/read` | Mark read + recalculate progress | 🟡 Auth |
+
+### Enrollments
+
+| Method | Endpoint | Description | Role |
+|---|---|---|---|
+| `POST` | `/api/courses/{courseId}/enroll` | Enroll in a course | 🟡 Auth |
+| `GET` | `/api/me/enrollments` | Get my enrollments | 🟡 Auth |
+
+> **Swagger UI** is available when running at: [`http://localhost:8080/swagger-ui.html`](http://localhost:8080/swagger-ui.html)
+
+---
+
+## 🔐 Security
+
+```mermaid
+flowchart LR
+    R[Request] --> F[Spring Security Filter Chain]
+    F --> J{JWT Token\nPresent?}
+    J -- Yes --> V[Validate & Extract Principal]
+    J -- No --> P{Is Public\nEndpoint?}
+    P -- Yes --> C[Controller]
+    P -- No --> X[401 Unauthorized]
+    V --> R2{Has Required\nRole?}
+    R2 -- Yes --> C
+    R2 -- No --> Y[403 Forbidden]
+    C --> H[GlobalExceptionHandler]
+    H --> API[ApiError JSON Response]
+```
+
+| Mechanism | Implementation |
+|---|---|
+| **JWT Authentication** | `JwtAuthenticationFilter` (wired via `SecurityConfig`) |
+| **RBAC** | `@PreAuthorize("hasRole('ADMIN')")` on admin endpoints |
+| **XSS Prevention** | `ContentSanitizer` runs all article content through OWASP HTML Sanitizer on write |
+| **Input Validation** | Jakarta Bean Validation (`@NotBlank`, `@Size`, `@Min`) on all request DTOs |
+| **Error Handling** | `GlobalExceptionHandler` returns consistent `ApiError` for all failures |
+
+---
+
+## 🗃 Database
+
+- **Engine**: PostgreSQL
+- **ORM**: Spring Data JPA / Hibernate
+- **DDL Strategy**: `ddl-auto: validate` — the app validates against an existing schema and **never auto-generates or drops tables**
+- **Migrations**: Managed externally (outside this repo) — entities must match the schema exactly
+- **Connection Pooling**: HikariCP with `maximum-pool-size: 10`
+
+---
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+| Tool | Minimum Version |
+|---|---|
+| Node.js | 18+ |
+| npm | 9+ |
+| Java JDK | 17+ |
+| Apache Maven | 3.8+ |
+| PostgreSQL | 14+ |
+
+### 1. Clone the repository
 
 ```bash
-cd backend
+git clone https://github.com/your-org/learning-management-system.git
+cd learning-management-system
+```
 
-# Set required environment variables (or add to your shell profile)
+### 2. Set environment variables
+
+Create a `.env` or export these in your shell:
+
+```bash
 export DB_URL=jdbc:postgresql://<host>:5432/postgres
 export DB_USERNAME=your_db_user
 export DB_PASSWORD=your_db_password
-export JWT_SECRET=your_jwt_secret
-
-# Build and run
-mvn clean install
-mvn spring-boot:run
+export JWT_SECRET=your_super_secret_key
 ```
 
-API will be available at `http://localhost:8080`.
-
----
-
-## Environment Variables
-
-| Variable      | Required | Description                                  |
-|---------------|----------|----------------------------------------------|
-| `DB_URL`      | Yes      | PostgreSQL JDBC URL                          |
-| `DB_USERNAME` | Yes      | Database username                            |
-| `DB_PASSWORD` | Yes      | Database password                            |
-| `JWT_SECRET`  | Yes      | HS256 signing secret for JWT tokens          |
-| `PORT`        | No       | Server port (defaults to `8080`)             |
-
----
-
-## Running the Full Stack
-
-From the **project root**, install all dependencies and run both frontend and backend concurrently:
+### 3. Install all dependencies
 
 ```bash
-# Install all dependencies (one-time)
 npm run install:all
+```
 
-# Run both frontend & backend simultaneously
+### 4. Run the full stack
+
+```bash
 npm run dev
 ```
 
-Individual commands:
+This starts both servers concurrently:
+
+| Service | URL |
+|---|---|
+| 🎨 Frontend (Vite) | `http://localhost:5173` |
+| ⚙️ Backend (Spring Boot) | `http://localhost:8080` |
+| 📖 Swagger UI | `http://localhost:8080/swagger-ui.html` |
+
+### Run individually
 
 ```bash
-npm run dev:frontend   # Starts Vite dev server (port 5173)
-npm run dev:backend    # Starts Spring Boot (port 8080)
+npm run dev:frontend    # React + Vite only
+npm run dev:backend     # Spring Boot only
 ```
+
+> 💡 The frontend gracefully **falls back to mock data** if the backend is not running — great for pure UI development.
 
 ---
 
-## Deployment (Render)
+## 🌍 Environment Variables
 
-### Backend (Web Service — Java)
+| Variable | Required | Default | Description |
+|---|---|---|---|
+| `DB_URL` | ✅ Yes | — | PostgreSQL JDBC URL |
+| `DB_USERNAME` | ✅ Yes | — | Database username |
+| `DB_PASSWORD` | ✅ Yes | — | Database password |
+| `JWT_SECRET` | ✅ Yes | — | HS256 signing secret for JWT |
+| `PORT` | No | `8080` | Backend server port |
 
-| Field           | Value                                            |
-|-----------------|--------------------------------------------------|
-| Root Directory  | `backend`                                        |
-| Build Command   | `mvn clean package -DskipTests`                  |
-| Start Command   | `java -jar target/skillforge-backend-0.1.0.jar`  |
+---
 
-Set the following **Environment Variables** in Render:
-- `DB_URL`
-- `DB_USERNAME`
-- `DB_PASSWORD`
-- `JWT_SECRET`
+## 🚢 Deployment
 
-### Frontend (Static Site)
+### Backend — Render Web Service
 
-| Field              | Value              |
-|--------------------|--------------------|
-| Root Directory     | `frontend`         |
-| Build Command      | `npm install && npm run build` |
-| Publish Directory  | `dist`             |
+| Field | Value |
+|---|---|
+| **Root Directory** | `backend` |
+| **Build Command** | `mvn clean package -DskipTests` |
+| **Start Command** | `java -jar target/skillforge-backend-0.1.0.jar` |
+
+Add these **Environment Variables** in the Render dashboard:
+
+```
+DB_URL         = jdbc:postgresql://<host>:5432/postgres
+DB_USERNAME    = ...
+DB_PASSWORD    = ...
+JWT_SECRET     = ...
+```
+
+### Frontend — Render Static Site
+
+| Field | Value |
+|---|---|
+| **Root Directory** | `frontend` |
+| **Build Command** | `npm install && npm run build` |
+| **Publish Directory** | `dist` |
+
+---
+
+<div align="center">
+
+Made with ❤️ by the SkillForge Team
+
+</div>
