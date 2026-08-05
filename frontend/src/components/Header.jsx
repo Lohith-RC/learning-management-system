@@ -5,14 +5,12 @@ import { useUI } from '../context/UIContext';
 
 const Header = memo(() => {
   const { user, logout } = useAuth();
-  const { notifications, unreadCount, markAllNotificationsRead } = useUI();
+  const { notifications, unreadCount, markAllNotificationsRead, toggleMobileMenu } = useUI();
   const navigate = useNavigate();
-  const location = useLocation();
 
   const [showNotifications, setShowNotifications] = useState(false);
   const [showProfileMenu, setShowProfileMenu] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const handleSearchSubmit = (e) => {
     e.preventDefault();
@@ -22,15 +20,15 @@ const Header = memo(() => {
   };
 
   return (
-    <header className="sticky top-0 z-30 bg-white border-b border-[#EAEAEA] h-16 flex items-center justify-between px-6 md:px-8 w-full font-sans">
+    <header className="sticky top-0 z-30 bg-white border-b border-[#EAEAEA] h-16 flex items-center justify-between px-4 sm:px-6 md:px-8 w-full font-sans">
       {/* Search Input matching Reference Images */}
-      <div className="flex items-center gap-4 flex-1">
+      <div className="flex items-center gap-3 flex-1">
         <button
-          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          className="md:hidden p-2 text-slate-700 hover:bg-slate-100 rounded-xl"
-          aria-label="Toggle Navigation"
+          onClick={toggleMobileMenu}
+          className="md:hidden p-2 text-slate-700 hover:bg-slate-100 rounded-xl cursor-pointer"
+          aria-label="Toggle Navigation Menu"
         >
-          <span className="material-symbols-outlined">menu</span>
+          <span className="material-symbols-outlined text-[22px]">menu</span>
         </button>
 
         <form onSubmit={handleSearchSubmit} className="relative w-full max-w-sm">

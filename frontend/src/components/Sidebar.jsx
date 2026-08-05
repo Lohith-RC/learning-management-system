@@ -1,9 +1,12 @@
 import React, { memo } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { useUI } from '../context/UIContext';
+import { X } from 'lucide-react';
 
 const Sidebar = memo(() => {
   const { logout } = useAuth();
+  const { isMobileMenuOpen, closeMobileMenu } = useUI();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -15,22 +18,38 @@ const Sidebar = memo(() => {
     { id: 'leaderboard', path: '/leaderboard', label: 'Leaderboard', icon: 'bar_chart' },
   ];
 
-  return (
-    <aside className="fixed left-0 top-0 h-full w-[260px] bg-white flex flex-col py-6 z-40 hidden md:flex border-r border-[#EAEAEA] font-sans">
-      {/* Brand Header with Transparent Logo Image */}
-      <div 
-        onClick={() => navigate('/')}
-        className="px-6 mb-8 flex items-center gap-3 cursor-pointer group"
-      >
-        <img src="/skillforge-logo.png" alt="SkillForge Logo" className="w-10 h-10 object-contain group-hover:scale-105 transition-transform" />
-        <div>
-          <h1 className="font-display font-black text-xl text-[#1F1B2D] tracking-tight">
-            SkillForge
-          </h1>
-          <p className="font-sans text-[9px] text-[#8E8A9F] font-bold tracking-widest uppercase">
-            ELITE TALENT ENGINE
-          </p>
+  const handleNavigation = (path) => {
+    navigate(path);
+    closeMobileMenu();
+  };
+
+  const sidebarContent = (
+    <div className="flex flex-col h-full py-6 font-sans">
+      {/* Brand Header with Close Button on Mobile */}
+      <div className="px-6 mb-8 flex items-center justify-between">
+        <div 
+          onClick={() => handleNavigation('/')}
+          className="flex items-center gap-3 cursor-pointer group"
+        >
+          <img src="/skillforge-logo.png" alt="SkillForge Logo" className="w-10 h-10 object-contain group-hover:scale-105 transition-transform" />
+          <div>
+            <h1 className="font-display font-black text-xl text-[#1F1B2D] tracking-tight">
+              SkillForge
+            </h1>
+            <p className="font-sans text-[9px] text-[#8E8A9F] font-bold tracking-widest uppercase">
+              ELITE TALENT ENGINE
+            </p>
+          </div>
         </div>
+
+        {/* Mobile Close Icon */}
+        <button
+          onClick={closeMobileMenu}
+          aria-label="Close Navigation Menu"
+          className="md:hidden p-1.5 rounded-lg text-[#9CA3AF] hover:text-[#1F1B2D] hover:bg-[#F3F4F6]"
+        >
+          <X className="w-5 h-5" />
+        </button>
       </div>
 
       {/* Navigation List */}
@@ -40,10 +59,10 @@ const Sidebar = memo(() => {
           return (
             <button
               key={item.id}
-              onClick={() => navigate(item.path)}
-              className={`w-full flex items-center gap-3.5 px-4 py-3 rounded-xl font-semibold text-sm transition-all ${
+              onClick={() => handleNavigation(item.path)}
+              className={`w-full flex items-center gap-3.5 px-4 py-3 rounded-xl font-semibold text-sm transition-all cursor-pointer ${
                 isActive
-                  ? 'bg-[#F0EBFA] text-[#5B4E80] font-bold'
+                  ? 'bg-[#F0EBFA] text-[#5B4E80] font-bold shadow-xs'
                   : 'text-[#6B7280] hover:bg-[#F9FAFC] hover:text-[#1F1B2D]'
               }`}
             >
@@ -70,22 +89,50 @@ const Sidebar = memo(() => {
 
         <div className="pt-2 border-t border-[#EAEAEA] space-y-0.5">
           <button
-            onClick={() => navigate('/')}
-            className="w-full flex items-center gap-3 px-4 py-2 rounded-xl text-[#6B7280] hover:bg-[#F9FAFC] text-xs font-medium transition-colors"
+            onClick={() => handleNavigation('/')}
+            className="w-full flex items-center gap-3 px-4 py-2 rounded-xl text-[#6B7280] hover:bg-[#F9FAFC] text-xs font-medium transition-colors cursor-pointer"
           >
             <span className="material-symbols-outlined text-[18px]">help_outline</span>
             Help & Documentation
           </button>
           <button
-            onClick={logout}
-            className="w-full flex items-center gap-3 px-4 py-2 rounded-xl text-rose-600 hover:bg-rose-50 text-xs font-semibold transition-colors"
+            onClick={() => {
+              logout();
+              closeMobileMenu();
+            }}
+            className="w-full flex items-center gap-3 px-4 py-2 rounded-xl text-rose-600 hover:bg-rose-50 text-xs font-semibold transition-colors cursor-pointer"
           >
             <span className="material-symbols-outlined text-[18px]">logout</span>
             Sign Out
           </button>
         </div>
       </div>
-    </aside>
+    </div>
+  );
+
+  return (
+    <>
+      {/* Desktop Permanent Sidebar (Laptop & Desktop Screens >= 768px) */}
+      <aside className="fixed left-0 top-0 h-full w-[260px] bg-white hidden md:flex flex-col z-40 border-r border-[#EAEAEA]">
+        {sidebarContent}
+      </aside>
+
+      {/* Mobile Slide-Over Drawer Overlay (Smartphone Screens < 768px) */}
+      {isMobileMenuOpen && (
+        <div className="fixed inset-0 z-50 md:hidden flex">
+          {/* Backdrop Blur */}
+          <div 
+            onClick={closeMobileMenu}
+            className="fixed inset-0 bg-slate-950/50 backdrop-blur-xs transition-opacity animate-fade-in"
+          />
+
+          {/* Drawer Sheet */}
+          <div className="relative w-[280px] max-w-[80vw] bg-white h-full shadow-2xl z-10 animate-slide-in-left">
+            {sidebarContent}
+          </div>
+        </div>
+      )}
+    </>
   );
 });
 
