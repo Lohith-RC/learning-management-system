@@ -29,9 +29,7 @@ const SignUpModal = () => {
         
         {/* Brand Header */}
         <div className="relative z-10 flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-[#810B38] flex items-center justify-center text-white shadow-lg">
-            <span className="material-symbols-outlined text-[22px]">terminal</span>
-          </div>
+          <img src="/skillforge-logo.png" alt="SkillForge Logo" className="w-10 h-10 rounded-xl object-contain drop-shadow-lg" />
           <span className="font-display text-xl font-bold tracking-tight">SkillForge</span>
         </div>
 
@@ -59,9 +57,7 @@ const SignUpModal = () => {
           {/* Header */}
           <div>
             <div className="flex items-center gap-2 mb-2 lg:hidden">
-              <div className="w-8 h-8 rounded-lg bg-[#810B38] flex items-center justify-center text-white">
-                <span className="material-symbols-outlined text-[18px]">terminal</span>
-              </div>
+              <img src="/skillforge-logo.png" alt="SkillForge Logo" className="w-8 h-8 rounded-lg object-contain" />
               <span className="font-display font-bold text-lg text-slate-900">SkillForge</span>
             </div>
             <h2 className="font-display text-2xl sm:text-3xl font-bold text-slate-900">

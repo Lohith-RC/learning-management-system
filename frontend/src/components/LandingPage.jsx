@@ -28,9 +28,7 @@ const LandingPage = () => {
           onClick={() => setActiveTab('landing')}
           className="glass-panel flex items-center gap-3 px-4 py-2 rounded-full border border-white/10 hover:border-rose-500/50 transition-colors cursor-pointer"
         >
-          <div className="w-8 h-8 rounded-full bg-[#810B38] flex items-center justify-center text-white shadow-[0_0_15px_rgba(203,41,87,0.6)]">
-            <span className="material-symbols-outlined text-[18px]">terminal</span>
-          </div>
+          <img src="/skillforge-logo.png" alt="SkillForge Logo" className="w-8 h-8 rounded-full object-contain drop-shadow-[0_0_10px_rgba(203,41,87,0.6)]" />
           <span className="font-display text-lg font-bold tracking-wider text-white">SkillForge</span>
         </div>
 
