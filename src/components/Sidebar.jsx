@@ -19,9 +19,7 @@ const Sidebar = () => {
         onClick={() => setActiveTab('landing')}
         className="px-6 mb-8 flex items-center gap-3 cursor-pointer group"
       >
-        <div className="w-10 h-10 rounded-xl bg-[#810B38] flex items-center justify-center text-white shadow-[0_0_15px_rgba(203,41,87,0.5)] group-hover:scale-105 transition-transform">
-          <span className="material-symbols-outlined text-[22px]">terminal</span>
-        </div>
+        <img src="/skillforge-logo.png" alt="SkillForge Logo" className="w-10 h-10 rounded-xl object-contain group-hover:scale-105 transition-transform drop-shadow-[0_0_10px_rgba(203,41,87,0.5)]" />
         <div>
           <h1 className="font-display font-bold text-xl text-white tracking-tight group-hover:text-primary-bright transition-colors">
             SkillForge
