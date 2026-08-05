@@ -1,6 +1,0 @@
-# Backend dependency directory
-node_modules/
-
-# Local env files
-.env
-.env.local
