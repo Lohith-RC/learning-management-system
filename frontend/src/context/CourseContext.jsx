@@ -47,10 +47,13 @@ export const CourseProvider = ({ children, showToast }) => {
     }));
 
     try {
-      await fetch('/api/courses/enroll', {
+      const token = localStorage.getItem('skillforge_token');
+      await fetch(`/api/courses/${courseId}/enroll`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ courseId }),
+        headers: {
+          'Content-Type': 'application/json',
+          ...(token ? { 'Authorization': `Bearer ${token}` } : {})
+        },
       });
     } catch (err) {
       console.log('Backend offline, enrolled course updated locally.');

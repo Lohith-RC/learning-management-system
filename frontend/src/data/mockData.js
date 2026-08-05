@@ -127,6 +127,325 @@ export const COURSES_DATA = [
       { id: 1, title: "React 19 Architecture & Custom Hooks", duration: "4h 00m", completed: true },
       { id: 2, title: "Express RESTful APIs & Middleware Security", duration: "3h 30m", completed: true },
     ]
+  },
+  {
+    id: "distributed-consensus-raft",
+    title: "Distributed Consensus & Raft Protocol Architecture",
+    category: "Architecture",
+    difficulty: "Advanced",
+    progress: 0,
+    modulesCount: 20,
+    completedModules: 0,
+    duration: "40 Hours",
+    rating: 4.95,
+    studentsCount: 5400,
+    instructor: "Dr. K. S. Ramanujan",
+    image: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=600&q=80",
+    tags: ["Distributed Systems", "Raft", "Paxos", "Fault Tolerance"],
+    description: "Deep dive into distributed consensus protocols, leader election, log replication, and Byzantine fault tolerance.",
+    status: "New",
+    enrolledStudentsList: ["Lohith R C", "Preetham S Gowda", "Rakshith Y B"],
+    modules: [
+      { id: 1, title: "State Machine Replication Foundations", duration: "2h 30m", completed: false },
+      { id: 2, title: "Raft Leader Election & Term Monotonic Counters", duration: "3h 45m", completed: false },
+      { id: 3, title: "Log Inconsistency Safety & Membership Changes", duration: "4h 10m", completed: false }
+    ]
+  },
+  {
+    id: "compiler-design-llvm",
+    title: "Advanced Compiler Design & LLVM Optimizations",
+    category: "Core CS",
+    difficulty: "Advanced",
+    progress: 0,
+    modulesCount: 18,
+    completedModules: 0,
+    duration: "36 Hours",
+    rating: 4.88,
+    studentsCount: 4200,
+    instructor: "Prof. Sundararajan Iyengar",
+    image: "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=600&q=80",
+    tags: ["LLVM", "Abstract Syntax Trees", "SSA Form", "Code Generation"],
+    description: "Build a programming language compiler frontend and backend pass pipeline using LLVM IR optimization passes.",
+    status: "New",
+    enrolledStudentsList: ["Avani J C", "Monica KS", "Kanikka M"],
+    modules: [
+      { id: 1, title: "Lexical Analysis & AST Construction", duration: "3h 00m", completed: false },
+      { id: 2, title: "Static Single Assignment (SSA) Transformations", duration: "4h 15m", completed: false }
+    ]
+  },
+  {
+    id: "quantum-computing-qiskit",
+    title: "Quantum Computing Algorithms & Qiskit Engineering",
+    category: "Core CS",
+    difficulty: "Advanced",
+    progress: 0,
+    modulesCount: 16,
+    completedModules: 0,
+    duration: "30 Hours",
+    rating: 4.90,
+    studentsCount: 3800,
+    instructor: "Dr. Ananya Venkatesh",
+    image: "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?auto=format&fit=crop&w=600&q=80",
+    tags: ["Quantum Gates", "Qiskit", "Shor's Algorithm", "Grover Search"],
+    description: "Explore quantum mechanical principles, qubit entanglement, quantum circuits, and Grover's search algorithm.",
+    status: "New",
+    enrolledStudentsList: ["Shwetha B G", "Kanya V P", "Lohith R C"],
+    modules: [
+      { id: 1, title: "Qubits, Superposition & Bloch Sphere", duration: "2h 30m", completed: false },
+      { id: 2, title: "Quantum Teleportation & Phase Estimation", duration: "3h 40m", completed: false }
+    ]
+  },
+  {
+    id: "stream-processing-flink",
+    title: "High-Throughput Stream Processing with Apache Flink",
+    category: "Database",
+    difficulty: "Intermediate",
+    progress: 0,
+    modulesCount: 15,
+    completedModules: 0,
+    duration: "28 Hours",
+    rating: 4.85,
+    studentsCount: 6100,
+    instructor: "Prof. N. R. Narayana Swamy",
+    image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=600&q=80",
+    tags: ["Apache Flink", "Event Time", "Windowing", "Stateful Processing"],
+    description: "Architect real-time streaming pipelines with event-time semantics, watermarks, and exactly-once state recovery.",
+    status: "New",
+    enrolledStudentsList: ["Preetham S Gowda", "Rakshith Y B", "Avani J C"],
+    modules: [
+      { id: 1, title: "Stream & Batch Unification Core Concepts", duration: "2h 15m", completed: false }
+    ]
+  },
+  {
+    id: "gpu-parallel-cuda",
+    title: "GPU Parallel Computing & CUDA Programming",
+    category: "Core CS",
+    difficulty: "Advanced",
+    progress: 0,
+    modulesCount: 22,
+    completedModules: 0,
+    duration: "42 Hours",
+    rating: 4.92,
+    studentsCount: 7400,
+    instructor: "Dr. Srinivas R. Murthy",
+    image: "https://images.unsplash.com/photo-1591488320449-011701bb6704?auto=format&fit=crop&w=600&q=80",
+    tags: ["CUDA", "GPU Parallelism", "Shared Memory", "Warp Divergence"],
+    description: "Write mass parallel kernel programs executing across thousands of GPU cores for deep learning and matrix acceleration.",
+    status: "New",
+    enrolledStudentsList: ["Monica KS", "Shwetha B G", "Kanikka M"],
+    modules: [
+      { id: 1, title: "CUDA Execution Model & Thread Grids", duration: "3h 20m", completed: false }
+    ]
+  },
+  {
+    id: "mlops-infrastructure",
+    title: "Machine Learning Systems (MLOps) Infrastructure",
+    category: "Development",
+    difficulty: "Intermediate",
+    progress: 0,
+    modulesCount: 16,
+    completedModules: 0,
+    duration: "32 Hours",
+    rating: 4.91,
+    studentsCount: 8900,
+    instructor: "Prof. Radhakrishnan Iyer",
+    image: "https://images.unsplash.com/photo-1527474305487-b87b222841cc?auto=format&fit=crop&w=600&q=80",
+    tags: ["MLOps", "Kubeflow", "MLflow", "Model Monitoring"],
+    description: "Build automated ML pipelines for feature stores, continuous training, model registries, and drift detection.",
+    status: "New",
+    enrolledStudentsList: ["Lohith R C", "Kanya V P", "Preetham S Gowda"],
+    modules: [
+      { id: 1, title: "Feature Store Design & Data Lineage", duration: "2h 45m", completed: false }
+    ]
+  },
+  {
+    id: "low-latency-trading-systems",
+    title: "Low-Latency Financial Trading System Architecture",
+    category: "Architecture",
+    difficulty: "Advanced",
+    progress: 0,
+    modulesCount: 19,
+    completedModules: 0,
+    duration: "38 Hours",
+    rating: 4.94,
+    studentsCount: 5100,
+    instructor: "Dr. Balaji Subramanian",
+    image: "https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?auto=format&fit=crop&w=600&q=80",
+    tags: ["Low Latency", "Lock-Free Ring Buffers", "Kernel Bypass", "DPDK"],
+    description: "Design sub-microsecond algorithmic order matching engines using lock-free data structures and DPDK networking.",
+    status: "New",
+    enrolledStudentsList: ["Rakshith Y B", "Avani J C", "Monica KS"],
+    modules: [
+      { id: 1, title: "LMAX Disruptor & Ring Buffer Mechanics", duration: "3h 10m", completed: false }
+    ]
+  },
+  {
+    id: "robotics-ros2-control",
+    title: "Autonomous Mobile Robotics & ROS2 Control",
+    category: "Development",
+    difficulty: "Intermediate",
+    progress: 0,
+    modulesCount: 17,
+    completedModules: 0,
+    duration: "35 Hours",
+    rating: 4.87,
+    studentsCount: 4600,
+    instructor: "Dr. Meenakshi Sundaram",
+    image: "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&w=600&q=80",
+    tags: ["ROS2", "SLAM", "Kalman Filters", "Kinematics"],
+    description: "Program autonomous navigation nodes, sensor fusion algorithms (LiDAR + IMU), and path planning in ROS2.",
+    status: "New",
+    enrolledStudentsList: ["Kanikka M", "Shwetha B G", "Kanya V P"],
+    modules: [
+      { id: 1, title: "ROS2 Nodes, Topics & Action Servers", duration: "2h 50m", completed: false }
+    ]
+  },
+  {
+    id: "microservices-security-oauth2",
+    title: "Microservices Security & OAuth2/OIDC Deep Dive",
+    category: "Architecture",
+    difficulty: "Intermediate",
+    progress: 0,
+    modulesCount: 14,
+    completedModules: 0,
+    duration: "24 Hours",
+    rating: 4.89,
+    studentsCount: 9300,
+    instructor: "Dr. Vigneshwaran K.",
+    image: "https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&w=600&q=80",
+    tags: ["OAuth2", "OIDC", "JWT", "API Gateways"],
+    description: "Implement zero-trust security architectures, token introspection, mTLS service communication, and PKCE auth flows.",
+    status: "New",
+    enrolledStudentsList: ["Lohith R C", "Preetham S Gowda", "Shwetha B G"],
+    modules: [
+      { id: 1, title: "OAuth2 Authorization Code Grant & PKCE Flow", duration: "2h 30m", completed: false }
+    ]
+  },
+  {
+    id: "freertos-embedded-systems",
+    title: "Embedded Real-Time Operating Systems (FreeRTOS)",
+    category: "Core CS",
+    difficulty: "Intermediate",
+    progress: 0,
+    modulesCount: 16,
+    completedModules: 0,
+    duration: "30 Hours",
+    rating: 4.83,
+    studentsCount: 3900,
+    instructor: "Prof. S. Shankaranarayanan",
+    image: "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=600&q=80",
+    tags: ["FreeRTOS", "Task Scheduling", "Semaphores", "Interrupts"],
+    description: "Develop deterministic embedded RTOS applications handling priority inversion, semaphores, queues, and ISRs.",
+    status: "New",
+    enrolledStudentsList: ["Avani J C", "Rakshith Y B", "Kanikka M"],
+    modules: [
+      { id: 1, title: "Preemptive Task Scheduling & Tick Timers", duration: "2h 40m", completed: false }
+    ]
+  },
+  {
+    id: "vlsi-verilog-hdl",
+    title: "VLSI Circuit Design & Verilog HDL Synthesis",
+    category: "Core CS",
+    difficulty: "Advanced",
+    progress: 0,
+    modulesCount: 21,
+    completedModules: 0,
+    duration: "44 Hours",
+    rating: 4.86,
+    studentsCount: 3500,
+    instructor: "Dr. Vidya Narasimhan",
+    image: "https://images.unsplash.com/photo-1517077304055-6e89abbf09b0?auto=format&fit=crop&w=600&q=80",
+    tags: ["VLSI", "Verilog", "FPGA", "Static Timing Analysis"],
+    description: "Design digital integrated circuits, synthesize hardware using Verilog HDL, and perform static timing analysis on FPGAs.",
+    status: "New",
+    enrolledStudentsList: ["Kanya V P", "Monica KS", "Lohith R C"],
+    modules: [
+      { id: 1, title: "Combinational & Sequential Verilog Modeling", duration: "3h 15m", completed: false }
+    ]
+  },
+  {
+    id: "computer-vision-spatial-ai",
+    title: "Deep Learning for Computer Vision & Spatial AI",
+    category: "Development",
+    difficulty: "Advanced",
+    progress: 0,
+    modulesCount: 20,
+    completedModules: 0,
+    duration: "40 Hours",
+    rating: 4.96,
+    studentsCount: 11200,
+    instructor: "Prof. B. S. Jayaprakash",
+    image: "https://images.unsplash.com/photo-1507146426996-ef05306b995a?auto=format&fit=crop&w=600&q=80",
+    tags: ["YOLO", "CNNs", "NeRFs", "3D Vision"],
+    description: "Build 3D spatial vision perception models, neural radiance fields (NeRFs), and real-time YOLO object detectors.",
+    status: "New",
+    enrolledStudentsList: ["Preetham S Gowda", "Shwetha B G", "Avani J C"],
+    modules: [
+      { id: 1, title: "Convolutional Architectures & ResNet Backbones", duration: "3h 00m", completed: false }
+    ]
+  },
+  {
+    id: "kubernetes-internals",
+    title: "Cloud Native Infrastructure & Kubernetes Internals",
+    category: "Architecture",
+    difficulty: "Intermediate",
+    progress: 0,
+    modulesCount: 15,
+    completedModules: 0,
+    duration: "30 Hours",
+    rating: 4.90,
+    studentsCount: 12500,
+    instructor: "Dr. Karthik Seshadri",
+    image: "https://images.unsplash.com/photo-1667372393119-3d4c48d07fc9?auto=format&fit=crop&w=600&q=80",
+    tags: ["Kubernetes", "Containerd", "Custom Controllers", "CNI"],
+    description: "Understand K8s control plane mechanics, write Custom Resource Definitions (CRDs), and implement Go operators.",
+    status: "New",
+    enrolledStudentsList: ["Rakshith Y B", "Kanikka M", "Kanya V P"],
+    modules: [
+      { id: 1, title: "Kube-Apiserver, Etcd & Controller Reconciliation", duration: "2h 45m", completed: false }
+    ]
+  },
+  {
+    id: "cryptographic-engineering-zkp",
+    title: "Cryptographic Engineering & Zero-Knowledge Proofs",
+    category: "Core CS",
+    difficulty: "Advanced",
+    progress: 0,
+    modulesCount: 18,
+    completedModules: 0,
+    duration: "36 Hours",
+    rating: 4.93,
+    studentsCount: 4100,
+    instructor: "Prof. R. Vasudevan",
+    image: "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=600&q=80",
+    tags: ["Cryptography", "zk-SNARKs", "Elliptic Curves", "AES"],
+    description: "Master modern cryptographic primitives, RSA/ECC mathematics, and non-interactive zero-knowledge proofs (zk-SNARKs).",
+    status: "New",
+    enrolledStudentsList: ["Monica KS", "Lohith R C", "Preetham S Gowda"],
+    modules: [
+      { id: 1, title: "Elliptic Curve Group Theory & Pairings", duration: "3h 20m", completed: false }
+    ]
+  },
+  {
+    id: "database-kernel-btree",
+    title: "Database Kernel Engine & B-Tree Storage Engines",
+    category: "Database",
+    difficulty: "Advanced",
+    progress: 0,
+    modulesCount: 16,
+    completedModules: 0,
+    duration: "32 Hours",
+    rating: 4.91,
+    studentsCount: 5800,
+    instructor: "Dr. Lakshmi Prasanna",
+    image: "https://images.unsplash.com/photo-1544383835-bda2bc66a55d?auto=format&fit=crop&w=600&q=80",
+    tags: ["B-Trees", "Buffer Pool", "WAL Log", "Query Planner"],
+    description: "Write a relational database storage engine in C++/Rust featuring B+Tree page splitters, buffer managers, and write-ahead logs.",
+    status: "New",
+    enrolledStudentsList: ["Avani J C", "Rakshith Y B", "Shwetha B G"],
+    modules: [
+      { id: 1, title: "Disk Page Layout & Buffer Pool Eviction", duration: "2h 50m", completed: false }
+    ]
   }
 ];
 

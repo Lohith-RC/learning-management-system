@@ -22,7 +22,28 @@ export const AuthProvider = ({ children, onLoginSuccess, onLogoutSuccess }) => {
     fetchUser();
   }, []);
 
-  const login = useCallback((email, password) => {
+  const login = useCallback(async (email, password) => {
+    try {
+      const res = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password })
+      });
+      if (res.ok) {
+        const data = await res.json();
+        if (data.token) {
+          localStorage.setItem('skillforge_token', data.token);
+        }
+        setUser(data.user || { ...INITIAL_USER, email });
+        setIsAuthenticated(true);
+        if (onLoginSuccess) onLoginSuccess((data.user && data.user.name) || INITIAL_USER.name);
+        return;
+      }
+    } catch (err) {
+      console.log('Backend authentication offline, using fallback mock login.');
+    }
+
+    // Graceful Fallback
     setIsAuthenticated(true);
     setUser({
       ...INITIAL_USER,
@@ -33,7 +54,40 @@ export const AuthProvider = ({ children, onLoginSuccess, onLogoutSuccess }) => {
     }
   }, [onLoginSuccess]);
 
+  const register = useCallback(async (name, email, password) => {
+    try {
+      const res = await fetch('/api/auth/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, email, password })
+      });
+      if (res.ok) {
+        const data = await res.json();
+        if (data.token) {
+          localStorage.setItem('skillforge_token', data.token);
+        }
+        setUser(data.user || { ...INITIAL_USER, name, email });
+        setIsAuthenticated(true);
+        if (onLoginSuccess) onLoginSuccess(name || INITIAL_USER.name);
+        return;
+      }
+    } catch (err) {
+      console.log('Backend registration offline, using fallback mock register.');
+    }
+
+    setIsAuthenticated(true);
+    setUser({
+      ...INITIAL_USER,
+      name: name || INITIAL_USER.name,
+      email: email || INITIAL_USER.email,
+    });
+    if (onLoginSuccess) {
+      onLoginSuccess(name || INITIAL_USER.name);
+    }
+  }, [onLoginSuccess]);
+
   const logout = useCallback(() => {
+    localStorage.removeItem('skillforge_token');
     setIsAuthenticated(false);
     if (onLogoutSuccess) {
       onLogoutSuccess();
@@ -46,8 +100,9 @@ export const AuthProvider = ({ children, onLoginSuccess, onLogoutSuccess }) => {
     isAuthenticated,
     setIsAuthenticated,
     login,
+    register,
     logout,
-  }), [user, isAuthenticated, login, logout]);
+  }), [user, isAuthenticated, login, register, logout]);
 
   return (
     <AuthContext.Provider value={value}>

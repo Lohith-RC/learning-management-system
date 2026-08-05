@@ -8,6 +8,7 @@ import SignInModal from './components/SignInModal';
 import SignUpModal from './components/SignUpModal';
 import StudentDashboard from './components/StudentDashboard';
 import CourseCatalog from './components/CourseCatalog';
+import CourseDetailPage from './components/CourseDetailPage';
 import PracticeSandbox from './components/PracticeSandbox';
 import ResumeAIOptimizer from './components/ResumeAIOptimizer';
 import Leaderboard from './components/Leaderboard';
@@ -53,6 +54,7 @@ const AppContent = memo(() => {
           <Route element={<ProtectedShellLayout />}>
             <Route path="/dashboard" element={<StudentDashboard />} />
             <Route path="/courses" element={<CourseCatalog />} />
+            <Route path="/courses/:courseId" element={<CourseDetailPage />} />
             <Route path="/practice" element={<PracticeSandbox />} />
             <Route path="/resume-ai" element={<ResumeAIOptimizer />} />
             <Route path="/profile" element={<ResumeAIOptimizer />} />
