@@ -38,7 +38,8 @@ const Header = () => {
           <span className="material-symbols-outlined">menu</span>
         </button>
 
-        <div>
+        <div className="flex items-center gap-3 cursor-pointer" onClick={() => setActiveTab('landing')}>
+          <img src="/skillforge-logo.png" alt="SkillForge Logo" className="w-8 h-8 rounded-lg object-contain drop-shadow-sm hover:scale-105 transition-transform" />
           <h2 className="font-display text-lg font-bold text-slate-900 hidden sm:block">
             {getTitle()}
           </h2>
