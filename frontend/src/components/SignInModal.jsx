@@ -2,16 +2,14 @@ import React, { useState, memo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useUI } from '../context/UIContext';
-import BackgroundShader from './BackgroundShader';
 
 const SignInModal = memo(() => {
   const { login } = useAuth();
   const { showToast } = useUI();
   const navigate = useNavigate();
 
-  const [email, setEmail] = useState('lohith.rc@skillforge.edu');
-  const [password, setPassword] = useState('••••••••••••');
-  const [showPassword, setShowPassword] = useState(false);
+  const [email, setEmail] = useState('lohith_test@oralai.com');
+  const [password, setPassword] = useState('••••••••');
   const [rememberMe, setRememberMe] = useState(true);
   const [loading, setLoading] = useState(false);
 
@@ -21,169 +19,158 @@ const SignInModal = memo(() => {
     setTimeout(() => {
       setLoading(false);
       login(email, password);
-    }, 600);
+    }, 500);
   };
 
-  const handleQuickDemo = () => {
+  const handleGoogleSignIn = () => {
     setLoading(true);
     setTimeout(() => {
       setLoading(false);
-      login('lohith.rc@skillforge.edu', 'demo123');
-    }, 400);
+      login('lohith.google@skillforge.edu', 'google_auth');
+      showToast('Signed in via Google OAuth successfully!', 'success');
+    }, 500);
   };
 
   return (
-    <div className="min-h-screen w-full flex bg-[#0B0F17] font-sans overflow-hidden relative">
-      {/* Left Column: Shader Graphic & Branding */}
-      <div className="relative hidden lg:flex w-1/2 flex-col justify-between p-12 overflow-hidden text-white">
-        <BackgroundShader />
-        
-        {/* Brand Header */}
-        <div className="relative z-10 flex items-center gap-3 cursor-pointer" onClick={() => navigate('/')}>
-          <img src="/skillforge-logo.png" alt="SkillForge Logo" className="w-10 h-10 rounded-xl object-contain drop-shadow-lg" />
-          <span className="font-display text-xl font-bold tracking-tight">SkillForge</span>
+    <div className="min-h-screen w-full flex bg-[#F8F9FC] font-sans text-[#1F1B2D]">
+      {/* Left Column: Reference Image 4 Hero Layout */}
+      <div className="hidden lg:flex w-1/2 flex-col justify-between p-12 relative overflow-hidden bg-[#F8F9FC]">
+        {/* Logo */}
+        <div 
+          onClick={() => navigate('/')}
+          className="flex items-center gap-3 cursor-pointer"
+        >
+          <div className="w-8 h-8 rounded-xl bg-[#F0EBFA] text-[#5B4E80] flex items-center justify-center font-bold">
+            <span className="material-symbols-outlined text-[20px]">school</span>
+          </div>
+          <span className="font-display font-black text-xl text-[#1F1B2D]">SkillForge</span>
         </div>
 
-        {/* Hero Branding Message */}
-        <div className="relative z-10 max-w-md my-auto space-y-4 glass-panel p-8 rounded-3xl border border-white/10">
-          <span className="px-3 py-1 rounded-full bg-[#810B38]/40 border border-[#810B38] text-rose-300 text-xs font-bold uppercase tracking-wider">
-            Engineered for CS Placements
+        {/* Center Floating White Card matching Reference Image 4 */}
+        <div className="bg-white border border-[#E5E7EB] rounded-3xl p-10 max-w-lg shadow-sm space-y-4 my-auto">
+          <span className="px-3.5 py-1 rounded-full bg-[#F0EBFA] text-[#5B4E80] text-[10px] font-bold uppercase tracking-wider">
+            ELITE TALENT ENGINE
           </span>
-          <h2 className="font-display text-3xl font-bold leading-tight">
+          <h2 className="font-display text-4xl font-black text-[#1F1B2D] leading-tight">
             Accelerate your tech career with real-time feedback.
           </h2>
-          <p className="text-sm text-slate-300 leading-relaxed">
-            Access curated CS modules, automated coding sandboxes, and Groq AI-powered resume match optimization.
+          <p className="text-xs text-[#6B7280] leading-relaxed">
+            Get instant access to CS learning tracks, algorithmic sandbox assessments, and AI resume ATS scoring.
           </p>
         </div>
 
-        <div className="relative z-10 text-xs text-white/50">
+        {/* Footer */}
+        <div className="text-xs text-[#9CA3AF]">
           © 2026 SkillForge Education Inc. All rights reserved.
         </div>
       </div>
 
-      {/* Right Column: Sign In Form */}
-      <div className="w-full lg:w-1/2 flex items-center justify-center p-6 sm:p-12 bg-white relative z-10">
-        <div className="w-full max-w-md space-y-8">
+      {/* Right Column: Form matching Reference Image 4 */}
+      <div className="w-full lg:w-1/2 bg-white flex items-center justify-center p-6 sm:p-12 border-l border-[#EAEAEA]">
+        <div className="w-full max-w-md space-y-6">
           {/* Header */}
           <div>
-            <div className="flex items-center gap-2 mb-2 lg:hidden cursor-pointer" onClick={() => navigate('/')}>
-              <img src="/skillforge-logo.png" alt="SkillForge Logo" className="w-8 h-8 rounded-lg object-contain" />
-              <span className="font-display font-bold text-lg text-slate-900">SkillForge</span>
-            </div>
-            <h2 className="font-display text-2xl sm:text-3xl font-bold text-slate-900">
+            <h2 className="font-display text-3xl font-black text-[#1F1B2D]">
               Welcome back
             </h2>
-            <p className="text-sm text-slate-500 mt-1">
-              Please enter your details to access your student workspace.
+            <p className="text-xs text-[#6B7280] mt-1">
+              Join SkillForge to start practicing coding sandboxes and courses.
             </p>
           </div>
 
-          {/* Quick Demo Fill Button */}
-          <div className="p-4 rounded-2xl bg-rose-50 border border-rose-200 flex items-center justify-between">
-            <div>
-              <p className="text-xs font-bold text-[#810B38]">Instant Demo Access</p>
-              <p className="text-[11px] text-slate-600">Pre-filled with student profile "Lohith R C"</p>
-            </div>
-            <button
-              onClick={handleQuickDemo}
-              className="px-3 py-1.5 rounded-lg bg-[#810B38] hover:bg-[#9c244b] text-white text-xs font-semibold shadow-sm transition-all"
-            >
-              1-Click Sign In
-            </button>
+          {/* Continue with Google OAuth Button matching Reference Image 4 */}
+          <button
+            onClick={handleGoogleSignIn}
+            disabled={loading}
+            className="w-full py-3 px-4 rounded-2xl bg-white border border-[#E5E7EB] hover:border-[#9CA3AF] text-[#1F1B2D] text-xs font-semibold shadow-xs transition-all flex items-center justify-center gap-3"
+          >
+            <svg className="w-4 h-4" viewBox="0 0 24 24">
+              <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.17z" />
+              <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.29v3.15C3.26 21.3 7.31 24 12 24z" />
+              <path fill="#FBBC05" d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.13-1.55.38-2.27V6.58H1.29C.47 8.2.0 10.04.0 12c0 1.96.47 3.8 1.29 5.42l3.99-3.15z" />
+              <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.31 0 3.26 2.7 1.29 6.58l3.99 3.15c.95-2.83 3.6-4.98 6.72-4.98z" />
+            </svg>
+            <span>Continue with Google</span>
+          </button>
+
+          {/* Divider */}
+          <div className="relative flex items-center justify-center">
+            <div className="border-t border-[#EAEAEA] w-full" />
+            <span className="bg-white px-3 text-[10px] text-[#9CA3AF] font-bold uppercase tracking-wider absolute">
+              OR FILL DETAILS
+            </span>
           </div>
 
           {/* Form */}
-          <form onSubmit={handleSubmit} className="space-y-5">
+          <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-2">
-                Email Address
+              <label className="block text-[10px] font-bold uppercase tracking-wider text-[#6B7280] mb-1.5">
+                EMAIL ADDRESS
               </label>
-              <div className="relative">
-                <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-[20px]">
-                  mail
-                </span>
-                <input
-                  type="email"
-                  required
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="student@university.edu"
-                  className="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-300 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#810B38] focus:border-transparent transition-all"
-                />
-              </div>
+              <input
+                type="email"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="lohith_test@oralai.com"
+                className="w-full px-4 py-3 rounded-xl bg-[#F3F4F6] border-none text-xs text-[#1F1B2D] focus:outline-none focus:ring-2 focus:ring-[#5B4E80]"
+              />
             </div>
 
             <div>
-              <div className="flex justify-between items-center mb-2">
-                <label className="block text-xs font-bold uppercase tracking-wider text-slate-700">
-                  Password
-                </label>
-                <a href="#" onClick={(e) => { e.preventDefault(); showToast('Password reset link sent to email!', 'info'); }} className="text-xs text-[#810B38] hover:underline font-semibold">
-                  Forgot password?
-                </a>
-              </div>
-              <div className="relative">
-                <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-[20px]">
-                  lock
-                </span>
-                <input
-                  type={showPassword ? 'text' : 'password'}
-                  required
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="••••••••••••"
-                  className="w-full pl-10 pr-10 py-3 rounded-xl border border-slate-300 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#810B38] focus:border-transparent transition-all"
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
-                >
-                  <span className="material-symbols-outlined text-[20px]">
-                    {showPassword ? 'visibility_off' : 'visibility'}
-                  </span>
-                </button>
-              </div>
+              <label className="block text-[10px] font-bold uppercase tracking-wider text-[#6B7280] mb-1.5">
+                PASSWORD
+              </label>
+              <input
+                type="password"
+                required
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="••••••••"
+                className="w-full px-4 py-3 rounded-xl bg-[#F3F4F6] border-none text-xs text-[#1F1B2D] focus:outline-none focus:ring-2 focus:ring-[#5B4E80]"
+              />
             </div>
 
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between text-xs">
               <label className="flex items-center gap-2 cursor-pointer">
                 <input
                   type="checkbox"
                   checked={rememberMe}
                   onChange={(e) => setRememberMe(e.target.checked)}
-                  className="rounded text-[#810B38] focus:ring-[#810B38]"
+                  className="rounded text-[#5B4E80] focus:ring-[#5B4E80]"
                 />
-                <span className="text-xs text-slate-600 font-medium">Remember for 30 days</span>
+                <span className="text-[#6B7280]">Remember me</span>
               </label>
+              <a href="#" onClick={(e) => { e.preventDefault(); showToast('Password reset link sent!', 'info'); }} className="text-[#5B4E80] font-semibold hover:underline">
+                Forgot password?
+              </a>
             </div>
 
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-3.5 px-4 rounded-xl bg-[#810B38] hover:bg-[#9c244b] text-white font-bold text-sm shadow-lg hover:shadow-rose-900/30 transition-all flex items-center justify-center gap-2"
+              className="w-full py-3.5 rounded-2xl bg-[#5B4E80] hover:bg-[#4C4070] text-white font-bold text-xs shadow-xs transition-all flex items-center justify-center gap-2"
             >
               {loading ? (
-                <span>Authenticating...</span>
+                <span>Signing In...</span>
               ) : (
                 <>
-                  <span>Sign In to Account</span>
-                  <span className="material-symbols-outlined text-[18px]">arrow_forward</span>
+                  <span>Sign In to Workspace</span>
+                  <span className="material-symbols-outlined text-[16px]">arrow_forward</span>
                 </>
               )}
             </button>
           </form>
 
           {/* Switch to Sign Up */}
-          <div className="text-center pt-4 border-t border-slate-100">
-            <p className="text-xs text-slate-600">
+          <div className="text-center pt-2">
+            <p className="text-xs text-[#6B7280]">
               Don't have an account?{' '}
               <button
                 onClick={() => navigate('/signup')}
-                className="text-[#810B38] font-bold hover:underline"
+                className="text-[#5B4E80] font-bold hover:underline"
               >
-                Create an account
+                Sign up now
               </button>
             </p>
           </div>

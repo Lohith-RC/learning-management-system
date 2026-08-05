@@ -14,10 +14,10 @@ import Leaderboard from './components/Leaderboard';
 import AIChatbotWidget from './components/AIChatbotWidget';
 import Toast from './components/Toast';
 
-// Layout shell for protected routes with Sidebar, Header, Chatbot, and Toast
+// Layout shell for protected workspace routes
 const ProtectedShellLayout = memo(() => {
   return (
-    <div className="flex h-screen overflow-hidden bg-[#EEEEEE] text-slate-900 font-sans">
+    <div className="flex h-screen overflow-hidden bg-[#F9FAFC] text-[#1F1B2D] font-sans">
       {/* Navigation Sidebar */}
       <Sidebar />
 
@@ -33,12 +33,6 @@ const ProtectedShellLayout = memo(() => {
           </div>
         </main>
       </div>
-
-      {/* Global AI Assistant Floating Widget */}
-      <AIChatbotWidget />
-
-      {/* Toast Notification Container */}
-      <Toast />
     </div>
   );
 });
@@ -47,27 +41,35 @@ ProtectedShellLayout.displayName = 'ProtectedShellLayout';
 
 const AppContent = memo(() => {
   return (
-    <Routes>
-      {/* Public Unauthenticated Routes */}
-      <Route path="/" element={<LandingPage />} />
-      <Route path="/signin" element={<SignInModal />} />
-      <Route path="/signup" element={<SignUpModal />} />
+    <div className="relative min-h-screen">
+      <Routes>
+        {/* Public Unauthenticated Routes */}
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/signin" element={<SignInModal />} />
+        <Route path="/signup" element={<SignUpModal />} />
 
-      {/* Protected Routes nested in ProtectedRoute & ProtectedShellLayout */}
-      <Route element={<ProtectedRoute />}>
-        <Route element={<ProtectedShellLayout />}>
-          <Route path="/dashboard" element={<StudentDashboard />} />
-          <Route path="/courses" element={<CourseCatalog />} />
-          <Route path="/practice" element={<PracticeSandbox />} />
-          <Route path="/resume-ai" element={<ResumeAIOptimizer />} />
-          <Route path="/profile" element={<ResumeAIOptimizer />} />
-          <Route path="/leaderboard" element={<Leaderboard />} />
+        {/* Protected Routes nested in ProtectedRoute & ProtectedShellLayout */}
+        <Route element={<ProtectedRoute />}>
+          <Route element={<ProtectedShellLayout />}>
+            <Route path="/dashboard" element={<StudentDashboard />} />
+            <Route path="/courses" element={<CourseCatalog />} />
+            <Route path="/practice" element={<PracticeSandbox />} />
+            <Route path="/resume-ai" element={<ResumeAIOptimizer />} />
+            <Route path="/profile" element={<ResumeAIOptimizer />} />
+            <Route path="/leaderboard" element={<Leaderboard />} />
+          </Route>
         </Route>
-      </Route>
 
-      {/* Catch-all redirect to Landing Page */}
-      <Route path="*" element={<Navigate to="/" replace />} />
-    </Routes>
+        {/* Catch-all redirect to Landing Page */}
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+
+      {/* Global Persistent AI Assistant Floating Widget (Bottom-Right Viewport Fixed) */}
+      <AIChatbotWidget />
+
+      {/* Global Toast Notification Container */}
+      <Toast />
+    </div>
   );
 });
 
