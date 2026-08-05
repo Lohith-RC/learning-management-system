@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
-import { useApp } from '../context/AppContext';
+import React, { useState, memo } from 'react';
+import { useNavigate } from 'react-router-dom';
 import BackgroundShader from './BackgroundShader';
 
-const LandingPage = () => {
-  const { setActiveTab } = useApp();
+const LandingPage = memo(() => {
+  const navigate = useNavigate();
   const [activeCodeTab, setActiveCodeTab] = useState('solution.py');
   const [runningTest, setRunningTest] = useState(false);
   const [testSuccess, setTestSuccess] = useState(true);
@@ -25,7 +25,7 @@ const LandingPage = () => {
       <nav className="fixed top-6 left-0 right-0 z-50 px-6 max-w-7xl mx-auto flex items-center justify-between">
         {/* Brand Logo */}
         <div 
-          onClick={() => setActiveTab('landing')}
+          onClick={() => navigate('/')}
           className="glass-panel flex items-center gap-3 px-4 py-2 rounded-full border border-white/10 hover:border-rose-500/50 transition-colors cursor-pointer"
         >
           <img src="/skillforge-logo.png" alt="SkillForge Logo" className="w-8 h-8 rounded-full object-contain drop-shadow-[0_0_10px_rgba(203,41,87,0.6)]" />
@@ -35,13 +35,13 @@ const LandingPage = () => {
         {/* Auth Actions */}
         <div className="flex items-center gap-4">
           <button
-            onClick={() => setActiveTab('signin')}
+            onClick={() => navigate('/signin')}
             className="text-sm font-medium text-white/80 hover:text-white transition-colors px-3 py-1.5"
           >
             Sign In
           </button>
           <button
-            onClick={() => setActiveTab('signup')}
+            onClick={() => navigate('/signup')}
             className="text-sm font-semibold text-white px-6 py-2.5 rounded-full bg-[#810B38] hover:bg-[#9c244b] transition-all shadow-[0_4px_20px_rgba(203,41,87,0.4)] hover:shadow-[0_4px_25px_rgba(203,41,87,0.6)] hover:scale-105"
           >
             Sign Up
@@ -79,14 +79,14 @@ const LandingPage = () => {
               {/* CTAs */}
               <div className="flex flex-col sm:flex-row gap-4">
                 <button
-                  onClick={() => setActiveTab('dashboard')}
+                  onClick={() => navigate('/dashboard')}
                   className="flex items-center justify-center gap-2 px-8 py-4 rounded-2xl bg-[#810B38] hover:bg-[#9c244b] text-white font-bold text-base transition-all shadow-lg hover:shadow-rose-900/40 hover:-translate-y-0.5"
                 >
                   <span className="material-symbols-outlined">rocket_launch</span>
                   <span>Launch Student Workspace</span>
                 </button>
                 <button
-                  onClick={() => setActiveTab('courses')}
+                  onClick={() => navigate('/courses')}
                   className="flex items-center justify-center gap-2 px-6 py-4 rounded-2xl border-2 border-slate-900 text-slate-900 hover:bg-slate-900 hover:text-white font-bold text-base transition-all"
                 >
                   <span className="material-symbols-outlined">school</span>
@@ -146,7 +146,7 @@ const LandingPage = () => {
               <div className="p-5 code-bg text-xs sm:text-sm text-white/90 leading-relaxed overflow-x-auto">
                 <span className="text-purple-400">def</span> <span className="text-blue-400 font-bold">optimize_placement</span>(profile):<br />
                 &nbsp;&nbsp;&nbsp;&nbsp;skills = profile.<span className="text-emerald-400">get_metrics</span>()<br />
-                &nbsp;&nbsp;&nbsp;&nbsp;<span class="text-purple-400">if</span> skills.score &gt; <span className="text-amber-400">95</span>:<br />
+                &nbsp;&nbsp;&nbsp;&nbsp;<span className="text-purple-400">if</span> skills.score &gt; <span className="text-amber-400">95</span>:<br />
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span className="text-purple-400">return</span> <span className="text-cyan-300 font-semibold">"Top Tier Match"</span><br />
                 &nbsp;&nbsp;&nbsp;&nbsp;<span className="text-slate-500 italic"># Groq AI ATS Processing...</span><br />
                 &nbsp;&nbsp;&nbsp;&nbsp;<span className="text-purple-400">return</span> groq_ai.<span className="text-emerald-400">analyze</span>(profile)
@@ -235,6 +235,8 @@ const LandingPage = () => {
       </section>
     </div>
   );
-};
+});
+
+LandingPage.displayName = 'LandingPage';
 
 export default LandingPage;

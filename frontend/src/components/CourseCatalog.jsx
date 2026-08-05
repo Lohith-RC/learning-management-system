@@ -1,8 +1,11 @@
-import React, { useState } from 'react';
-import { useApp } from '../context/AppContext';
+import React, { useState, memo } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useCourse } from '../context/CourseContext';
 
-const CourseCatalog = () => {
-  const { courses, enrollCourse, updateCourseProgress, selectedCourse, setSelectedCourse, setActiveTab } = useApp();
+const CourseCatalog = memo(() => {
+  const { courses, enrollCourse, updateCourseProgress, selectedCourse, setSelectedCourse } = useCourse();
+  const navigate = useNavigate();
+
   const [activeCategory, setActiveCategory] = useState('All');
   const [activeDifficulty, setActiveDifficulty] = useState('All');
   const [searchQuery, setSearchQuery] = useState('');
@@ -280,7 +283,7 @@ const CourseCatalog = () => {
               <button
                 onClick={() => {
                   setDetailModalCourse(null);
-                  setActiveTab('practice');
+                  navigate('/practice');
                 }}
                 className="px-5 py-2.5 rounded-xl bg-[#810B38] hover:bg-[#9c244b] text-white text-xs font-bold shadow-md"
               >
@@ -292,6 +295,8 @@ const CourseCatalog = () => {
       )}
     </div>
   );
-};
+});
+
+CourseCatalog.displayName = 'CourseCatalog';
 
 export default CourseCatalog;

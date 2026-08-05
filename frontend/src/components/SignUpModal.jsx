@@ -1,9 +1,12 @@
-import React, { useState } from 'react';
-import { useApp } from '../context/AppContext';
+import React, { useState, memo } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 import BackgroundShader from './BackgroundShader';
 
-const SignUpModal = () => {
-  const { login, setActiveTab } = useApp();
+const SignUpModal = memo(() => {
+  const { login } = useAuth();
+  const navigate = useNavigate();
+
   const [fullName, setFullName] = useState('Lohith R C');
   const [email, setEmail] = useState('');
   const [targetRole, setTargetRole] = useState('Full Stack Engineer');
@@ -28,7 +31,7 @@ const SignUpModal = () => {
         <BackgroundShader />
         
         {/* Brand Header */}
-        <div className="relative z-10 flex items-center gap-3">
+        <div className="relative z-10 flex items-center gap-3 cursor-pointer" onClick={() => navigate('/')}>
           <img src="/skillforge-logo.png" alt="SkillForge Logo" className="w-10 h-10 rounded-xl object-contain drop-shadow-lg" />
           <span className="font-display text-xl font-bold tracking-tight">SkillForge</span>
         </div>
@@ -56,7 +59,7 @@ const SignUpModal = () => {
         <div className="w-full max-w-md space-y-6 my-auto">
           {/* Header */}
           <div>
-            <div className="flex items-center gap-2 mb-2 lg:hidden">
+            <div className="flex items-center gap-2 mb-2 lg:hidden cursor-pointer" onClick={() => navigate('/')}>
               <img src="/skillforge-logo.png" alt="SkillForge Logo" className="w-8 h-8 rounded-lg object-contain" />
               <span className="font-display font-bold text-lg text-slate-900">SkillForge</span>
             </div>
@@ -162,7 +165,7 @@ const SignUpModal = () => {
             <p className="text-xs text-slate-600">
               Already have an account?{' '}
               <button
-                onClick={() => setActiveTab('signin')}
+                onClick={() => navigate('/signin')}
                 className="text-[#810B38] font-bold hover:underline"
               >
                 Sign In
@@ -173,6 +176,8 @@ const SignUpModal = () => {
       </div>
     </div>
   );
-};
+});
+
+SignUpModal.displayName = 'SignUpModal';
 
 export default SignUpModal;

@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
-import { useApp } from '../context/AppContext';
+import React, { useState, memo } from 'react';
+import { useAuth } from '../context/AuthContext';
+import { useUI } from '../context/UIContext';
 
-const ResumeAIOptimizer = () => {
-  const { user, showToast } = useApp();
+const ResumeAIOptimizer = memo(() => {
+  const { user } = useAuth();
+  const { showToast } = useUI();
   const [targetRole, setTargetRole] = useState('Full Stack Engineer (SDE-1)');
   const [resumeText, setResumeText] = useState(
     `Lohith R C | Computer Science Engineer | lohith.rc@skillforge.edu
@@ -178,6 +180,8 @@ SKILLS: JavaScript, TypeScript, Python, React.js, Node.js, SQL, Data Structures,
       </div>
     </div>
   );
-};
+});
+
+ResumeAIOptimizer.displayName = 'ResumeAIOptimizer';
 
 export default ResumeAIOptimizer;

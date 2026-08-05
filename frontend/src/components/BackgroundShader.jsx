@@ -1,6 +1,6 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, memo } from 'react';
 
-const BackgroundShader = () => {
+const BackgroundShader = memo(() => {
   const canvasRef = useRef(null);
 
   useEffect(() => {
@@ -142,6 +142,8 @@ const BackgroundShader = () => {
       className="absolute inset-0 w-full h-full object-cover pointer-events-none z-0"
     />
   );
-};
+});
+
+BackgroundShader.displayName = 'BackgroundShader';
 
 export default BackgroundShader;

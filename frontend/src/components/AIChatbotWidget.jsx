@@ -1,8 +1,8 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { useApp } from '../context/AppContext';
+import React, { useState, useRef, useEffect, memo } from 'react';
+import { useAuth } from '../context/AuthContext';
 
-const AIChatbotWidget = () => {
-  const { user } = useApp();
+const AIChatbotWidget = memo(() => {
+  const { user } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState([
     {
@@ -173,6 +173,8 @@ const AIChatbotWidget = () => {
       </div>
     </div>
   );
-};
+});
+
+AIChatbotWidget.displayName = 'AIChatbotWidget';
 
 export default AIChatbotWidget;

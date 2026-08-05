@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, memo } from 'react';
 import { LEADERBOARD_USERS } from '../data/mockData';
 
-const Leaderboard = () => {
+const Leaderboard = memo(() => {
   const [timeframe, setTimeframe] = useState('Weekly');
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -152,6 +152,8 @@ const Leaderboard = () => {
       </div>
     </div>
   );
-};
+});
+
+Leaderboard.displayName = 'Leaderboard';
 
 export default Leaderboard;

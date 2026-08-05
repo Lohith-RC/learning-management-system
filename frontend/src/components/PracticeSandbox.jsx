@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, memo } from 'react';
 import confetti from 'canvas-confetti';
-import { useApp } from '../context/AppContext';
+import { useCourse } from '../context/CourseContext';
+import { useUI } from '../context/UIContext';
 
-const PracticeSandbox = () => {
-  const { practiceProblems, activeProblem, setActiveProblem, showToast } = useApp();
+const PracticeSandbox = memo(() => {
+  const { practiceProblems, activeProblem, setActiveProblem } = useCourse();
+  const { showToast } = useUI();
   const [selectedLanguage, setSelectedLanguage] = useState('python');
   const [code, setCode] = useState(activeProblem.starterCode.python);
   const [isRunning, setIsRunning] = useState(false);
@@ -100,7 +102,7 @@ const PracticeSandbox = () => {
             <span className="material-symbols-outlined text-[18px]">smart_toy</span>
             <span className="font-mono text-xs font-bold">Groq AI Code Assistant</span>
           </div>
-          <p className="text-[11px] text-slate-300 leading-relaxed">
+          <p className="text-[11px] text-[#CBD5E1] leading-relaxed">
             {activeProblem.groqAiInsight}
           </p>
         </div>
@@ -204,6 +206,8 @@ const PracticeSandbox = () => {
       </div>
     </div>
   );
-};
+});
+
+PracticeSandbox.displayName = 'PracticeSandbox';
 
 export default PracticeSandbox;

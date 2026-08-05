@@ -1,20 +1,27 @@
-import React, { useState } from 'react';
-import { useApp } from '../context/AppContext';
+import React, { useState, memo } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
+import { useUI } from '../context/UIContext';
 
-const Header = () => {
-  const { user, activeTab, setActiveTab, notifications, unreadCount, markAllNotificationsRead, logout } = useApp();
+const Header = memo(() => {
+  const { user, logout } = useAuth();
+  const { notifications, unreadCount, markAllNotificationsRead } = useUI();
+  const navigate = useNavigate();
+  const location = useLocation();
+
   const [showNotifications, setShowNotifications] = useState(false);
   const [showProfileMenu, setShowProfileMenu] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const getTitle = () => {
-    switch (activeTab) {
-      case 'dashboard': return 'Student Workspace';
-      case 'courses': return 'Course Catalog & Modules';
-      case 'practice': return 'Coding Sandbox & Test Runner';
-      case 'resume-ai': return 'Groq AI Resume Optimizer';
-      case 'leaderboard': return 'Global Skill Leaderboard';
+    switch (location.pathname) {
+      case '/dashboard': return 'Student Workspace';
+      case '/courses': return 'Course Catalog & Modules';
+      case '/practice': return 'Coding Sandbox & Test Runner';
+      case '/resume-ai':
+      case '/profile': return 'Groq AI Resume Optimizer';
+      case '/leaderboard': return 'Global Skill Leaderboard';
       default: return 'SkillForge Platform';
     }
   };
@@ -22,7 +29,7 @@ const Header = () => {
   const handleSearchSubmit = (e) => {
     e.preventDefault();
     if (searchQuery.trim()) {
-      setActiveTab('courses');
+      navigate('/courses');
     }
   };
 
@@ -63,7 +70,7 @@ const Header = () => {
       <div className="flex items-center gap-3 relative">
         {/* Quick Launch Buttons */}
         <button
-          onClick={() => setActiveTab('practice')}
+          onClick={() => navigate('/practice')}
           className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold shadow-sm transition-all"
         >
           <span className="material-symbols-outlined text-[16px] text-cyan-400">code</span>
@@ -152,7 +159,7 @@ const Header = () => {
               </div>
               <button
                 onClick={() => {
-                  setActiveTab('dashboard');
+                  navigate('/dashboard');
                   setShowProfileMenu(false);
                 }}
                 className="w-full text-left px-4 py-2 text-xs text-slate-700 hover:bg-slate-50 flex items-center gap-2"
@@ -162,7 +169,7 @@ const Header = () => {
               </button>
               <button
                 onClick={() => {
-                  setActiveTab('resume-ai');
+                  navigate('/profile');
                   setShowProfileMenu(false);
                 }}
                 className="w-full text-left px-4 py-2 text-xs text-slate-700 hover:bg-slate-50 flex items-center gap-2"
@@ -191,20 +198,20 @@ const Header = () => {
         <div className="fixed inset-0 top-16 bg-slate-900/95 backdrop-blur-xl z-50 p-6 flex flex-col md:hidden">
           <div className="space-y-3">
             {[
-              { id: 'dashboard', label: 'Dashboard', icon: 'dashboard' },
-              { id: 'courses', label: 'Course Catalog', icon: 'school' },
-              { id: 'practice', label: 'Practice Sandbox', icon: 'code' },
-              { id: 'resume-ai', label: 'Resume AI', icon: 'psychology' },
-              { id: 'leaderboard', label: 'Leaderboard', icon: 'leaderboard' },
+              { id: 'dashboard', path: '/dashboard', label: 'Dashboard', icon: 'dashboard' },
+              { id: 'courses', path: '/courses', label: 'Course Catalog', icon: 'school' },
+              { id: 'practice', path: '/practice', label: 'Practice Sandbox', icon: 'code' },
+              { id: 'resume-ai', path: '/resume-ai', label: 'Resume AI', icon: 'psychology' },
+              { id: 'leaderboard', path: '/leaderboard', label: 'Leaderboard', icon: 'leaderboard' },
             ].map((item) => (
               <button
                 key={item.id}
                 onClick={() => {
-                  setActiveTab(item.id);
+                  navigate(item.path);
                   setMobileMenuOpen(false);
                 }}
                 className={`w-full flex items-center gap-4 px-4 py-3 rounded-xl text-base font-semibold ${
-                  activeTab === item.id ? 'bg-[#810B38] text-white' : 'text-white/80 hover:bg-white/10'
+                  location.pathname === item.path ? 'bg-[#810B38] text-white' : 'text-white/80 hover:bg-white/10'
                 }`}
               >
                 <span className="material-symbols-outlined">{item.icon}</span>
@@ -228,6 +235,8 @@ const Header = () => {
       )}
     </header>
   );
-};
+});
+
+Header.displayName = 'Header';
 
 export default Header;

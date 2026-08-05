@@ -1,5 +1,6 @@
-import React from 'react';
-import { useApp } from './context/AppContext';
+import React, { memo } from 'react';
+import { Routes, Route, Navigate, Outlet } from 'react-router-dom';
+import ProtectedRoute from './components/ProtectedRoute';
 import Sidebar from './components/Sidebar';
 import Header from './components/Header';
 import LandingPage from './components/LandingPage';
@@ -13,13 +14,8 @@ import Leaderboard from './components/Leaderboard';
 import AIChatbotWidget from './components/AIChatbotWidget';
 import Toast from './components/Toast';
 
-const AppContent = () => {
-  const { activeTab } = useApp();
-
-  if (activeTab === 'landing') return <LandingPage />;
-  if (activeTab === 'signin') return <SignInModal />;
-  if (activeTab === 'signup') return <SignUpModal />;
-
+// Layout shell for protected routes with Sidebar, Header, Chatbot, and Toast
+const ProtectedShellLayout = memo(() => {
   return (
     <div className="flex h-screen overflow-hidden bg-[#EEEEEE] text-slate-900 font-sans">
       {/* Navigation Sidebar */}
@@ -33,11 +29,7 @@ const AppContent = () => {
         {/* Main Canvas Scroll Area */}
         <main className="flex-1 overflow-y-auto p-4 md:p-8">
           <div className="max-w-[1440px] mx-auto">
-            {activeTab === 'dashboard' && <StudentDashboard />}
-            {activeTab === 'courses' && <CourseCatalog />}
-            {activeTab === 'practice' && <PracticeSandbox />}
-            {activeTab === 'resume-ai' && <ResumeAIOptimizer />}
-            {activeTab === 'leaderboard' && <Leaderboard />}
+            <Outlet />
           </div>
         </main>
       </div>
@@ -49,6 +41,36 @@ const AppContent = () => {
       <Toast />
     </div>
   );
-};
+});
+
+ProtectedShellLayout.displayName = 'ProtectedShellLayout';
+
+const AppContent = memo(() => {
+  return (
+    <Routes>
+      {/* Public Unauthenticated Routes */}
+      <Route path="/" element={<LandingPage />} />
+      <Route path="/signin" element={<SignInModal />} />
+      <Route path="/signup" element={<SignUpModal />} />
+
+      {/* Protected Routes nested in ProtectedRoute & ProtectedShellLayout */}
+      <Route element={<ProtectedRoute />}>
+        <Route element={<ProtectedShellLayout />}>
+          <Route path="/dashboard" element={<StudentDashboard />} />
+          <Route path="/courses" element={<CourseCatalog />} />
+          <Route path="/practice" element={<PracticeSandbox />} />
+          <Route path="/resume-ai" element={<ResumeAIOptimizer />} />
+          <Route path="/profile" element={<ResumeAIOptimizer />} />
+          <Route path="/leaderboard" element={<Leaderboard />} />
+        </Route>
+      </Route>
+
+      {/* Catch-all redirect to Landing Page */}
+      <Route path="*" element={<Navigate to="/" replace />} />
+    </Routes>
+  );
+});
+
+AppContent.displayName = 'AppContent';
 
 export default AppContent;

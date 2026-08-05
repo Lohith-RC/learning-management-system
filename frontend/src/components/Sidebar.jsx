@@ -1,22 +1,25 @@
-import React from 'react';
-import { useApp } from '../context/AppContext';
+import React, { memo } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 
-const Sidebar = () => {
-  const { activeTab, setActiveTab, logout } = useApp();
+const Sidebar = memo(() => {
+  const { logout } = useAuth();
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const navItems = [
-    { id: 'dashboard', label: 'Dashboard', icon: 'dashboard' },
-    { id: 'courses', label: 'Course Catalog', icon: 'school' },
-    { id: 'practice', label: 'Practice Sandbox', icon: 'code' },
-    { id: 'resume-ai', label: 'Resume AI', icon: 'psychology' },
-    { id: 'leaderboard', label: 'Leaderboard', icon: 'leaderboard' },
+    { id: 'dashboard', path: '/dashboard', label: 'Dashboard', icon: 'dashboard' },
+    { id: 'courses', path: '/courses', label: 'Course Catalog', icon: 'school' },
+    { id: 'practice', path: '/practice', label: 'Practice Sandbox', icon: 'code' },
+    { id: 'resume-ai', path: '/resume-ai', altPath: '/profile', label: 'Resume AI', icon: 'psychology' },
+    { id: 'leaderboard', path: '/leaderboard', label: 'Leaderboard', icon: 'leaderboard' },
   ];
 
   return (
     <aside className="fixed left-0 top-0 h-full w-[260px] bg-[#0B0F17] flex flex-col py-6 z-40 hidden md:flex border-r border-white/10 shadow-2xl">
       {/* Brand Header */}
       <div 
-        onClick={() => setActiveTab('landing')}
+        onClick={() => navigate('/')}
         className="px-6 mb-8 flex items-center gap-3 cursor-pointer group"
       >
         <img src="/skillforge-logo.png" alt="SkillForge Logo" className="w-10 h-10 rounded-xl object-contain group-hover:scale-105 transition-transform drop-shadow-[0_0_10px_rgba(203,41,87,0.5)]" />
@@ -33,11 +36,11 @@ const Sidebar = () => {
       {/* Navigation List */}
       <nav className="flex-1 px-3 space-y-1.5">
         {navItems.map((item) => {
-          const isActive = activeTab === item.id;
+          const isActive = location.pathname === item.path || (item.altPath && location.pathname === item.altPath);
           return (
             <button
               key={item.id}
-              onClick={() => setActiveTab(item.id)}
+              onClick={() => navigate(item.path)}
               className={`w-full flex items-center gap-3.5 px-4 py-3 rounded-xl font-medium text-sm transition-all relative ${
                 isActive
                   ? 'bg-white/10 text-white font-semibold shadow-inner'
@@ -73,7 +76,7 @@ const Sidebar = () => {
 
         <div className="pt-2 border-t border-white/10 space-y-1">
           <button
-            onClick={() => setActiveTab('landing')}
+            onClick={() => navigate('/')}
             className="w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-white/70 hover:bg-white/5 hover:text-white text-xs font-medium transition-colors"
           >
             <span className="material-symbols-outlined text-[18px]">help</span>
@@ -90,6 +93,8 @@ const Sidebar = () => {
       </div>
     </aside>
   );
-};
+});
+
+Sidebar.displayName = 'Sidebar';
 
 export default Sidebar;

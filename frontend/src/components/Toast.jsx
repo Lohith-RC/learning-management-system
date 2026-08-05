@@ -1,8 +1,8 @@
-import React from 'react';
-import { useApp } from '../context/AppContext';
+import React, { memo } from 'react';
+import { useUI } from '../context/UIContext';
 
-const Toast = () => {
-  const { toast } = useApp();
+const Toast = memo(() => {
+  const { toast } = useUI();
 
   if (!toast) return null;
 
@@ -26,6 +26,8 @@ const Toast = () => {
       </div>
     </div>
   );
-};
+});
+
+Toast.displayName = 'Toast';
 
 export default Toast;

@@ -1,9 +1,14 @@
-import React, { useState } from 'react';
-import { useApp } from '../context/AppContext';
+import React, { useState, memo } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
+import { useUI } from '../context/UIContext';
 import BackgroundShader from './BackgroundShader';
 
-const SignInModal = () => {
-  const { login, setActiveTab, showToast } = useApp();
+const SignInModal = memo(() => {
+  const { login } = useAuth();
+  const { showToast } = useUI();
+  const navigate = useNavigate();
+
   const [email, setEmail] = useState('lohith.rc@skillforge.edu');
   const [password, setPassword] = useState('••••••••••••');
   const [showPassword, setShowPassword] = useState(false);
@@ -34,7 +39,7 @@ const SignInModal = () => {
         <BackgroundShader />
         
         {/* Brand Header */}
-        <div className="relative z-10 flex items-center gap-3">
+        <div className="relative z-10 flex items-center gap-3 cursor-pointer" onClick={() => navigate('/')}>
           <img src="/skillforge-logo.png" alt="SkillForge Logo" className="w-10 h-10 rounded-xl object-contain drop-shadow-lg" />
           <span className="font-display text-xl font-bold tracking-tight">SkillForge</span>
         </div>
@@ -62,7 +67,7 @@ const SignInModal = () => {
         <div className="w-full max-w-md space-y-8">
           {/* Header */}
           <div>
-            <div className="flex items-center gap-2 mb-2 lg:hidden">
+            <div className="flex items-center gap-2 mb-2 lg:hidden cursor-pointer" onClick={() => navigate('/')}>
               <img src="/skillforge-logo.png" alt="SkillForge Logo" className="w-8 h-8 rounded-lg object-contain" />
               <span className="font-display font-bold text-lg text-slate-900">SkillForge</span>
             </div>
@@ -175,7 +180,7 @@ const SignInModal = () => {
             <p className="text-xs text-slate-600">
               Don't have an account?{' '}
               <button
-                onClick={() => setActiveTab('signup')}
+                onClick={() => navigate('/signup')}
                 className="text-[#810B38] font-bold hover:underline"
               >
                 Create an account
@@ -186,6 +191,8 @@ const SignInModal = () => {
       </div>
     </div>
   );
-};
+});
+
+SignInModal.displayName = 'SignInModal';
 
 export default SignInModal;

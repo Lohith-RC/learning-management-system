@@ -1,8 +1,15 @@
-import React, { useState } from 'react';
-import { useApp } from '../context/AppContext';
+import React, { useState, memo } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
+import { useCourse } from '../context/CourseContext';
+import { useUI } from '../context/UIContext';
 
-const StudentDashboard = () => {
-  const { user, courses, setActiveTab, setSelectedCourse, showToast } = useApp();
+const StudentDashboard = memo(() => {
+  const { user } = useAuth();
+  const { courses, setSelectedCourse } = useCourse();
+  const { showToast } = useUI();
+  const navigate = useNavigate();
+
   const [hoveredHeatmap, setHoveredHeatmap] = useState(null);
 
   // Generate 30 days heatmap activity data
@@ -42,7 +49,7 @@ const StudentDashboard = () => {
         </div>
         <div className="flex items-center gap-3">
           <button
-            onClick={() => setActiveTab('practice')}
+            onClick={() => navigate('/practice')}
             className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#810B38] hover:bg-[#9c244b] text-white text-xs font-bold shadow-lg shadow-rose-950/20 transition-all hover:scale-105"
           >
             <span className="material-symbols-outlined text-[18px]">play_arrow</span>
@@ -120,7 +127,7 @@ const StudentDashboard = () => {
               <p className="text-xs text-slate-500">Pick up right where you left off</p>
             </div>
             <button
-              onClick={() => setActiveTab('courses')}
+              onClick={() => navigate('/courses')}
               className="text-xs font-bold text-[#810B38] hover:underline flex items-center gap-1"
             >
               <span>Explore All Courses</span>
@@ -136,7 +143,7 @@ const StudentDashboard = () => {
                     <h4 className="font-bold text-sm text-slate-900 hover:text-[#810B38] cursor-pointer transition-colors"
                         onClick={() => {
                           setSelectedCourse(course);
-                          setActiveTab('courses');
+                          navigate('/courses');
                         }}>
                       {course.title}
                     </h4>
@@ -149,7 +156,7 @@ const StudentDashboard = () => {
                     <button
                       onClick={() => {
                         setSelectedCourse(course);
-                        setActiveTab('courses');
+                        navigate('/courses');
                       }}
                       className="px-3 py-1 rounded-lg bg-slate-100 hover:bg-[#810B38] hover:text-white text-slate-700 text-xs font-semibold transition-colors"
                     >
@@ -211,6 +218,8 @@ const StudentDashboard = () => {
       </div>
     </div>
   );
-};
+});
+
+StudentDashboard.displayName = 'StudentDashboard';
 
 export default StudentDashboard;
