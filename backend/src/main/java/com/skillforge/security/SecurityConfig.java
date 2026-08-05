@@ -1,11 +1,14 @@
 package com.skillforge.security;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 /**
  * Backend Security & API Standards v1 (Avani):
@@ -21,12 +24,15 @@ import org.springframework.security.web.SecurityFilterChain;
  */
 @Configuration
 @EnableMethodSecurity
+@RequiredArgsConstructor
 public class SecurityConfig {
+
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(csrf -> csrf.disable()) // stateless JWT API, no cookies/CSRF exposure
+                .csrf(csrf -> csrf.disable())
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
@@ -35,13 +41,12 @@ public class SecurityConfig {
                                 "/api-docs/**",
                                 "/api/auth/**"
                         ).permitAll()
-                        // TEMPORARY for local dev testing only — remove once Monica's
-                        // JwtAuthenticationFilter is wired in, so GETs actually authenticate properly.
-                        .requestMatchers(org.springframework.http.HttpMethod.GET, "/api/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/courses").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/courses/{id}").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/courses/{courseId}/modules").permitAll()
                         .anyRequest().authenticated()
-                );
-                // .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
-                // ^ Monica: uncomment once JwtAuthenticationFilter exists in com.skillforge.security
+                )
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
