@@ -1,290 +1,185 @@
-import React, { useState } from 'react';
-import { useApp } from '../context/AppContext';
+import React, { useState, memo } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useCourse } from '../context/CourseContext';
 
-const CourseCatalog = () => {
-  const { courses, enrollCourse, updateCourseProgress, selectedCourse, setSelectedCourse, setActiveTab } = useApp();
-  const [activeCategory, setActiveCategory] = useState('All');
-  const [activeDifficulty, setActiveDifficulty] = useState('All');
-  const [searchQuery, setSearchQuery] = useState('');
+const CourseCatalog = memo(() => {
+  const { courses, setSelectedCourse } = useCourse();
+  const navigate = useNavigate();
+
+  const [activeCategory, setActiveCategory] = useState('All Paths');
+  const [selectedLevel, setSelectedLevel] = useState('All Levels');
   const [detailModalCourse, setDetailModalCourse] = useState(null);
 
-  const categories = ['All', 'Core CS', 'Database', 'Architecture', 'Development'];
-  const difficulties = ['All', 'Beginner', 'Intermediate', 'Advanced'];
-
-  // Filter courses
-  const filteredCourses = courses.filter((course) => {
-    const matchesCat = activeCategory === 'All' || course.category === activeCategory;
-    const matchesDiff = activeDifficulty === 'All' || course.difficulty.toLowerCase().includes(activeDifficulty.toLowerCase());
-    const matchesSearch = course.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                          course.tags.some(t => t.toLowerCase().includes(searchQuery.toLowerCase()));
-    return matchesCat && matchesDiff && matchesSearch;
-  });
-
-  const handleModuleToggle = (courseId, moduleId) => {
-    if (!detailModalCourse) return;
-    const updatedModules = detailModalCourse.modules.map(m => 
-      m.id === moduleId ? { ...m, completed: !m.completed } : m
-    );
-    const completedCount = updatedModules.filter(m => m.completed).length;
-    const newProgress = Math.round((completedCount / updatedModules.length) * 100);
-
-    const updatedCourse = {
-      ...detailModalCourse,
-      modules: updatedModules,
-      completedModules: completedCount,
-      progress: newProgress,
-      status: newProgress === 100 ? 'Completed' : 'In Progress'
-    };
-
-    setDetailModalCourse(updatedCourse);
-    updateCourseProgress(courseId, newProgress);
-  };
+  const categories = ['All Paths', 'Core CS', 'Database', 'Architecture', 'Machine Learning', 'Web Dev'];
 
   return (
-    <div className="space-y-8 animate-fade-in-up">
-      {/* Header Banner */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 pb-4 border-b border-slate-200">
-        <div>
-          <h1 className="font-display text-2xl md:text-3xl font-extrabold text-slate-900">
-            Computer Science Learning Paths
-          </h1>
-          <p className="text-sm text-slate-500 mt-1">
-            Master core fundamentals, algorithms, and system design tailored for tech placements.
+    <div className="space-y-8 animate-fade-in-up font-sans pb-12">
+      {/* Title Section matching Reference Image 2 */}
+      <div>
+        <h1 className="font-display text-4xl sm:text-5xl font-black text-[#1F1B2D] tracking-tight">
+          Computer Science Learning Paths
+        </h1>
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-4 mt-3">
+          <p className="text-sm text-[#4B5563] max-w-3xl leading-relaxed font-normal">
+            Master fundamental concepts, deep-dive into complex architectures, and prepare for top-tier engineering interviews with our structured curriculum.
           </p>
-        </div>
 
-        {/* Search Input */}
-        <div className="relative w-full md:w-72">
-          <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-[18px]">
-            search
-          </span>
-          <input
-            type="text"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search topics, tags..."
-            className="w-full bg-white border border-slate-200 rounded-full py-2 pl-9 pr-4 text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#810B38]"
-          />
+          {/* Level Dropdown matching Reference Image 2 */}
+          <div className="flex items-center gap-2">
+            <span className="text-xs text-[#6B7280]">Level:</span>
+            <select
+              value={selectedLevel}
+              onChange={(e) => setSelectedLevel(e.target.value)}
+              className="bg-white border border-[#E5E7EB] rounded-xl px-3 py-1.5 text-xs text-[#1F1B2D] font-semibold focus:outline-none focus:ring-2 focus:ring-[#5B4E80] shadow-xs"
+            >
+              <option>All Levels</option>
+              <option>Beginner</option>
+              <option>Intermediate</option>
+              <option>Advanced</option>
+            </select>
+          </div>
         </div>
       </div>
 
-      {/* Filter Tabs */}
-      <div className="flex flex-wrap items-center justify-between gap-4">
-        {/* Category Pills */}
-        <div className="flex items-center gap-2 overflow-x-auto pb-1">
-          {categories.map((cat) => (
-            <button
-              key={cat}
-              onClick={() => setActiveCategory(cat)}
-              className={`px-4 py-2 rounded-full text-xs font-semibold whitespace-nowrap transition-all ${
-                activeCategory === cat
-                  ? 'bg-[#810B38] text-white shadow-md'
-                  : 'bg-white text-slate-700 hover:bg-slate-100 border border-slate-200'
-              }`}
-            >
-              {cat}
-            </button>
-          ))}
-        </div>
-
-        {/* Difficulty Filter */}
-        <div className="flex items-center gap-2">
-          <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">Level:</span>
-          {difficulties.map((diff) => (
-            <button
-              key={diff}
-              onClick={() => setActiveDifficulty(diff)}
-              className={`px-3 py-1 rounded-lg text-xs font-medium transition-colors ${
-                activeDifficulty === diff
-                  ? 'bg-slate-900 text-white'
-                  : 'text-slate-600 hover:bg-slate-100'
-              }`}
-            >
-              {diff}
-            </button>
-          ))}
-        </div>
+      {/* Category Filter Pills matching Reference Image 2 */}
+      <div className="flex items-center gap-2 overflow-x-auto pb-1">
+        {categories.map((cat) => (
+          <button
+            key={cat}
+            onClick={() => setActiveCategory(cat)}
+            className={`px-5 py-2 rounded-full text-xs font-semibold whitespace-nowrap transition-all ${
+              activeCategory === cat
+                ? 'bg-[#5B4E80] text-white shadow-xs'
+                : 'bg-[#F3F4F6] text-[#4B5563] hover:bg-[#EAEAEA]'
+            }`}
+          >
+            {cat}
+          </button>
+        ))}
       </div>
 
-      {/* Course Cards Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {filteredCourses.map((course) => (
+      {/* Course Cards Grid matching Reference Image 2 */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {[
+          {
+            id: 'c1',
+            title: 'Data Structures & Algorithms Mastery',
+            category: 'CORE CS',
+            completed: 17,
+            total: 24,
+            progress: 72,
+            accentColor: 'border-t-4 border-t-[#3B82F6]',
+            badgeColor: 'bg-blue-50 text-blue-700',
+            barColor: 'bg-[#3B82F6]'
+          },
+          {
+            id: 'c2',
+            title: 'Database Management Systems & SQL Scaling',
+            category: 'DATABASE',
+            completed: 6,
+            total: 16,
+            progress: 40,
+            accentColor: 'border-t-4 border-t-[#10B981]',
+            badgeColor: 'bg-emerald-50 text-emerald-700',
+            barColor: 'bg-[#10B981]'
+          },
+          {
+            id: 'c3',
+            title: 'System Design for High Scale Applications',
+            category: 'ARCHITECTURE',
+            completed: 3,
+            total: 20,
+            progress: 15,
+            accentColor: 'border-t-4 border-t-[#9333EA]',
+            badgeColor: 'bg-purple-50 text-purple-700',
+            barColor: 'bg-[#9333EA]'
+          }
+        ].map((course) => (
           <div
             key={course.id}
-            className="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between group"
+            className={`bg-white border border-[#E5E7EB] rounded-3xl p-6 shadow-xs flex flex-col justify-between ${course.accentColor} hover:shadow-md transition-shadow`}
           >
             <div>
-              {/* Image & Badges */}
-              <div className="relative h-44 overflow-hidden">
-                <img
-                  src={course.image}
-                  alt={course.title}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-                
-                <span className="absolute top-3 left-3 px-3 py-1 rounded-full bg-slate-900/80 backdrop-blur-md text-white text-[10px] font-bold uppercase tracking-wider border border-white/20">
+              {/* Category Badge & Progress % */}
+              <div className="flex justify-between items-center mb-4">
+                <span className={`px-3 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider ${course.badgeColor}`}>
                   {course.category}
                 </span>
-
-                <div className="absolute bottom-3 left-3 right-3 flex justify-between items-center text-white text-xs font-medium">
-                  <span className="flex items-center gap-1">
-                    <span className="material-symbols-outlined text-[14px]">schedule</span>
-                    {course.duration}
-                  </span>
-                  <span className="flex items-center gap-1 text-amber-400 font-bold">
-                    ★ {course.rating} ({course.studentsCount.toLocaleString()})
-                  </span>
-                </div>
+                <span className="font-mono font-bold text-xs text-[#5B4E80]">
+                  {course.progress}%
+                </span>
               </div>
 
-              {/* Course Info */}
-              <div className="p-6">
-                <div className="flex justify-between items-start mb-2">
-                  <h3 className="font-display font-bold text-base text-slate-900 group-hover:text-[#810B38] transition-colors leading-snug">
-                    {course.title}
-                  </h3>
-                </div>
+              {/* Title & Module Subtitle */}
+              <h3 className="font-display font-bold text-lg text-[#1F1B2D] leading-snug mb-2">
+                {course.title}
+              </h3>
+              <p className="text-xs text-[#6B7280] mb-6">
+                {course.completed} of {course.total} Modules Completed
+              </p>
 
-                <p className="text-xs text-slate-500 mb-4 line-clamp-2 leading-relaxed">
-                  {course.description}
-                </p>
-
-                {/* Tags */}
-                <div className="flex flex-wrap gap-1.5 mb-5">
-                  {course.tags.map((tag, idx) => (
-                    <span key={idx} className="px-2 py-0.5 rounded-md bg-slate-100 text-slate-600 text-[10px] font-medium">
-                      #{tag}
-                    </span>
-                  ))}
-                </div>
-
-                {/* Progress bar if enrolled */}
-                {course.progress > 0 && (
-                  <div className="mb-4">
-                    <div className="flex justify-between text-xs font-semibold mb-1">
-                      <span className="text-slate-600">Course Progress</span>
-                      <span className="text-[#810B38] font-mono">{course.progress}%</span>
-                    </div>
-                    <div className="h-1.5 w-full bg-slate-100 rounded-full overflow-hidden">
-                      <div className="h-full bg-gradient-to-r from-cyan-500 to-emerald-500" style={{ width: `${course.progress}%` }} />
-                    </div>
-                  </div>
-                )}
+              {/* Progress Bar */}
+              <div className="h-2 w-full bg-[#F3F4F6] rounded-full overflow-hidden mb-6">
+                <div className={`h-full ${course.barColor} rounded-full`} style={{ width: `${course.progress}%` }} />
               </div>
             </div>
 
-            {/* Bottom Actions */}
-            <div className="p-6 pt-0 border-t border-slate-100 flex items-center justify-between mt-auto">
-              <span className="text-xs text-slate-500 font-medium">
-                {course.modulesCount} Modules
-              </span>
-
-              <div className="flex gap-2">
-                <button
-                  onClick={() => setDetailModalCourse(course)}
-                  className="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold transition-colors"
-                >
-                  View Syllabus
-                </button>
-                {course.status === 'New' ? (
-                  <button
-                    onClick={() => enrollCourse(course.id)}
-                    className="px-4 py-2 rounded-xl bg-[#810B38] hover:bg-[#9c244b] text-white text-xs font-bold transition-all shadow-md"
-                  >
-                    Enroll Now
-                  </button>
-                ) : (
-                  <button
-                    onClick={() => setDetailModalCourse(course)}
-                    className="px-4 py-2 rounded-xl bg-[#810B38] hover:bg-[#9c244b] text-white text-xs font-bold transition-all shadow-md"
-                  >
-                    Continue
-                  </button>
-                )}
-              </div>
-            </div>
+            {/* Bottom Continue Module Pill Button matching Reference Image 2 */}
+            <button
+              onClick={() => {
+                const found = courses.find(c => c.id === course.id) || courses[0];
+                setSelectedCourse(found);
+                setDetailModalCourse(found);
+              }}
+              className="w-full py-3 rounded-2xl bg-[#F3F4F6] hover:bg-[#5B4E80] hover:text-white text-[#1F1B2D] text-xs font-bold transition-colors flex items-center justify-center gap-2"
+            >
+              <span className="material-symbols-outlined text-[16px]">play_arrow</span>
+              <span>Continue Module</span>
+            </button>
           </div>
         ))}
       </div>
 
-      {/* Course Detail Modal */}
+      {/* Syllabus Modal */}
       {detailModalCourse && (
-        <div className="fixed inset-0 z-50 bg-slate-900/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl max-w-2xl w-full max-h-[90vh] overflow-y-auto p-6 md:p-8 shadow-2xl space-y-6 animate-fade-in-up">
-            <div className="flex justify-between items-start border-b border-slate-100 pb-4">
+        <div className="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-white rounded-3xl max-w-xl w-full p-6 md:p-8 shadow-2xl space-y-6 border border-[#E5E7EB]">
+            <div className="flex justify-between items-start border-b border-[#EAEAEA] pb-4">
               <div>
-                <span className="px-3 py-1 rounded-full bg-rose-50 text-[#810B38] text-[10px] font-bold uppercase tracking-wider">
-                  {detailModalCourse.category} • {detailModalCourse.difficulty}
+                <span className="px-3 py-1 rounded-md bg-[#F0EBFA] text-[#5B4E80] text-[10px] font-bold uppercase">
+                  {detailModalCourse.category}
                 </span>
-                <h2 className="font-display text-xl font-bold text-slate-900 mt-2">
+                <h2 className="font-display text-xl font-bold text-[#1F1B2D] mt-2">
                   {detailModalCourse.title}
                 </h2>
-                <p className="text-xs text-slate-500 mt-1">Instructor: {detailModalCourse.instructor}</p>
               </div>
               <button
                 onClick={() => setDetailModalCourse(null)}
-                className="p-1 rounded-full hover:bg-slate-100 text-slate-400 hover:text-slate-600"
+                className="p-1 rounded-full text-slate-400 hover:text-slate-600"
               >
                 <span className="material-symbols-outlined">close</span>
               </button>
             </div>
 
-            {/* Description */}
-            <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+            <p className="text-xs text-[#6B7280] leading-relaxed">
               {detailModalCourse.description}
             </p>
 
-            {/* Modules List with Toggle */}
-            <div>
-              <div className="flex justify-between items-center mb-3">
-                <h4 className="font-display font-bold text-sm text-slate-900">Module Syllabus & Interactive Checkpoints</h4>
-                <span className="text-xs font-mono font-bold text-[#810B38]">
-                  {detailModalCourse.completedModules} / {detailModalCourse.modulesCount} Completed
-                </span>
-              </div>
-
-              <div className="space-y-2.5">
-                {detailModalCourse.modules.map((mod) => (
-                  <div
-                    key={mod.id}
-                    onClick={() => handleModuleToggle(detailModalCourse.id, mod.id)}
-                    className={`p-3.5 rounded-xl border flex items-center justify-between cursor-pointer transition-all ${
-                      mod.completed
-                        ? 'bg-emerald-50/60 border-emerald-200'
-                        : 'bg-slate-50 border-slate-200 hover:bg-slate-100'
-                    }`}
-                  >
-                    <div className="flex items-center gap-3">
-                      <span className={`material-symbols-outlined text-[20px] ${mod.completed ? 'text-emerald-600' : 'text-slate-400'}`}>
-                        {mod.completed ? 'check_box' : 'check_box_outline_blank'}
-                      </span>
-                      <span className={`text-xs font-semibold ${mod.completed ? 'line-through text-slate-500' : 'text-slate-800'}`}>
-                        {mod.title}
-                      </span>
-                    </div>
-                    <span className="text-[11px] font-mono text-slate-400">{mod.duration}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Modal Actions */}
-            <div className="pt-4 border-t border-slate-100 flex justify-end gap-3">
+            <div className="pt-4 border-t border-[#EAEAEA] flex justify-end gap-3">
               <button
                 onClick={() => setDetailModalCourse(null)}
-                className="px-5 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold"
+                className="px-5 py-2 rounded-xl bg-[#F3F4F6] text-[#1F1B2D] text-xs font-bold"
               >
-                Close Window
+                Close
               </button>
               <button
                 onClick={() => {
                   setDetailModalCourse(null);
-                  setActiveTab('practice');
+                  navigate('/practice');
                 }}
-                className="px-5 py-2.5 rounded-xl bg-[#810B38] hover:bg-[#9c244b] text-white text-xs font-bold shadow-md"
+                className="px-5 py-2 rounded-xl bg-[#5B4E80] text-white text-xs font-bold shadow-xs"
               >
-                Practice Related Sandbox
+                Practice Sandbox
               </button>
             </div>
           </div>
@@ -292,6 +187,8 @@ const CourseCatalog = () => {
       )}
     </div>
   );
-};
+});
+
+CourseCatalog.displayName = 'CourseCatalog';
 
 export default CourseCatalog;

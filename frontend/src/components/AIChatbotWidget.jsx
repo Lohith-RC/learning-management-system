@@ -1,14 +1,14 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { useApp } from '../context/AppContext';
+import React, { useState, useRef, useEffect, memo } from 'react';
+import { useAuth } from '../context/AuthContext';
 
-const AIChatbotWidget = () => {
-  const { user } = useApp();
+const AIChatbotWidget = memo(() => {
+  const { user } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState([
     {
       id: 1,
       sender: 'ai',
-      text: `Hi ${user.name}! I'm your Groq AI Assistant on SkillForge. Ask me anything about Data Structures, System Design, or Resume ATS prep.`,
+      text: `Hi ${user?.name || 'Student'}! I'm your AI Assistant on SkillForge. Ask me anything about Data Structures, System Design, or Resume ATS prep.`,
       time: 'Just now'
     }
   ]);
@@ -45,7 +45,6 @@ const AIChatbotWidget = () => {
     if (!textToSend) setInputText('');
     setIsTyping(true);
 
-    // Simulate Groq AI response
     setTimeout(() => {
       let aiText = "That's a great question! For high-scale technical interviews, focus on analyzing time/space trade-offs and handling edge cases in test suites.";
       
@@ -69,44 +68,56 @@ const AIChatbotWidget = () => {
     }, 800);
   };
 
+  // Fixed Bottom-Right Viewport Launcher Button labeled "Ask AI"
   if (!isOpen) {
     return (
       <button
         onClick={() => setIsOpen(true)}
-        className="fixed bottom-6 right-6 z-50 flex items-center gap-3 px-5 py-3.5 rounded-full bg-[#0B0F17] hover:bg-slate-900 text-white shadow-2xl border border-[#810B38] group transition-all hover:scale-105"
+        aria-label="Ask AI Assistant"
+        title="Ask AI Assistant"
+        className="fixed bottom-6 right-6 z-[9999] flex items-center gap-2.5 px-4 py-2.5 rounded-full bg-white/90 backdrop-blur-xl text-[#1F1B2D] border border-white/80 shadow-[0_12px_30px_rgba(91,78,128,0.22)] hover:shadow-[0_18px_36px_rgba(91,78,128,0.32)] transition-all hover:scale-105 active:scale-95 group relative overflow-hidden font-sans cursor-pointer"
       >
-        <div className="w-8 h-8 rounded-full bg-[#810B38] flex items-center justify-center text-white shadow-md">
-          <span className="material-symbols-outlined text-[18px]">smart_toy</span>
+        {/* Bottom Ambient Glow Accent Bar */}
+        <span className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-[#5B4E80] via-[#9333EA] to-[#3B82F6] opacity-80 group-hover:opacity-100 transition-opacity" />
+
+        {/* Emblem Badge Icon */}
+        <div className="w-7 h-7 rounded-full bg-[#F0EBFA] border border-[#EAE5F5] p-1 flex items-center justify-center shadow-xs">
+          <img src="/skillforge-logo.png" alt="SkillForge AI Logo" className="w-full h-full object-contain" />
         </div>
-        <span className="font-display text-xs font-bold text-white tracking-wide">Ask Groq AI</span>
-        <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse" />
+
+        {/* Clear Accessible Label: Ask AI */}
+        <span className="font-display text-xs font-extrabold text-[#1F1B2D] tracking-wide pr-1">Ask AI</span>
+        
+        {/* Active Indicator Pulse */}
+        <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 ring-2 ring-emerald-100 animate-pulse" />
       </button>
     );
   }
 
   return (
-    <div className="fixed bottom-6 right-6 w-80 sm:w-96 bg-[#0B0F17] text-white rounded-3xl shadow-2xl border border-white/10 flex flex-col overflow-hidden z-50 animate-fade-in-up">
-      {/* Header */}
-      <div className="p-4 border-b border-white/10 bg-white/5 flex justify-between items-center backdrop-blur-sm">
+    <div className="fixed bottom-6 right-6 w-80 sm:w-96 bg-white/95 backdrop-blur-2xl text-[#1F1B2D] rounded-3xl shadow-2xl border border-white flex flex-col overflow-hidden z-[9999] animate-fade-in-up font-sans">
+      {/* Popover Header */}
+      <div className="p-4 border-b border-[#EAEAEA] bg-[#F9FAFC] flex justify-between items-center">
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-xl bg-[#810B38] flex items-center justify-center text-white">
-            <span className="material-symbols-outlined text-[18px]">smart_toy</span>
+          <div className="w-8 h-8 rounded-full bg-[#F0EBFA] border border-[#EAE5F5] p-1 flex items-center justify-center">
+            <img src="/skillforge-logo.png" alt="SkillForge AI Logo" className="w-full h-full object-contain" />
           </div>
           <div>
-            <h4 className="font-display text-xs font-bold text-white">SkillForge AI Assistant</h4>
-            <p className="text-[10px] text-cyan-400 font-mono">Groq Llama-3 Engine Active</p>
+            <h4 className="font-display text-xs font-bold text-[#1F1B2D]">SkillForge AI Assistant</h4>
+            <p className="text-[10px] text-[#5B4E80] font-mono">AI Active • Ready to help</p>
           </div>
         </div>
         <button
           onClick={() => setIsOpen(false)}
-          className="p-1 text-slate-400 hover:text-white rounded-lg transition-colors"
+          aria-label="Close Chat"
+          className="p-1 text-[#9CA3AF] hover:text-[#1F1B2D] rounded-lg transition-colors"
         >
           <span className="material-symbols-outlined text-[18px]">close</span>
         </button>
       </div>
 
-      {/* Messages Scroll Area */}
-      <div className="p-4 h-72 overflow-y-auto space-y-3 bg-[#0B0F17]/90 text-xs">
+      {/* Messages Area */}
+      <div className="p-4 h-72 overflow-y-auto space-y-3 bg-[#F9FAFC]/80 text-xs">
         {messages.map((msg) => (
           <div
             key={msg.id}
@@ -115,8 +126,8 @@ const AIChatbotWidget = () => {
             <div
               className={`max-w-[85%] p-3 rounded-2xl leading-relaxed ${
                 msg.sender === 'user'
-                  ? 'bg-[#810B38] text-white rounded-br-none'
-                  : 'bg-white/10 text-slate-200 border border-white/10 rounded-bl-none'
+                  ? 'bg-[#5B4E80] text-white rounded-br-none shadow-xs'
+                  : 'bg-white text-[#1F1B2D] border border-[#E5E7EB] rounded-bl-none shadow-xs'
               }`}
             >
               <p>{msg.text}</p>
@@ -126,29 +137,29 @@ const AIChatbotWidget = () => {
         ))}
 
         {isTyping && (
-          <div className="flex items-center gap-2 text-cyan-400 text-xs font-mono">
+          <div className="flex items-center gap-2 text-[#5B4E80] text-xs font-mono">
             <span className="material-symbols-outlined text-[14px] animate-spin">sync</span>
-            <span>Groq AI is processing...</span>
+            <span>AI Assistant is typing...</span>
           </div>
         )}
         <div ref={chatEndRef} />
       </div>
 
-      {/* Quick Prompt Pills */}
-      <div className="px-3 py-2 bg-slate-950 border-t border-white/5 flex gap-1.5 overflow-x-auto">
+      {/* Quick Prompts */}
+      <div className="px-3 py-2 bg-[#F9FAFC] border-t border-[#EAEAEA] flex gap-1.5 overflow-x-auto">
         {predefinedPrompts.map((prompt, idx) => (
           <button
             key={idx}
             onClick={() => handleSendMessage(prompt)}
-            className="px-2.5 py-1 rounded-full bg-white/5 hover:bg-white/10 text-white/80 text-[10px] whitespace-nowrap border border-white/10 transition-colors"
+            className="px-2.5 py-1 rounded-full bg-white hover:bg-[#F0EBFA] text-[#4B5563] hover:text-[#5B4E80] text-[10px] font-semibold whitespace-nowrap border border-[#E5E7EB] transition-colors"
           >
             {prompt}
           </button>
         ))}
       </div>
 
-      {/* Input Field */}
-      <div className="p-3 bg-[#0B0F17] border-t border-white/10">
+      {/* Input Form */}
+      <div className="p-3 bg-white border-t border-[#EAEAEA]">
         <form
           onSubmit={(e) => {
             e.preventDefault();
@@ -160,12 +171,13 @@ const AIChatbotWidget = () => {
             type="text"
             value={inputText}
             onChange={(e) => setInputText(e.target.value)}
-            placeholder="Ask a technical question..."
-            className="w-full bg-white/5 border border-white/10 rounded-full py-2 pl-4 pr-10 text-xs text-white placeholder:text-slate-500 focus:outline-none focus:ring-1 focus:ring-[#810B38]"
+            placeholder="Ask AI a technical question..."
+            className="w-full bg-[#F3F4F6] border border-[#E5E7EB] rounded-full py-2 pl-4 pr-10 text-xs text-[#1F1B2D] placeholder:text-[#9CA3AF] focus:outline-none focus:ring-1 focus:ring-[#5B4E80]"
           />
           <button
             type="submit"
-            className="absolute right-2 top-1/2 -translate-y-1/2 text-rose-400 hover:text-rose-300 p-1"
+            aria-label="Send Message"
+            className="absolute right-2 top-1/2 -translate-y-1/2 text-[#5B4E80] hover:text-[#4C4070] p-1"
           >
             <span className="material-symbols-outlined text-[18px]">send</span>
           </button>
@@ -173,6 +185,8 @@ const AIChatbotWidget = () => {
       </div>
     </div>
   );
-};
+});
+
+AIChatbotWidget.displayName = 'AIChatbotWidget';
 
 export default AIChatbotWidget;
