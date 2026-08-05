@@ -1,0 +1,7 @@
+# Local dependency and build directories
+node_modules/
+dist/
+
+# Local env files
+.env.local
+.env.*.local
