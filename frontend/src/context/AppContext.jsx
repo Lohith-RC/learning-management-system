@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
 import { INITIAL_USER, COURSES_DATA, PRACTICE_PROBLEMS, NOTIFICATIONS_DATA } from '../data/mockData';
 
 const AppContext = createContext();
@@ -14,6 +14,56 @@ export const AppProvider = ({ children }) => {
   const [notifications, setNotifications] = useState(NOTIFICATIONS_DATA);
   const [unreadCount, setUnreadCount] = useState(2);
   const [toast, setToast] = useState(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const userRes = await fetch('/api/user');
+        if (userRes.ok) {
+          const userData = await userRes.json();
+          setUser(userData);
+        }
+      } catch (err) {
+        console.log('Backend offline or error fetching user, using mock data.');
+      }
+
+      try {
+        const coursesRes = await fetch('/api/courses');
+        if (coursesRes.ok) {
+          const coursesData = await coursesRes.json();
+          setCourses(coursesData);
+        }
+      } catch (err) {
+        console.log('Backend offline or error fetching courses, using mock data.');
+      }
+
+      try {
+        const practiceRes = await fetch('/api/practice');
+        if (practiceRes.ok) {
+          const practiceData = await practiceRes.json();
+          setPracticeProblems(practiceData);
+          if (practiceData.length > 0) {
+            setActiveProblem(practiceData[0]);
+          }
+        }
+      } catch (err) {
+        console.log('Backend offline or error fetching practice problems, using mock data.');
+      }
+
+      try {
+        const notificationsRes = await fetch('/api/notifications');
+        if (notificationsRes.ok) {
+          const notificationsData = await notificationsRes.json();
+          setNotifications(notificationsData);
+          setUnreadCount(notificationsData.filter(n => !n.read).length);
+        }
+      } catch (err) {
+        console.log('Backend offline or error fetching notifications, using mock data.');
+      }
+    };
+
+    fetchData();
+  }, []);
 
   const showToast = (message, type = 'success') => {
     setToast({ message, type });
@@ -36,13 +86,24 @@ export const AppProvider = ({ children }) => {
     showToast('Logged out successfully', 'info');
   };
 
-  const enrollCourse = (courseId) => {
+  const enrollCourse = async (courseId) => {
     setCourses(prev => prev.map(c => {
       if (c.id === courseId) {
         return { ...c, status: 'In Progress', progress: Math.max(c.progress, 5) };
       }
       return c;
     }));
+
+    try {
+      await fetch('/api/courses/enroll', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ courseId }),
+      });
+    } catch (err) {
+      console.log('Backend offline, enrolled course updated locally.');
+    }
+
     showToast('Enrolled in course successfully!', 'success');
   };
 
