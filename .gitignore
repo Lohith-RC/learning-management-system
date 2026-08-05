@@ -29,3 +29,9 @@ Thumbs.db
 .agents/
 .vscode/
 .idea/
+
+# Reports & Internal Logs
+Project_Progress_Report.md
+Lohith_RC_Individual_Progress_Report.md
+*_Progress_Report.md
+
