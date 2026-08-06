@@ -1,5 +1,6 @@
 import React, { memo } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import { Sparkles, Rocket, BookOpen, Code2, CheckCircle2, ShieldCheck, ArrowRight, Star } from 'lucide-react';
 
 const LandingPage = memo(() => {
@@ -25,18 +26,24 @@ const LandingPage = memo(() => {
         </div>
 
         <div className="flex items-center gap-2.5 sm:gap-4">
-          <button
+          <motion.button
             onClick={() => navigate('/signin')}
-            className="text-xs font-bold uppercase tracking-wider text-[#4B5563] hover:text-[#5B4E80] transition-colors px-3 py-2 cursor-pointer"
+            className="text-xs font-bold uppercase tracking-wider text-[#4B5563] hover:text-[#5B4E80] px-3 py-2 cursor-pointer"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            transition={{ duration: 0.15, ease: [0.16, 1, 0.3, 1] }}
           >
             SIGN IN
-          </button>
-          <button
+          </motion.button>
+          <motion.button
             onClick={() => navigate('/signup')}
-            className="text-xs font-bold uppercase tracking-wider text-white px-4 sm:px-6 py-2.5 rounded-full bg-gradient-to-r from-[#5B4E80] to-[#6E56CF] hover:from-[#4C4070] hover:to-[#5B4E80] transition-all shadow-md active:scale-95 cursor-pointer"
+            className="text-xs font-bold uppercase tracking-wider text-white px-4 sm:px-6 py-2.5 rounded-full bg-gradient-to-r from-[#5B4E80] to-[#6E56CF] hover:from-[#4C4070] hover:to-[#5B4E80] shadow-md cursor-pointer"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            transition={{ duration: 0.15, ease: [0.16, 1, 0.3, 1] }}
           >
             GET STARTED
-          </button>
+          </motion.button>
         </div>
       </nav>
 
@@ -71,22 +78,28 @@ const LandingPage = memo(() => {
 
         {/* Hero Action Buttons - Full Width on Mobile */}
         <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto mb-12 sm:mb-16">
-          <button
+          <motion.button
             onClick={() => navigate('/dashboard')}
-            className="w-full sm:w-auto flex items-center justify-center gap-2.5 px-8 py-3.5 rounded-2xl sm:rounded-full bg-gradient-to-r from-[#5B4E80] to-[#6E56CF] hover:from-[#4C4070] hover:to-[#5B4E80] text-white font-bold text-xs sm:text-sm transition-all shadow-md active:scale-95 cursor-pointer"
+            className="w-full sm:w-auto flex items-center justify-center gap-2.5 px-8 py-3.5 rounded-2xl sm:rounded-full bg-gradient-to-r from-[#5B4E80] to-[#6E56CF] hover:from-[#4C4070] hover:to-[#5B4E80] text-white font-bold text-xs sm:text-sm shadow-md cursor-pointer"
+            whileHover={{ scale: 1.05, boxShadow: '0 12px 24px -8px rgba(91, 78, 128, 0.3)' }}
+            whileTap={{ scale: 0.95 }}
+            transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
           >
             <Rocket className="w-4 h-4" />
             <span>Launch Student Workspace</span>
             <ArrowRight className="w-4 h-4 ml-1" />
-          </button>
+          </motion.button>
 
-          <button
+          <motion.button
             onClick={() => navigate('/courses')}
-            className="w-full sm:w-auto flex items-center justify-center gap-2.5 px-8 py-3.5 rounded-2xl sm:rounded-full border border-[#5B4E80] text-[#5B4E80] hover:bg-[#F0EBFA] font-bold text-xs sm:text-sm transition-all active:scale-95 cursor-pointer bg-white"
+            className="w-full sm:w-auto flex items-center justify-center gap-2.5 px-8 py-3.5 rounded-2xl sm:rounded-full border border-[#5B4E80] text-[#5B4E80] hover:bg-[#F0EBFA] font-bold text-xs sm:text-sm bg-white cursor-pointer"
+            whileHover={{ scale: 1.05, boxShadow: '0 8px 20px -6px rgba(91, 78, 128, 0.2)' }}
+            whileTap={{ scale: 0.95 }}
+            transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
           >
             <BookOpen className="w-4 h-4 text-[#5B4E80]" />
             <span>Explore 20+ Courses</span>
-          </button>
+          </motion.button>
         </div>
 
         {/* Mobile Quick Stats Banner */}
@@ -124,16 +137,24 @@ const LandingPage = memo(() => {
               desc: 'Instant match scoring, skill gap diagnostics, and targeted keyword placement optimization.'
             }
           ].map((card, idx) => (
-            <div
+            <motion.div
               key={idx}
-              className="bg-white border border-[#E5E7EB] rounded-3xl p-6 sm:p-8 shadow-xs hover:shadow-lg transition-all duration-300 group"
+              className="bg-white border border-[#E5E7EB] rounded-3xl p-6 sm:p-8 shadow-xs group"
+              whileHover={{ y: -6, boxShadow: '0 20px 40px -12px rgba(91, 78, 128, 0.25)' }}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: idx * 0.1, ease: [0.16, 1, 0.3, 1] }}
             >
-              <div className="w-12 h-12 rounded-2xl bg-[#F0EBFA] flex items-center justify-center mb-5 group-hover:scale-110 transition-transform">
+              <motion.div
+                className="w-12 h-12 rounded-2xl bg-[#F0EBFA] flex items-center justify-center mb-5"
+                whileHover={{ scale: 1.1, rotate: 5 }}
+                transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
+              >
                 {card.icon}
-              </div>
+              </motion.div>
               <h3 className="font-display font-bold text-base text-[#1F1B2D] mb-2">{card.title}</h3>
               <p className="text-xs text-[#6B7280] leading-relaxed">{card.desc}</p>
-            </div>
+            </motion.div>
           ))}
         </div>
       </main>

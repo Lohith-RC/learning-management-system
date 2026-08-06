@@ -1,6 +1,22 @@
-import React, { useState, memo } from 'react';
+import React, { useState, memo, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useUI } from '../context/UIContext';
+import { motion, useMotionValue, useTransform, animate } from 'framer-motion';
+
+// Counting animation component
+const CountUp = memo(({ value, duration = 1.5 }) => {
+  const motionValue = useMotionValue(0);
+  const rounded = useTransform(motionValue, (latest) => Math.round(latest));
+
+  useEffect(() => {
+    const controls = animate(motionValue, value, { duration, ease: [0.16, 1, 0.3, 1] });
+    return controls.stop;
+  }, [motionValue, value, duration]);
+
+  return <motion.span>{rounded}</motion.span>;
+});
+
+CountUp.displayName = 'CountUp';
 
 const ResumeAIOptimizer = memo(() => {
   const { user } = useAuth();
@@ -97,16 +113,19 @@ SKILLS: JavaScript, TypeScript, Python, React.js, Node.js, SQL, Data Structures,
             <span className="text-xs text-[#6B7280] font-medium">
               Word Count: <strong className="text-[#1F1B2D] font-mono">{resumeText.split(/\s+/).filter(Boolean).length}</strong> Words
             </span>
-            <button
+            <motion.button
               onClick={handleAudit}
               disabled={isAnalyzing}
-              className="flex items-center gap-2 px-6 py-3 rounded-2xl bg-[#5B4E80] hover:bg-[#4C4070] text-white text-xs font-bold shadow-xs transition-all disabled:opacity-50 hover:scale-105 active:scale-95"
+              className="flex items-center gap-2 px-6 py-3 rounded-2xl bg-[#5B4E80] hover:bg-[#4C4070] text-white text-xs font-bold shadow-xs disabled:opacity-50 cursor-pointer"
+              whileHover={{ scale: isAnalyzing ? 1 : 1.02 }}
+              whileTap={{ scale: isAnalyzing ? 1 : 0.95 }}
+              transition={{ duration: 0.15, ease: [0.16, 1, 0.3, 1] }}
             >
               <span className="material-symbols-outlined text-[18px]">
                 {isAnalyzing ? 'sync' : 'psychology'}
               </span>
               <span>{isAnalyzing ? 'Analyzing with AI Chat...' : 'Run ATS Audit'}</span>
-            </button>
+            </motion.button>
           </div>
         </div>
 
@@ -145,7 +164,9 @@ SKILLS: JavaScript, TypeScript, Python, React.js, Node.js, SQL, Data Structures,
                 />
               </svg>
               <div className="absolute flex flex-col items-center justify-center">
-                <span className="font-display font-black text-2xl text-[#1F1B2D]">{atsScore}</span>
+                <span className="font-display font-black text-2xl text-[#1F1B2D]">
+                  <CountUp value={atsScore} duration={1.2} />
+                </span>
                 <span className="text-[9px] font-mono font-bold text-[#9CA3AF]">/ 100</span>
               </div>
             </div>
@@ -190,14 +211,17 @@ SKILLS: JavaScript, TypeScript, Python, React.js, Node.js, SQL, Data Structures,
               </div>
             </div>
 
-            <button
+            <motion.button
               onClick={handleApplyOptimizations}
               disabled={isAnalyzing || optimized}
-              className="w-full py-3.5 rounded-2xl bg-[#5B4E80] hover:bg-[#4C4070] text-white text-xs font-bold shadow-xs transition-all flex items-center justify-center gap-2 disabled:opacity-60 hover:scale-[1.02] active:scale-[0.98]"
+              className="w-full py-3.5 rounded-2xl bg-[#5B4E80] hover:bg-[#4C4070] text-white text-xs font-bold shadow-xs flex items-center justify-center gap-2 disabled:opacity-60 cursor-pointer"
+              whileHover={{ scale: (isAnalyzing || optimized) ? 1 : 1.02 }}
+              whileTap={{ scale: (isAnalyzing || optimized) ? 1 : 0.95 }}
+              transition={{ duration: 0.15, ease: [0.16, 1, 0.3, 1] }}
             >
               <span className="material-symbols-outlined text-[18px]">auto_fix_high</span>
               <span>{optimized ? 'Enhancements Applied (Score: 96/100)' : 'Auto-Inject Missing Keywords'}</span>
-            </button>
+            </motion.button>
           </div>
         </div>
       </div>

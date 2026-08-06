@@ -2,6 +2,7 @@ import React, { memo } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useUI } from '../context/UIContext';
+import { motion, AnimatePresence } from 'framer-motion';
 import { X } from 'lucide-react';
 
 const Sidebar = memo(() => {
@@ -118,20 +119,32 @@ const Sidebar = memo(() => {
       </aside>
 
       {/* Mobile Slide-Over Drawer Overlay */}
-      {isMobileMenuOpen && (
-        <div className="fixed inset-0 z-50 md:hidden flex">
-          {/* Backdrop Blur */}
-          <div 
-            onClick={closeMobileMenu}
-            className="fixed inset-0 bg-slate-950/50 backdrop-blur-xs transition-opacity animate-fade-in"
-          />
+      <AnimatePresence>
+        {isMobileMenuOpen && (
+          <div className="fixed inset-0 z-50 md:hidden flex">
+            {/* Backdrop Blur */}
+            <motion.div
+              onClick={closeMobileMenu}
+              className="fixed inset-0 bg-slate-950/50 backdrop-blur-xs"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
+            />
 
-          {/* Drawer Sheet */}
-          <div className="relative w-[280px] max-w-[80vw] bg-white dark:bg-slate-900 h-full shadow-2xl z-10 animate-slide-in-left">
-            {sidebarContent}
+            {/* Drawer Sheet */}
+            <motion.div
+              className="relative w-[280px] max-w-[80vw] bg-white dark:bg-slate-900 h-full shadow-2xl z-10"
+              initial={{ x: '-100%' }}
+              animate={{ x: 0 }}
+              exit={{ x: '-100%' }}
+              transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+            >
+              {sidebarContent}
+            </motion.div>
           </div>
-        </div>
-      )}
+        )}
+      </AnimatePresence>
     </>
   );
 });
