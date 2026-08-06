@@ -24,15 +24,15 @@ export const AuthProvider = ({ children, onLoginSuccess, onLogoutSuccess }) => {
 
   const login = useCallback(async (email, password) => {
     try {
-      const res = await fetch('/api/v1/auth/login', {
+      const res = await fetch('/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password })
       });
       if (res.ok) {
         const result = await res.json();
-        if (result.success && result.data) {
-          const authData = result.data;
+        const authData = (result.success && result.data) ? result.data : result;
+        if (authData && authData.accessToken) {
           localStorage.setItem('accessToken', authData.accessToken);
           localStorage.setItem('refreshToken', authData.refreshToken);
           setUser({
@@ -62,15 +62,15 @@ export const AuthProvider = ({ children, onLoginSuccess, onLogoutSuccess }) => {
 
   const register = useCallback(async (name, email, password) => {
     try {
-      const res = await fetch('/api/v1/auth/register', {
+      const res = await fetch('/api/auth/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ fullName: name, email, password })
       });
       if (res.ok) {
         const result = await res.json();
-        if (result.success && result.data) {
-          const authData = result.data;
+        const authData = (result.success && result.data) ? result.data : result;
+        if (authData && authData.accessToken) {
           localStorage.setItem('accessToken', authData.accessToken);
           localStorage.setItem('refreshToken', authData.refreshToken);
           setUser({
