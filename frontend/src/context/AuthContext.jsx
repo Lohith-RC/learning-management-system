@@ -30,17 +30,23 @@ export const AuthProvider = ({ children, onLoginSuccess, onLogoutSuccess }) => {
         body: JSON.stringify({ email, password })
       });
       if (res.ok) {
-        const data = await res.json();
-        if (data.token) {
-          localStorage.setItem('skillforge_token', data.token);
+        const result = await res.json();
+        const authData = (result.success && result.data) ? result.data : result;
+        if (authData && authData.accessToken) {
+          localStorage.setItem('accessToken', authData.accessToken);
+          localStorage.setItem('refreshToken', authData.refreshToken);
+          setUser({
+            email: authData.email,
+            name: authData.fullName || INITIAL_USER.name,
+            role: authData.role,
+          });
+          setIsAuthenticated(true);
+          if (onLoginSuccess) onLoginSuccess(authData.fullName || INITIAL_USER.name);
+          return;
         }
-        setUser(data.user || { ...INITIAL_USER, email });
-        setIsAuthenticated(true);
-        if (onLoginSuccess) onLoginSuccess((data.user && data.user.name) || INITIAL_USER.name);
-        return;
       }
     } catch (err) {
-      console.log('Backend authentication offline, using fallback mock login.');
+      console.log('Backend authentication offline, using fallback mock login.', err);
     }
 
     // Graceful Fallback
@@ -59,20 +65,26 @@ export const AuthProvider = ({ children, onLoginSuccess, onLogoutSuccess }) => {
       const res = await fetch('/api/auth/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, email, password })
+        body: JSON.stringify({ fullName: name, email, password })
       });
       if (res.ok) {
-        const data = await res.json();
-        if (data.token) {
-          localStorage.setItem('skillforge_token', data.token);
+        const result = await res.json();
+        const authData = (result.success && result.data) ? result.data : result;
+        if (authData && authData.accessToken) {
+          localStorage.setItem('accessToken', authData.accessToken);
+          localStorage.setItem('refreshToken', authData.refreshToken);
+          setUser({
+            email: authData.email,
+            name: authData.fullName,
+            role: authData.role,
+          });
+          setIsAuthenticated(true);
+          if (onLoginSuccess) onLoginSuccess(authData.fullName);
+          return;
         }
-        setUser(data.user || { ...INITIAL_USER, name, email });
-        setIsAuthenticated(true);
-        if (onLoginSuccess) onLoginSuccess(name || INITIAL_USER.name);
-        return;
       }
     } catch (err) {
-      console.log('Backend registration offline, using fallback mock register.');
+      console.log('Backend registration offline, using fallback mock register.', err);
     }
 
     setIsAuthenticated(true);
@@ -87,6 +99,8 @@ export const AuthProvider = ({ children, onLoginSuccess, onLogoutSuccess }) => {
   }, [onLoginSuccess]);
 
   const logout = useCallback(() => {
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('refreshToken');
     localStorage.removeItem('skillforge_token');
     setIsAuthenticated(false);
     if (onLogoutSuccess) {

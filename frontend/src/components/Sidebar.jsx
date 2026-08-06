@@ -33,10 +33,10 @@ const Sidebar = memo(() => {
         >
           <img src="/skillforge-logo.png" alt="SkillForge Logo" className="w-10 h-10 object-contain group-hover:scale-105 transition-transform" />
           <div>
-            <h1 className="font-display font-black text-xl text-[#1F1B2D] tracking-tight">
+            <h1 className="font-display font-black text-xl text-[#1F1B2D] dark:text-slate-100 tracking-tight">
               SkillForge
             </h1>
-            <p className="font-sans text-[9px] text-[#8E8A9F] font-bold tracking-widest uppercase">
+            <p className="font-sans text-[9px] text-[#8E8A9F] dark:text-purple-400/80 font-bold tracking-widest uppercase">
               ELITE TALENT ENGINE
             </p>
           </div>
@@ -46,7 +46,7 @@ const Sidebar = memo(() => {
         <button
           onClick={closeMobileMenu}
           aria-label="Close Navigation Menu"
-          className="md:hidden p-1.5 rounded-lg text-[#9CA3AF] hover:text-[#1F1B2D] hover:bg-[#F3F4F6]"
+          className="md:hidden p-1.5 rounded-lg text-[#9CA3AF] hover:text-[#1F1B2D] dark:hover:text-slate-100 hover:bg-[#F3F4F6] dark:hover:bg-slate-800"
         >
           <X className="w-5 h-5" />
         </button>
@@ -62,11 +62,11 @@ const Sidebar = memo(() => {
               onClick={() => handleNavigation(item.path)}
               className={`w-full flex items-center gap-3.5 px-4 py-3 rounded-xl font-semibold text-sm transition-all cursor-pointer ${
                 isActive
-                  ? 'bg-[#F0EBFA] text-[#5B4E80] font-bold shadow-xs'
-                  : 'text-[#6B7280] hover:bg-[#F9FAFC] hover:text-[#1F1B2D]'
+                  ? 'bg-[#F0EBFA] dark:bg-purple-950/60 text-[#5B4E80] dark:text-purple-300 font-bold shadow-xs'
+                  : 'text-[#6B7280] dark:text-slate-400 hover:bg-[#F9FAFC] dark:hover:bg-slate-800 hover:text-[#1F1B2D] dark:hover:text-slate-100'
               }`}
             >
-              <span className={`material-symbols-outlined text-[20px] ${isActive ? 'text-[#5B4E80]' : 'text-[#9CA3AF]'}`}>
+              <span className={`material-symbols-outlined text-[20px] ${isActive ? 'text-[#5B4E80] dark:text-purple-300' : 'text-[#9CA3AF] dark:text-slate-500'}`}>
                 {item.icon}
               </span>
               <span>{item.label}</span>
@@ -77,20 +77,20 @@ const Sidebar = memo(() => {
 
       {/* Footer Free Access Card */}
       <div className="px-4 mt-auto space-y-3">
-        <div className="p-4 rounded-2xl bg-[#F4F0FA] border border-[#EAE5F5]">
-          <div className="flex items-center gap-2 text-[#5B4E80] text-xs font-bold mb-1">
+        <div className="p-4 rounded-2xl bg-[#F4F0FA] dark:bg-slate-800/70 border border-[#EAE5F5] dark:border-slate-700/60">
+          <div className="flex items-center gap-2 text-[#5B4E80] dark:text-purple-300 text-xs font-bold mb-1">
             <span className="material-symbols-outlined text-[16px]">verified</span>
             <span>100% Free & Open Access</span>
           </div>
-          <p className="text-[11px] text-[#6B7280] leading-relaxed">
+          <p className="text-[11px] text-[#6B7280] dark:text-slate-400 leading-relaxed">
             Built for CS engineering placement prep.
           </p>
         </div>
 
-        <div className="pt-2 border-t border-[#EAEAEA] space-y-0.5">
+        <div className="pt-2 border-t border-[#EAEAEA] dark:border-slate-800 space-y-0.5">
           <button
             onClick={() => handleNavigation('/')}
-            className="w-full flex items-center gap-3 px-4 py-2 rounded-xl text-[#6B7280] hover:bg-[#F9FAFC] text-xs font-medium transition-colors cursor-pointer"
+            className="w-full flex items-center gap-3 px-4 py-2 rounded-xl text-[#6B7280] dark:text-slate-400 hover:bg-[#F9FAFC] dark:hover:bg-slate-800 hover:text-[#1F1B2D] dark:hover:text-slate-100 text-xs font-medium transition-colors cursor-pointer"
           >
             <span className="material-symbols-outlined text-[18px]">help_outline</span>
             Help & Documentation
@@ -100,7 +100,7 @@ const Sidebar = memo(() => {
               logout();
               closeMobileMenu();
             }}
-            className="w-full flex items-center gap-3 px-4 py-2 rounded-xl text-rose-600 hover:bg-rose-50 text-xs font-semibold transition-colors cursor-pointer"
+            className="w-full flex items-center gap-3 px-4 py-2 rounded-xl text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/40 text-xs font-semibold transition-colors cursor-pointer"
           >
             <span className="material-symbols-outlined text-[18px]">logout</span>
             Sign Out
@@ -113,11 +113,11 @@ const Sidebar = memo(() => {
   return (
     <>
       {/* Desktop Permanent Sidebar (Laptop & Desktop Screens >= 768px) */}
-      <aside className="fixed left-0 top-0 h-full w-[260px] bg-white hidden md:flex flex-col z-40 border-r border-[#EAEAEA]">
+      <aside className="fixed left-0 top-0 h-full w-[260px] bg-white dark:bg-slate-900 hidden md:flex flex-col z-40 border-r border-[#EAEAEA] dark:border-slate-800 transition-colors duration-300">
         {sidebarContent}
       </aside>
 
-      {/* Mobile Slide-Over Drawer Overlay (Smartphone Screens < 768px) */}
+      {/* Mobile Slide-Over Drawer Overlay */}
       {isMobileMenuOpen && (
         <div className="fixed inset-0 z-50 md:hidden flex">
           {/* Backdrop Blur */}
@@ -127,7 +127,7 @@ const Sidebar = memo(() => {
           />
 
           {/* Drawer Sheet */}
-          <div className="relative w-[280px] max-w-[80vw] bg-white h-full shadow-2xl z-10 animate-slide-in-left">
+          <div className="relative w-[280px] max-w-[80vw] bg-white dark:bg-slate-900 h-full shadow-2xl z-10 animate-slide-in-left">
             {sidebarContent}
           </div>
         </div>
