@@ -45,6 +45,27 @@ export const UIProvider = ({ children }) => {
     setIsMobileMenuOpen(false);
   }, []);
 
+  // Theme state: 'light' | 'dark'
+  const [theme, setTheme] = useState(() => {
+    const savedTheme = localStorage.getItem('skillforge_theme');
+    if (savedTheme) return savedTheme;
+    return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  });
+
+  useEffect(() => {
+    const root = document.documentElement;
+    if (theme === 'dark') {
+      root.classList.add('dark');
+    } else {
+      root.classList.remove('dark');
+    }
+    localStorage.setItem('skillforge_theme', theme);
+  }, [theme]);
+
+  const toggleTheme = useCallback(() => {
+    setTheme(prev => (prev === 'light' ? 'dark' : 'light'));
+  }, []);
+
   const value = useMemo(() => ({
     activeTab,
     setActiveTab,
@@ -60,6 +81,9 @@ export const UIProvider = ({ children }) => {
     setIsMobileMenuOpen,
     toggleMobileMenu,
     closeMobileMenu,
+    theme,
+    setTheme,
+    toggleTheme,
   }), [
     activeTab,
     notifications,
@@ -70,6 +94,8 @@ export const UIProvider = ({ children }) => {
     isMobileMenuOpen,
     toggleMobileMenu,
     closeMobileMenu,
+    theme,
+    toggleTheme,
   ]);
 
   return (

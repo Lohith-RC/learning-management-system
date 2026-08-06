@@ -1,0 +1,8 @@
+[providers]
+providers = ["java", "maven"]
+
+[build]
+cmds = ["./mvnw clean package -DskipTests"]
+
+[start]
+cmd = "java -jar target/skillforge-backend-0.1.0.jar"
