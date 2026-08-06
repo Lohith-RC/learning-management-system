@@ -98,8 +98,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 extractNestedRole(claims)
         );
 
-        if (role != null && ("ADMIN".equalsIgnoreCase(role) || "ROLE_ADMIN".equalsIgnoreCase(role))) {
-            authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
+        if (role != null) {
+            String roleUpper = role.toUpperCase();
+            if (roleUpper.startsWith("ROLE_")) {
+                authorities.add(new SimpleGrantedAuthority(roleUpper));
+            } else {
+                authorities.add(new SimpleGrantedAuthority("ROLE_" + roleUpper));
+            }
         }
 
         return authorities;
