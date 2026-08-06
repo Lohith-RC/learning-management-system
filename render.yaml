@@ -4,6 +4,17 @@ services:
     env: docker
     dockerContext: backend
     dockerfilePath: Dockerfile
+    envVars:
+      - key: DB_URL
+        sync: false
+      - key: DB_USERNAME
+        sync: false
+      - key: DB_PASSWORD
+        sync: false
+      - key: JWT_SECRET
+        sync: false
+      - key: PORT
+        sync: false
 
   - type: web
     name: skillforge-frontend

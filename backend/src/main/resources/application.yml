@@ -2,12 +2,14 @@ spring:
   application:
     name: skillforge-backend
 
+  # Render env vars: DB_URL, DB_USERNAME, DB_PASSWORD (mapped in DatabaseUrlEnvironmentPostProcessor)
   datasource:
-    url: ${DB_URL:${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/postgres}}
-    username: ${DB_USERNAME:${SPRING_DATASOURCE_USERNAME:postgres}}
-    password: ${DB_PASSWORD:${SPRING_DATASOURCE_PASSWORD:postgres}}
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/postgres}
+    username: ${DB_USERNAME:postgres}
+    password: ${DB_PASSWORD:postgres}
     hikari:
       maximum-pool-size: 10
+      connection-timeout: 30000
 
   jpa:
     hibernate:
