@@ -439,9 +439,9 @@ npm run dev:backend     # Spring Boot only
 
 | Field | Value |
 |---|---|
-| **Root Directory** | `backend` |
-| **Build Command** | `mvn clean package -DskipTests` |
-| **Start Command** | `java -jar target/skillforge-backend-0.1.0.jar` |
+| **Environment / Runtime** | `Docker` |
+| **Docker Context** | `backend` |
+| **Dockerfile Path** | `Dockerfile` |
 
 Add these **Environment Variables** in the Render dashboard:
 
