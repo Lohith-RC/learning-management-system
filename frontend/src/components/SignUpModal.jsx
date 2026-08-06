@@ -4,7 +4,7 @@ import { useAuth } from '../context/AuthContext';
 import { useUI } from '../context/UIContext';
 
 const SignUpModal = memo(() => {
-  const { login } = useAuth();
+  const { login, register } = useAuth();
   const { showToast } = useUI();
   const navigate = useNavigate();
 
@@ -18,7 +18,7 @@ const SignUpModal = memo(() => {
     setLoading(true);
     setTimeout(() => {
       setLoading(false);
-      login(email || 'lohith.rc@skillforge.edu', password);
+      register(fullName, email, password);
     }, 500);
   };
 

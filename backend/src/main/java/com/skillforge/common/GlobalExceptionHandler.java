@@ -1,5 +1,7 @@
 package com.skillforge.common;
 
+import com.skillforge.auth.BadRequestException;
+import com.skillforge.auth.UnauthorizedException;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,6 +38,18 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiError> handleAccessDenied(AccessDeniedExceptionCustom ex) {
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(
                 ApiError.of(403, "FORBIDDEN", ex.getMessage(), List.of()));
+    }
+
+    @ExceptionHandler(BadRequestException.class)
+    public ResponseEntity<ApiError> handleBadRequest(BadRequestException ex) {
+        return ResponseEntity.badRequest().body(
+                ApiError.of(400, "BAD_REQUEST", ex.getMessage(), List.of()));
+    }
+
+    @ExceptionHandler(UnauthorizedException.class)
+    public ResponseEntity<ApiError> handleUnauthorized(UnauthorizedException ex) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(
+                ApiError.of(401, "UNAUTHORIZED", ex.getMessage(), List.of()));
     }
 
     @ExceptionHandler(Exception.class)
