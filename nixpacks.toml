@@ -1,0 +1,8 @@
+[providers]
+providers = ["node"]
+
+[build]
+cmds = ["npm run build:frontend"]
+
+[start]
+cmd = "npx serve -s frontend/dist -l $PORT"
