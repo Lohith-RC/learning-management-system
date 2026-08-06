@@ -26,7 +26,7 @@ public class EnvVerifier {
         log.info(" - DB_URL: {}", status(dbUrl));
         log.info(" - DB_USERNAME: {}", status(dbUser));
         log.info(" - DB_PASSWORD: {}", status(dbPassword));
-        log.info(" - JWT_SECRET: {}", status(jwtSecret));
+        log.info(" - JWT_SECRET: {}", jwtStatus(jwtSecret));
         log.info(" - PORT: {}", (port != null && !port.isBlank() ? port : "8080 (default)"));
 
         if (dbUrl != null && !dbUrl.startsWith("jdbc:postgresql://") && !dbUrl.startsWith("postgres")) {
@@ -55,6 +55,17 @@ public class EnvVerifier {
 
     private static String status(String value) {
         return (value != null && !value.isBlank()) ? "PRESENT" : "MISSING (using default)";
+    }
+
+    private static String jwtStatus(String jwtSecret) {
+        if (jwtSecret == null || jwtSecret.isBlank()) {
+            return "MISSING (using default)";
+        }
+        int bytes = jwtSecret.getBytes(java.nio.charset.StandardCharsets.UTF_8).length;
+        if (bytes < 32) {
+            return "PRESENT (" + bytes + " bytes — will be SHA-256 stretched to 256 bits)";
+        }
+        return "PRESENT (" + bytes + " bytes)";
     }
 
     private static void validateRequired(String name, String value) {

@@ -30,7 +30,7 @@ jwt:
   access-token-expiry-minutes: 15
   refresh-token-expiry-days: 7
 
-refresh-token-expiry-seconds: ${REFRESH_TOKEN_EXPIRY_SECONDS:604800}
+ refresh-token-expiry-seconds: ${REFRESH_TOKEN_EXPIRY_SECONDS:604800}
 
 admin:
   provisioning:
