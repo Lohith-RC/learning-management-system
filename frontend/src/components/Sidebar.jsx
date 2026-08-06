@@ -1,53 +1,72 @@
-import React from 'react';
-import { useApp } from '../context/AppContext';
+import React, { memo } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
+import { useUI } from '../context/UIContext';
+import { X } from 'lucide-react';
 
-const Sidebar = () => {
-  const { activeTab, setActiveTab, logout } = useApp();
+const Sidebar = memo(() => {
+  const { logout } = useAuth();
+  const { isMobileMenuOpen, closeMobileMenu } = useUI();
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const navItems = [
-    { id: 'dashboard', label: 'Dashboard', icon: 'dashboard' },
-    { id: 'courses', label: 'Course Catalog', icon: 'school' },
-    { id: 'practice', label: 'Practice Sandbox', icon: 'code' },
-    { id: 'resume-ai', label: 'Resume AI', icon: 'psychology' },
-    { id: 'leaderboard', label: 'Leaderboard', icon: 'leaderboard' },
+    { id: 'dashboard', path: '/dashboard', label: 'Dashboard', icon: 'grid_view' },
+    { id: 'courses', path: '/courses', label: 'Course Catalog', icon: 'menu_book' },
+    { id: 'practice', path: '/practice', label: 'Practice Sandbox', icon: 'code' },
+    { id: 'resume-ai', path: '/resume-ai', altPath: '/profile', label: 'Resume AI', icon: 'description' },
+    { id: 'leaderboard', path: '/leaderboard', label: 'Leaderboard', icon: 'bar_chart' },
   ];
 
-  return (
-    <aside className="fixed left-0 top-0 h-full w-[260px] bg-[#0B0F17] flex flex-col py-6 z-40 hidden md:flex border-r border-white/10 shadow-2xl">
-      {/* Brand Header */}
-      <div 
-        onClick={() => setActiveTab('landing')}
-        className="px-6 mb-8 flex items-center gap-3 cursor-pointer group"
-      >
-        <img src="/skillforge-logo.png" alt="SkillForge Logo" className="w-10 h-10 rounded-xl object-contain group-hover:scale-105 transition-transform drop-shadow-[0_0_10px_rgba(203,41,87,0.5)]" />
-        <div>
-          <h1 className="font-display font-bold text-xl text-white tracking-tight group-hover:text-primary-bright transition-colors">
-            SkillForge
-          </h1>
-          <p className="font-sans text-[11px] text-white/60 font-medium tracking-wider uppercase">
-            Placement Engine
-          </p>
+  const handleNavigation = (path) => {
+    navigate(path);
+    closeMobileMenu();
+  };
+
+  const sidebarContent = (
+    <div className="flex flex-col h-full py-6 font-sans">
+      {/* Brand Header with Close Button on Mobile */}
+      <div className="px-6 mb-8 flex items-center justify-between">
+        <div 
+          onClick={() => handleNavigation('/')}
+          className="flex items-center gap-3 cursor-pointer group"
+        >
+          <img src="/skillforge-logo.png" alt="SkillForge Logo" className="w-10 h-10 object-contain group-hover:scale-105 transition-transform" />
+          <div>
+            <h1 className="font-display font-black text-xl text-[#1F1B2D] tracking-tight">
+              SkillForge
+            </h1>
+            <p className="font-sans text-[9px] text-[#8E8A9F] font-bold tracking-widest uppercase">
+              ELITE TALENT ENGINE
+            </p>
+          </div>
         </div>
+
+        {/* Mobile Close Icon */}
+        <button
+          onClick={closeMobileMenu}
+          aria-label="Close Navigation Menu"
+          className="md:hidden p-1.5 rounded-lg text-[#9CA3AF] hover:text-[#1F1B2D] hover:bg-[#F3F4F6]"
+        >
+          <X className="w-5 h-5" />
+        </button>
       </div>
 
       {/* Navigation List */}
-      <nav className="flex-1 px-3 space-y-1.5">
+      <nav className="flex-1 px-3 space-y-1">
         {navItems.map((item) => {
-          const isActive = activeTab === item.id;
+          const isActive = location.pathname === item.path || (item.altPath && location.pathname === item.altPath);
           return (
             <button
               key={item.id}
-              onClick={() => setActiveTab(item.id)}
-              className={`w-full flex items-center gap-3.5 px-4 py-3 rounded-xl font-medium text-sm transition-all relative ${
+              onClick={() => handleNavigation(item.path)}
+              className={`w-full flex items-center gap-3.5 px-4 py-3 rounded-xl font-semibold text-sm transition-all cursor-pointer ${
                 isActive
-                  ? 'bg-white/10 text-white font-semibold shadow-inner'
-                  : 'text-white/70 hover:bg-white/5 hover:text-white'
+                  ? 'bg-[#F0EBFA] text-[#5B4E80] font-bold shadow-xs'
+                  : 'text-[#6B7280] hover:bg-[#F9FAFC] hover:text-[#1F1B2D]'
               }`}
             >
-              {isActive && (
-                <span className="absolute left-0 top-1/2 -translate-y-1/2 w-1.5 h-7 bg-[#810B38] rounded-r-full shadow-[0_0_10px_#CB2957]" />
-              )}
-              <span className={`material-symbols-outlined text-[20px] ${isActive ? 'text-cyan-400' : ''}`}>
+              <span className={`material-symbols-outlined text-[20px] ${isActive ? 'text-[#5B4E80]' : 'text-[#9CA3AF]'}`}>
                 {item.icon}
               </span>
               <span>{item.label}</span>
@@ -56,40 +75,67 @@ const Sidebar = () => {
         })}
       </nav>
 
-      {/* Pro Plan Card & Bottom Actions */}
-      <div className="px-4 mt-auto space-y-4">
-        <div className="p-4 rounded-xl bg-gradient-to-br from-[#810B38]/40 to-slate-900 border border-[#810B38]/30">
-          <div className="flex items-center gap-2 mb-1.5 text-amber-300">
-            <span className="material-symbols-outlined text-[18px]">verified</span>
-            <span className="font-display text-xs font-bold uppercase tracking-wider">Placement Ready Pro</span>
+      {/* Footer Free Access Card */}
+      <div className="px-4 mt-auto space-y-3">
+        <div className="p-4 rounded-2xl bg-[#F4F0FA] border border-[#EAE5F5]">
+          <div className="flex items-center gap-2 text-[#5B4E80] text-xs font-bold mb-1">
+            <span className="material-symbols-outlined text-[16px]">verified</span>
+            <span>100% Free & Open Access</span>
           </div>
-          <p className="text-[12px] text-white/70 leading-relaxed mb-3">
-            Unlimited Groq AI ATS Audits & Live Sandbox test runs.
+          <p className="text-[11px] text-[#6B7280] leading-relaxed">
+            Built for CS engineering placement prep.
           </p>
-          <div className="w-full bg-white/10 h-1.5 rounded-full overflow-hidden">
-            <div className="bg-gradient-to-r from-cyan-400 to-emerald-400 h-full w-[85%]" />
-          </div>
         </div>
 
-        <div className="pt-2 border-t border-white/10 space-y-1">
+        <div className="pt-2 border-t border-[#EAEAEA] space-y-0.5">
           <button
-            onClick={() => setActiveTab('landing')}
-            className="w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-white/70 hover:bg-white/5 hover:text-white text-xs font-medium transition-colors"
+            onClick={() => handleNavigation('/')}
+            className="w-full flex items-center gap-3 px-4 py-2 rounded-xl text-[#6B7280] hover:bg-[#F9FAFC] text-xs font-medium transition-colors cursor-pointer"
           >
-            <span className="material-symbols-outlined text-[18px]">help</span>
+            <span className="material-symbols-outlined text-[18px]">help_outline</span>
             Help & Documentation
           </button>
           <button
-            onClick={logout}
-            className="w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-rose-400 hover:bg-rose-500/10 text-xs font-medium transition-colors"
+            onClick={() => {
+              logout();
+              closeMobileMenu();
+            }}
+            className="w-full flex items-center gap-3 px-4 py-2 rounded-xl text-rose-600 hover:bg-rose-50 text-xs font-semibold transition-colors cursor-pointer"
           >
             <span className="material-symbols-outlined text-[18px]">logout</span>
             Sign Out
           </button>
         </div>
       </div>
-    </aside>
+    </div>
   );
-};
+
+  return (
+    <>
+      {/* Desktop Permanent Sidebar (Laptop & Desktop Screens >= 768px) */}
+      <aside className="fixed left-0 top-0 h-full w-[260px] bg-white hidden md:flex flex-col z-40 border-r border-[#EAEAEA]">
+        {sidebarContent}
+      </aside>
+
+      {/* Mobile Slide-Over Drawer Overlay (Smartphone Screens < 768px) */}
+      {isMobileMenuOpen && (
+        <div className="fixed inset-0 z-50 md:hidden flex">
+          {/* Backdrop Blur */}
+          <div 
+            onClick={closeMobileMenu}
+            className="fixed inset-0 bg-slate-950/50 backdrop-blur-xs transition-opacity animate-fade-in"
+          />
+
+          {/* Drawer Sheet */}
+          <div className="relative w-[280px] max-w-[80vw] bg-white h-full shadow-2xl z-10 animate-slide-in-left">
+            {sidebarContent}
+          </div>
+        </div>
+      )}
+    </>
+  );
+});
+
+Sidebar.displayName = 'Sidebar';
 
 export default Sidebar;

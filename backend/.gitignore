@@ -1,6 +1,7 @@
-# Backend dependency directory
-node_modules/
-
-# Local env files
+﻿target/
+.idea/
+*.iml
+.vscode/
 .env
-.env.local
+*.log
+.DS_Store

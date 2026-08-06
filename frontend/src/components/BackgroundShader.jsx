@@ -1,6 +1,6 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, memo } from 'react';
 
-const BackgroundShader = () => {
+const BackgroundShader = memo(() => {
   const canvasRef = useRef(null);
 
   useEffect(() => {
@@ -41,30 +41,30 @@ const BackgroundShader = () => {
 
       void main() {
           vec2 uv = v_texCoord;
-          float time = u_time * 0.25;
+          float time = u_time * 0.15;
           
-          // Dark background #0B0F17
-          vec3 baseColor = vec3(0.043, 0.059, 0.09);
+          // Soft ambient slate background #F8FAFC
+          vec3 baseColor = vec3(0.972, 0.98, 0.988);
           
-          // Deep crimson blob (#810B38)
+          // Soft calming indigo blob (#818CF8)
           vec2 p1 = vec2(0.4 + 0.25 * sin(time * 1.1), 0.5 + 0.2 * cos(time * 0.9));
           float d1 = length(uv - p1);
-          float blob1 = smoothstep(0.65, 0.0, d1);
-          vec3 crimson = vec3(0.505, 0.043, 0.22);
+          float blob1 = smoothstep(0.7, 0.0, d1);
+          vec3 indigo = vec3(0.505, 0.549, 0.972);
           
-          // Cyan highlight blob (#06B6D4)
+          // Soft sky blue blob (#38BDF8)
           vec2 p2 = vec2(0.7 + 0.2 * cos(time * 1.3), 0.3 + 0.25 * sin(time * 0.7));
           float d2 = length(uv - p2);
-          float blob2 = smoothstep(0.55, 0.0, d2);
-          vec3 cyan = vec3(0.023, 0.713, 0.831);
+          float blob2 = smoothstep(0.6, 0.0, d2);
+          vec3 sky = vec3(0.22, 0.741, 0.972);
           
-          vec3 finalColor = baseColor + crimson * blob1 * 0.8 + cyan * blob2 * 0.4;
+          vec3 finalColor = baseColor + indigo * blob1 * 0.15 + sky * blob2 * 0.12;
           
-          // Subtle grid mesh overlay
+          // Ultra-subtle grid mesh overlay
           vec2 grid = abs(fract(uv * 25.0 - 0.5) - 0.5) / fwidth(uv * 25.0);
           float line = min(grid.x, grid.y);
           float mesh = 1.0 - min(line, 1.0);
-          finalColor += vec3(0.04, 0.08, 0.12) * mesh * 0.15;
+          finalColor += vec3(0.9, 0.93, 0.98) * mesh * 0.05;
           
           gl_FragColor = vec4(finalColor, 1.0);
       }
@@ -142,6 +142,8 @@ const BackgroundShader = () => {
       className="absolute inset-0 w-full h-full object-cover pointer-events-none z-0"
     />
   );
-};
+});
+
+BackgroundShader.displayName = 'BackgroundShader';
 
 export default BackgroundShader;
