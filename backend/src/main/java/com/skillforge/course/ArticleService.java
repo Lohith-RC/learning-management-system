@@ -5,6 +5,7 @@ import com.skillforge.course.dto.ArticleRequest;
 import com.skillforge.course.dto.ArticleResponse;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import com.skillforge.streak.StreakService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,6 +22,7 @@ public class ArticleService {
     private final ArticleProgressRepository articleProgressRepository;
     private final EnrollmentRepository enrollmentRepository;
     private final ContentSanitizer sanitizer;
+    private final StreakService streakService;
 
     public List<ArticleResponse> listByModule(UUID moduleId, UUID requestingUserId) {
         return articleRepository.findByModuleIdOrderByOrderIndexAsc(moduleId).stream()
@@ -94,8 +96,20 @@ public class ArticleService {
         double percent = totalArticles == 0 ? 0.0 : (readArticles * 100.0) / totalArticles;
 
         enrollmentRepository.findByUserIdAndCourseId(userId, courseId).ifPresent(enrollment -> {
+            Double previous = enrollment.getProgressPercent();
             enrollment.setProgressPercent(percent);
             enrollmentRepository.save(enrollment);
+
+            // if user just completed the course (crossed to 100%), update streak
+            try {
+                boolean wasCompletedBefore = previous != null && previous >= 100.0;
+                boolean isCompletedNow = percent >= 100.0;
+                if (!wasCompletedBefore && isCompletedNow) {
+                    streakService.updateStreak(userId);
+                }
+            } catch (Exception ignored) {
+                // do not fail read/mark flow if streak update fails
+            }
         });
     }
 

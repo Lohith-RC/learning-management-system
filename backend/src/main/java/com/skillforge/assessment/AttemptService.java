@@ -7,7 +7,8 @@ import com.skillforge.assessment.dto.SubmitAnswerResponse;
 import com.skillforge.assessment.dto.SubmitCodeRequest;
 import com.skillforge.assessment.dto.SubmitCodeResponse;
 import jakarta.persistence.EntityNotFoundException;
-import lombok.RequiredArgsConstructor;
+import lombok.RequiredArgsConstructor; 
+import com.skillforge.streak.StreakService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,6 +26,7 @@ public class AttemptService {
     private final AttemptRepository attemptRepository;
     private final CodeExecutionClient codeExecutionClient;
     private final ObjectMapper objectMapper;
+    private final StreakService streakService;
 
     /**
      * FR-3.5: instant auto-grading for MCQ. DESCRIPTIVE questions are recorded
@@ -56,6 +58,13 @@ public class AttemptService {
         }
 
         Attempt saved = attemptRepository.save(attempt);
+
+        // update streak for qualifying activity (assessment submitted)
+        try {
+            streakService.updateStreak(userId);
+        } catch (Exception ignored) {
+            // do not fail the grading flow if streak update fails
+        }
 
         return new SubmitAnswerResponse(
                 saved.getId(),
@@ -98,6 +107,13 @@ public class AttemptService {
         attempt.setScore("PASS".equals(result.status()) ? 100.0 : 0.0);
 
         Attempt saved = attemptRepository.save(attempt);
+
+        // update streak for qualifying activity (assessment submitted)
+        try {
+            streakService.updateStreak(userId);
+        } catch (Exception ignored) {
+            // do not fail the submission flow if streak update fails
+        }
 
         return new SubmitCodeResponse(saved.getId(), result.status(), result.resultsJson(), result.runtimeMs());
     }
