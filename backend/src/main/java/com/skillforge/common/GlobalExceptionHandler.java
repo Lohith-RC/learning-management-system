@@ -34,6 +34,12 @@ public class GlobalExceptionHandler {
                 ApiError.of(404, "NOT_FOUND", ex.getMessage(), List.of()));
     }
 
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<ApiError> handleBadRequest(IllegalArgumentException ex) {
+        return ResponseEntity.badRequest().body(
+                ApiError.of(400, "BAD_REQUEST", ex.getMessage(), List.of()));
+    }
+
     @ExceptionHandler(AccessDeniedExceptionCustom.class)
     public ResponseEntity<ApiError> handleAccessDenied(AccessDeniedExceptionCustom ex) {
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(
