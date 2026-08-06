@@ -17,9 +17,12 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.List;
 
+<<<<<<< HEAD
 /**
  * Security configuration: stateless JWT with method security.
  */
+=======
+>>>>>>> fba9bbc1fddd5f0ee2eb8b1e79cfc2af5a58028f
 @Configuration
 @EnableMethodSecurity
 @RequiredArgsConstructor
@@ -48,11 +51,16 @@ public class SecurityConfig {
                                 "/swagger-ui.html",
                                 "/swagger-ui/**",
                                 "/api-docs/**",
+                                "/v3/api-docs/**",
                                 "/api/auth/**"
                         ).permitAll()
+<<<<<<< HEAD
                         .requestMatchers(HttpMethod.GET, "/api/courses").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/courses/{id}").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/courses/{courseId}/modules").permitAll()
+=======
+                        .requestMatchers(HttpMethod.GET, "/api/courses/**").permitAll()
+>>>>>>> fba9bbc1fddd5f0ee2eb8b1e79cfc2af5a58028f
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
@@ -63,10 +71,10 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(List.of("http://localhost:3000"));
+        config.setAllowedOrigins(List.of("http://localhost:3000", "http://localhost:5173", "*"));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
-        config.setAllowCredentials(true);
+        config.setAllowCredentials(false);
         config.setMaxAge(3600L);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

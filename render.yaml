@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: skillforge-backend
+    env: docker
+    dockerContext: backend
+    dockerfilePath: Dockerfile
+
+  - type: web
+    name: skillforge-frontend
+    env: static
+    rootDir: frontend
+    buildCommand: npm install && npm run build
+    staticPublishPath: dist
