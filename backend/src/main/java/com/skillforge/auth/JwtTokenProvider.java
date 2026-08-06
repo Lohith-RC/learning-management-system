@@ -1,7 +1,6 @@
 package com.skillforge.auth;
 
 import io.jsonwebtoken.*;
-import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -26,7 +25,7 @@ public class JwtTokenProvider {
             @Value("${jwt.access-token-expiry-minutes:15}") long accessExpiryMinutes,
             @Value("${jwt.refresh-token-expiry-days:7}") long refreshExpiryDays
     ) {
-        this.signingKey = Keys.hmacShaKeyFor(jwtSecret.getBytes(StandardCharsets.UTF_8));
+        this.signingKey = JwtSigningKeyFactory.fromSecret(jwtSecret);
         this.accessTokenExpirationMs = accessExpiryMinutes * 60 * 1000;
         this.refreshTokenExpirationMs = refreshExpiryDays * 24 * 60 * 60 * 1000;
     }
