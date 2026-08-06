@@ -18,7 +18,7 @@ import Toast from './components/Toast';
 // Layout shell for protected workspace routes
 const ProtectedShellLayout = memo(() => {
   return (
-    <div className="flex h-screen overflow-hidden bg-[#F9FAFC] text-[#1F1B2D] font-sans">
+    <div className="flex h-screen overflow-hidden bg-[#F9FAFC] dark:bg-[#090D16] text-[#1F1B2D] dark:text-slate-100 font-sans transition-colors duration-300">
       {/* Navigation Sidebar */}
       <Sidebar />
 
@@ -28,7 +28,7 @@ const ProtectedShellLayout = memo(() => {
         <Header />
 
         {/* Main Canvas Scroll Area */}
-        <main className="flex-1 overflow-y-auto p-4 md:p-8">
+        <main className="flex-1 overflow-y-auto p-4 md:p-8 bg-[#F9FAFC] dark:bg-[#090D16] transition-colors duration-300">
           <div className="max-w-[1440px] mx-auto">
             <Outlet />
           </div>
@@ -42,7 +42,7 @@ ProtectedShellLayout.displayName = 'ProtectedShellLayout';
 
 const AppContent = memo(() => {
   return (
-    <div className="relative min-h-screen">
+    <div className="relative min-h-screen bg-[#F9FAFC] dark:bg-[#090D16] text-[#1F1B2D] dark:text-slate-100 transition-colors duration-300">
       <Routes>
         {/* Public Unauthenticated Routes */}
         <Route path="/" element={<LandingPage />} />
