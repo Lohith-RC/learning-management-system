@@ -23,7 +23,7 @@ const ResumeAIOptimizer = memo(() => {
   const { showToast } = useUI();
   const [targetRole, setTargetRole] = useState('Full Stack Engineer (SDE-1)');
   const [resumeText, setResumeText] = useState(
-    `Lohith R C | Computer Science Engineer | lohith.rc@skillforge.edu
+    `Rakshith Y B | Computer Science Engineer | rakshith.yb@skillforge.edu
 SUMMARY: Enthusiastic Software Engineer with experience in React.js, Node.js, SQL databases, and algorithm optimization. Built scalable web applications and solved 80+ DSA challenges.
 
 EXPERIENCE / PROJECTS:
