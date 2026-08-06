@@ -94,33 +94,33 @@ const StudentDashboard = memo(() => {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         
         {/* 30-Day Activity & Submissions (Col 8) */}
-        <div className="lg:col-span-8 bg-white border border-[#EAEAEA] rounded-3xl p-5 sm:p-6 shadow-xs flex flex-col justify-between">
+        <div className="lg:col-span-8 bg-white dark:bg-slate-900 border border-[#EAEAEA] dark:border-slate-800 rounded-3xl p-5 sm:p-6 shadow-xs flex flex-col justify-between transition-colors duration-300">
           <div>
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-2">
               <div>
-                <h3 className="font-display font-bold text-base sm:text-lg text-[#1F1B2D]">
+                <h3 className="font-display font-bold text-base sm:text-lg text-[#1F1B2D] dark:text-slate-100">
                   30-Day Activity & Submissions
                 </h3>
-                <p className="text-xs text-[#6B7280]">
+                <p className="text-xs text-[#6B7280] dark:text-slate-400">
                   Consistent daily coding builds placement velocity.
                 </p>
               </div>
 
               {/* Heatmap Legend */}
-              <div className="flex items-center gap-1.5 text-[10px] font-bold text-[#6B7280]">
+              <div className="flex items-center gap-1.5 text-[10px] font-bold text-[#6B7280] dark:text-slate-400">
                 <span>LESS</span>
-                <span className="w-2.5 h-2.5 rounded-xs bg-[#EAE5F5]" />
-                <span className="w-2.5 h-2.5 rounded-xs bg-[#C4B5FD]" />
-                <span className="w-2.5 h-2.5 rounded-xs bg-[#9333EA]" />
-                <span className="w-2.5 h-2.5 rounded-xs bg-[#6B5B95]" />
-                <span className="w-2.5 h-2.5 rounded-xs bg-[#4C1D95]" />
+                <span className="w-2.5 h-2.5 rounded-xs bg-[#EAE5F5] dark:bg-purple-950/60" />
+                <span className="w-2.5 h-2.5 rounded-xs bg-[#C4B5FD] dark:bg-purple-800/60" />
+                <span className="w-2.5 h-2.5 rounded-xs bg-[#9333EA] dark:bg-purple-600" />
+                <span className="w-2.5 h-2.5 rounded-xs bg-[#6B5B95] dark:bg-purple-500" />
+                <span className="w-2.5 h-2.5 rounded-xs bg-[#4C1D95] dark:bg-purple-400" />
                 <span>MORE</span>
               </div>
             </div>
 
             {/* Grid with Mon, Wed, Fri Labels */}
             <div className="mt-4 flex gap-3 items-center">
-              <div className="flex flex-col justify-between h-14 text-[10px] font-semibold text-[#9CA3AF]">
+              <div className="flex flex-col justify-between h-14 text-[10px] font-semibold text-[#9CA3AF] dark:text-slate-500">
                 <span>Mon</span>
                 <span>Wed</span>
                 <span>Fri</span>
@@ -148,16 +148,16 @@ const StudentDashboard = memo(() => {
         </div>
 
         {/* AI SKILL INSIGHT Card (Col 4) */}
-        <div className="lg:col-span-4 bg-[#F4F0FA] border border-[#EAE5F5] rounded-3xl p-5 sm:p-6 shadow-xs flex flex-col justify-between">
+        <div className="lg:col-span-4 bg-[#F4F0FA] dark:bg-slate-900/80 border border-[#EAE5F5] dark:border-slate-800 rounded-3xl p-5 sm:p-6 shadow-xs flex flex-col justify-between transition-colors duration-300">
           <div>
             <div className="flex items-center gap-1.5 mb-3">
-              <Sparkles className="w-4 h-4 text-[#5B4E80]" />
-              <span className="text-[10px] font-bold tracking-widest text-[#5B4E80] uppercase">
+              <Sparkles className="w-4 h-4 text-[#5B4E80] dark:text-purple-400" />
+              <span className="text-[10px] font-bold tracking-widest text-[#5B4E80] dark:text-purple-300 uppercase">
                 AI SKILL INSIGHT
               </span>
             </div>
-            <p className="text-xs text-[#4B5563] leading-relaxed">
-              Your recent sandbox telemetry indicates high efficiency in <strong className="text-[#1F1B2D]">Recursion & Trees</strong>. We recommend taking on Dynamic Programming challenge sets next.
+            <p className="text-xs text-[#4B5563] dark:text-slate-300 leading-relaxed">
+              Your recent sandbox telemetry indicates high efficiency in <strong className="text-[#1F1B2D] dark:text-purple-200">Recursion & Trees</strong>. We recommend taking on Dynamic Programming challenge sets next.
             </p>
           </div>
 
@@ -166,7 +166,7 @@ const StudentDashboard = memo(() => {
               showToast('Generated new Dynamic Programming sandbox challenge!', 'info');
               navigate('/practice');
             }}
-            className="w-full mt-4 py-2.5 rounded-xl bg-white border border-[#E5E7EB] hover:border-[#5B4E80] text-[#5B4E80] text-xs font-bold transition-all text-center shadow-xs cursor-pointer active:scale-95"
+            className="w-full mt-4 py-2.5 rounded-xl bg-white dark:bg-slate-800 border border-[#E5E7EB] dark:border-slate-700 hover:border-[#5B4E80] dark:hover:border-purple-400 text-[#5B4E80] dark:text-purple-300 text-xs font-bold transition-all text-center shadow-xs cursor-pointer active:scale-95"
           >
             Generate Challenge
           </button>
@@ -181,14 +181,14 @@ const StudentDashboard = memo(() => {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         
         {/* Enrolled Learning Modules (Col 8) */}
-        <div className="lg:col-span-8 bg-white border border-[#EAEAEA] rounded-3xl p-5 sm:p-6 shadow-xs space-y-4">
-          <div className="flex justify-between items-center pb-2 border-b border-[#F3F4F6]">
-            <h3 className="font-display font-bold text-base text-[#1F1B2D]">
+        <div className="lg:col-span-8 bg-white dark:bg-slate-900 border border-[#EAEAEA] dark:border-slate-800 rounded-3xl p-5 sm:p-6 shadow-xs space-y-4 transition-colors duration-300">
+          <div className="flex justify-between items-center pb-2 border-b border-[#F3F4F6] dark:border-slate-800">
+            <h3 className="font-display font-bold text-base text-[#1F1B2D] dark:text-slate-100">
               Enrolled Learning Paths
             </h3>
             <button
               onClick={() => navigate('/courses')}
-              className="text-[11px] font-bold text-[#5B4E80] hover:underline tracking-wider uppercase cursor-pointer"
+              className="text-[11px] font-bold text-[#5B4E80] dark:text-purple-400 hover:underline tracking-wider uppercase cursor-pointer"
             >
               VIEW ALL
             </button>
@@ -203,22 +203,22 @@ const StudentDashboard = memo(() => {
               <div 
                 key={i} 
                 onClick={() => navigate(`/courses/${mod.id}`)}
-                className="p-4 rounded-2xl border border-[#E5E7EB] bg-white hover:border-[#5B4E80] hover:shadow-md transition-all cursor-pointer space-y-3"
+                className="p-4 rounded-2xl border border-[#E5E7EB] dark:border-slate-800 bg-white dark:bg-slate-800/50 hover:border-[#5B4E80] dark:hover:border-purple-500 hover:shadow-md transition-all cursor-pointer space-y-3"
               >
                 <div className="flex justify-between items-center">
                   <div className="flex items-center gap-3">
-                    <div className="w-9 h-9 rounded-xl bg-[#F0EBFA] text-[#5B4E80] flex items-center justify-center font-bold shrink-0">
-                      <Layers className="w-4 h-4 text-[#5B4E80]" />
+                    <div className="w-9 h-9 rounded-xl bg-[#F0EBFA] dark:bg-purple-950/60 text-[#5B4E80] dark:text-purple-300 flex items-center justify-center font-bold shrink-0">
+                      <Layers className="w-4 h-4 text-[#5B4E80] dark:text-purple-300" />
                     </div>
                     <div>
-                      <h4 className="font-bold text-xs text-[#1F1B2D] hover:text-[#5B4E80] transition-colors">{mod.title}</h4>
-                      <p className="text-[11px] text-[#6B7280]">{mod.desc}</p>
+                      <h4 className="font-bold text-xs text-[#1F1B2D] dark:text-slate-100 hover:text-[#5B4E80] dark:hover:text-purple-300 transition-colors">{mod.title}</h4>
+                      <p className="text-[11px] text-[#6B7280] dark:text-slate-400">{mod.desc}</p>
                     </div>
                   </div>
-                  <span className="font-mono font-bold text-xs text-[#5B4E80] shrink-0 ml-2">{mod.progress}%</span>
+                  <span className="font-mono font-bold text-xs text-[#5B4E80] dark:text-purple-400 shrink-0 ml-2">{mod.progress}%</span>
                 </div>
 
-                <div className="h-1.5 w-full bg-[#F3F4F6] rounded-full overflow-hidden">
+                <div className="h-1.5 w-full bg-[#F3F4F6] dark:bg-slate-700 rounded-full overflow-hidden">
                   <div className={`h-full ${mod.color} rounded-full`} style={{ width: `${mod.progress}%` }} />
                 </div>
               </div>
@@ -231,41 +231,41 @@ const StudentDashboard = memo(() => {
           
           {/* Two Metric Cards Side-by-Side */}
           <div className="grid grid-cols-2 gap-3 sm:gap-4">
-            <div className="bg-white border border-[#EAEAEA] rounded-2xl p-4 text-center shadow-xs flex flex-col items-center justify-center">
-              <Code2 className="w-5 h-5 text-[#5B4E80] mb-1" />
-              <span className="font-display font-black text-xl sm:text-2xl text-[#1F1B2D]">142</span>
-              <span className="text-[9px] font-bold text-[#6B7280] uppercase tracking-wider mt-1">PROBLEMS SOLVED</span>
+            <div className="bg-white dark:bg-slate-900 border border-[#EAEAEA] dark:border-slate-800 rounded-2xl p-4 text-center shadow-xs flex flex-col items-center justify-center transition-colors duration-300">
+              <Code2 className="w-5 h-5 text-[#5B4E80] dark:text-purple-400 mb-1" />
+              <span className="font-display font-black text-xl sm:text-2xl text-[#1F1B2D] dark:text-slate-100">142</span>
+              <span className="text-[9px] font-bold text-[#6B7280] dark:text-slate-400 uppercase tracking-wider mt-1">PROBLEMS SOLVED</span>
             </div>
 
-            <div className="bg-white border border-[#EAEAEA] rounded-2xl p-4 text-center shadow-xs flex flex-col items-center justify-center">
+            <div className="bg-white dark:bg-slate-900 border border-[#EAEAEA] dark:border-slate-800 rounded-2xl p-4 text-center shadow-xs flex flex-col items-center justify-center transition-colors duration-300">
               <Trophy className="w-5 h-5 text-amber-500 mb-1" />
-              <span className="font-display font-black text-xl sm:text-2xl text-[#1F1B2D]">Top 5%</span>
-              <span className="text-[9px] font-bold text-[#6B7280] uppercase tracking-wider mt-1 font-mono">GLOBAL RANK</span>
+              <span className="font-display font-black text-xl sm:text-2xl text-[#1F1B2D] dark:text-slate-100">Top 5%</span>
+              <span className="text-[9px] font-bold text-[#6B7280] dark:text-slate-400 uppercase tracking-wider mt-1 font-mono">GLOBAL RANK</span>
             </div>
           </div>
 
           {/* Upcoming Focus Card */}
-          <div className="bg-white border border-[#EAEAEA] rounded-3xl p-5 sm:p-6 shadow-xs space-y-4">
-            <h4 className="font-display font-bold text-sm text-[#1F1B2D]">Upcoming Focus</h4>
+          <div className="bg-white dark:bg-slate-900 border border-[#EAEAEA] dark:border-slate-800 rounded-3xl p-5 sm:p-6 shadow-xs space-y-4 transition-colors duration-300">
+            <h4 className="font-display font-bold text-sm text-[#1F1B2D] dark:text-slate-100">Upcoming Focus</h4>
             
             <div className="space-y-3">
               <div className="flex items-start gap-3 text-xs">
-                <div className="w-7 h-7 rounded-full bg-rose-50 text-rose-600 flex items-center justify-center mt-0.5 shrink-0">
+                <div className="w-7 h-7 rounded-full bg-rose-50 dark:bg-rose-950/40 text-rose-600 dark:text-rose-400 flex items-center justify-center mt-0.5 shrink-0">
                   <Clock className="w-3.5 h-3.5" />
                 </div>
                 <div>
-                  <h5 className="font-bold text-[#1F1B2D]">Weekly Coding Contest</h5>
-                  <p className="text-[11px] text-[#6B7280]">Starts in 2 days (Sat, 10 AM)</p>
+                  <h5 className="font-bold text-[#1F1B2D] dark:text-slate-100">Weekly Coding Contest</h5>
+                  <p className="text-[11px] text-[#6B7280] dark:text-slate-400">Starts in 2 days (Sat, 10 AM)</p>
                 </div>
               </div>
 
               <div className="flex items-start gap-3 text-xs">
-                <div className="w-7 h-7 rounded-full bg-[#F0EBFA] text-[#5B4E80] flex items-center justify-center mt-0.5 shrink-0">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-[#5B4E80]" />
+                <div className="w-7 h-7 rounded-full bg-[#F0EBFA] dark:bg-purple-950/60 text-[#5B4E80] dark:text-purple-300 flex items-center justify-center mt-0.5 shrink-0">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-[#5B4E80] dark:text-purple-300" />
                 </div>
                 <div>
-                  <h5 className="font-bold text-[#1F1B2D]">Submit DBMS Capstone</h5>
-                  <p className="text-[11px] text-[#6B7280]">Due Next Wednesday</p>
+                  <h5 className="font-bold text-[#1F1B2D] dark:text-slate-100">Submit DBMS Capstone</h5>
+                  <p className="text-[11px] text-[#6B7280] dark:text-slate-400">Due Next Wednesday</p>
                 </div>
               </div>
             </div>
