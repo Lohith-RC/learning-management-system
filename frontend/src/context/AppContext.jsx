@@ -70,17 +70,96 @@ export const AppProvider = ({ children }) => {
     setTimeout(() => setToast(null), 3500);
   };
 
-  const login = (email, password) => {
-    setIsAuthenticated(true);
-    setUser({
-      ...INITIAL_USER,
-      email: email || INITIAL_USER.email,
-    });
-    setActiveTab('dashboard');
-    showToast(`Welcome back, ${INITIAL_USER.name}!`, 'success');
+  const login = async (email, password) => {
+    try {
+      const response = await fetch('/api/v1/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        if (result.success && result.data) {
+          const authData = result.data;
+          localStorage.setItem('accessToken', authData.accessToken);
+          localStorage.setItem('refreshToken', authData.refreshToken);
+          setIsAuthenticated(true);
+          setUser({
+            id: authData.userId || INITIAL_USER.id,
+            email: authData.email,
+            name: authData.fullName || INITIAL_USER.name,
+            role: authData.role,
+            title: authData.role === 'ROLE_ADMIN' ? 'Administrator' : 'Student Developer',
+          });
+          setActiveTab('dashboard');
+          showToast(`Welcome back, ${authData.fullName || 'User'}!`, 'success');
+          return;
+        }
+      }
+      
+      const errResult = await response.json().catch(() => ({}));
+      showToast(errResult.message || 'Invalid email or password', 'error');
+    } catch (err) {
+      console.warn('Real auth service offline, falling back to mock authentication:', err);
+      // Fallback to mock auth
+      setIsAuthenticated(true);
+      setUser({
+        ...INITIAL_USER,
+        email: email || INITIAL_USER.email,
+      });
+      setActiveTab('dashboard');
+      showToast(`Welcome back, ${INITIAL_USER.name} (Mock Mode)!`, 'success');
+    }
+  };
+
+  const signup = async (fullName, email, password) => {
+    try {
+      const response = await fetch('/api/v1/auth/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ fullName, email, password }),
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        if (result.success && result.data) {
+          const authData = result.data;
+          localStorage.setItem('accessToken', authData.accessToken);
+          localStorage.setItem('refreshToken', authData.refreshToken);
+          setIsAuthenticated(true);
+          setUser({
+            id: authData.userId || INITIAL_USER.id,
+            email: authData.email,
+            name: authData.fullName,
+            role: authData.role,
+            title: 'Student Developer',
+          });
+          setActiveTab('dashboard');
+          showToast(`Account created successfully! Welcome, ${authData.fullName}!`, 'success');
+          return;
+        }
+      }
+      
+      const errResult = await response.json().catch(() => ({}));
+      showToast(errResult.message || 'Failed to create account', 'error');
+    } catch (err) {
+      console.warn('Real auth service offline, falling back to mock registration:', err);
+      // Fallback to mock auth
+      setIsAuthenticated(true);
+      setUser({
+        ...INITIAL_USER,
+        name: fullName || INITIAL_USER.name,
+        email: email || INITIAL_USER.email,
+      });
+      setActiveTab('dashboard');
+      showToast(`Account created successfully (Mock Mode)!`, 'success');
+    }
   };
 
   const logout = () => {
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('refreshToken');
     setIsAuthenticated(false);
     setActiveTab('landing');
     showToast('Logged out successfully', 'info');
@@ -145,6 +224,7 @@ export const AppProvider = ({ children }) => {
       unreadCount,
       markAllNotificationsRead,
       login,
+      signup,
       logout,
       toast,
       showToast,

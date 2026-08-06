@@ -3,7 +3,7 @@ import { useApp } from '../context/AppContext';
 import BackgroundShader from './BackgroundShader';
 
 const SignUpModal = () => {
-  const { login, setActiveTab } = useApp();
+  const { signup, setActiveTab } = useApp();
   const [fullName, setFullName] = useState('Lohith R C');
   const [email, setEmail] = useState('');
   const [targetRole, setTargetRole] = useState('Full Stack Engineer');
@@ -17,7 +17,7 @@ const SignUpModal = () => {
     setLoading(true);
     setTimeout(() => {
       setLoading(false);
-      login(email || 'lohith.rc@skillforge.edu', password);
+      signup(fullName, email, password);
     }, 600);
   };
 
