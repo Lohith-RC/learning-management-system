@@ -19,11 +19,16 @@ spring:
 
 server:
   port: ${PORT:8080}
+  error:
+    include-stacktrace: never
+    include-message: never
 
 jwt:
   secret: ${JWT_SECRET}        # HS256 signing secret - never commit a real value
   access-token-expiry-minutes: 15
   refresh-token-expiry-days: 7
+
+refresh-token-expiry-seconds: ${REFRESH_TOKEN_EXPIRY_SECONDS:604800}
 
 springdoc:
   swagger-ui:
