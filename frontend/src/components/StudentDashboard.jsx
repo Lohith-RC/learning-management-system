@@ -1,27 +1,149 @@
-import React, { useState, memo } from 'react';
+import React, { useState, memo, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useCourse } from '../context/CourseContext';
 import { useUI } from '../context/UIContext';
-import { 
-  Sparkles, 
-  Flame, 
-  Play, 
-  BookOpen, 
-  Code2, 
-  Trophy, 
-  ArrowRight, 
-  CheckCircle2, 
-  Clock, 
+import { motion, useMotionValue, useTransform, animate } from 'framer-motion';
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  Cell
+} from 'recharts';
+import {
+  Sparkles,
+  Flame,
+  Play,
+  BookOpen,
+  Code2,
+  Trophy,
+  ArrowRight,
+  CheckCircle2,
+  Clock,
   Calendar,
-  Layers
+  Layers,
+  Target,
+  TrendingUp,
+  Award,
+  Zap,
+  Star,
+  Medal,
+  Shield,
+  Check,
+  X,
+  Activity,
+  Brain,
+  Timer
 } from 'lucide-react';
+
+// Counting animation component
+const CountUp = memo(({ value, duration = 1.5 }) => {
+  const motionValue = useMotionValue(0);
+  const rounded = useTransform(motionValue, (latest) => Math.round(latest));
+
+  useEffect(() => {
+    const controls = animate(motionValue, value, { duration, ease: [0.16, 1, 0.3, 1] });
+    return controls.stop;
+  }, [motionValue, value, duration]);
+
+  return <motion.span>{rounded}</motion.span>;
+});
+
+CountUp.displayName = 'CountUp';
+
+// Circular Progress Component
+const CircularProgress = memo(({ percentage, size = 80, strokeWidth = 8, children }) => {
+  const radius = (size - strokeWidth) / 2;
+  const circumference = radius * 2 * Math.PI;
+  const offset = circumference - (percentage / 100) * circumference;
+
+  return (
+    <div className="relative" style={{ width: size, height: size }}>
+      <svg
+        width={size}
+        height={size}
+        className="transform -rotate-90"
+      >
+        <circle
+          cx={size / 2}
+          cy={size / 2}
+          r={radius}
+          stroke="#E5E7EB"
+          strokeWidth={strokeWidth}
+          fill="transparent"
+        />
+        <motion.circle
+          cx={size / 2}
+          cy={size / 2}
+          r={radius}
+          stroke="#5B4E80"
+          strokeWidth={strokeWidth}
+          fill="transparent"
+          strokeLinecap="round"
+          initial={{ strokeDashoffset: circumference }}
+          animate={{ strokeDashoffset: offset }}
+          transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
+          style={{
+            strokeDasharray: circumference,
+          }}
+        />
+      </svg>
+      <div className="absolute inset-0 flex items-center justify-center">
+        {children}
+      </div>
+    </div>
+  );
+});
+
+CircularProgress.displayName = 'CircularProgress';
 
 const StudentDashboard = memo(() => {
   const { user } = useAuth();
   const { courses, setSelectedCourse } = useCourse();
   const { showToast } = useUI();
   const navigate = useNavigate();
+
+  // Mock data for new features
+  const quickStats = [
+    { icon: Code2, value: 142, label: 'Problems Solved', trend: '+12 this week', color: 'text-[#5B4E80]', bgColor: 'bg-[#F0EBFA]' },
+    { icon: Target, value: 88, label: 'ATS Score', trend: '+5 this week', color: 'text-emerald-600', bgColor: 'bg-emerald-50' },
+    { icon: Trophy, value: 5, label: 'Current Rank', trend: 'Top 5%', color: 'text-amber-500', bgColor: 'bg-amber-50' },
+    { icon: TrendingUp, value: 92, label: 'Accuracy', trend: '+3% this week', color: 'text-blue-600', bgColor: 'bg-blue-50' },
+  ];
+
+  const xpProgress = { current: 2450, next: 3000, level: 12 };
+  const dailyGoals = [
+    { id: 1, text: 'Solve 2 DSA Problems', completed: true },
+    { id: 2, text: 'Complete Resume Audit', completed: true },
+    { id: 3, text: 'Finish DBMS Module', completed: false },
+  ];
+
+  const weeklyActivity = [
+    { day: 'Mon', problems: 4 },
+    { day: 'Tue', problems: 6 },
+    { day: 'Wed', problems: 3 },
+    { day: 'Thu', problems: 8 },
+    { day: 'Fri', problems: 5 },
+    { day: 'Sat', problems: 7 },
+    { day: 'Sun', problems: 2 },
+  ];
+
+  const recentActivities = [
+    { icon: CheckCircle2, title: 'Solved Binary Search', time: '2 hours ago', color: 'text-emerald-600' },
+    { icon: Award, title: 'Completed Resume Audit', time: '5 hours ago', color: 'text-[#5B4E80]' },
+    { icon: BookOpen, title: 'Finished React Module', time: '1 day ago', color: 'text-blue-600' },
+  ];
+
+  const achievements = [
+    { icon: Star, title: '100 Problems Solved', desc: 'Milestone achievement', color: 'from-amber-400 to-amber-600' },
+    { icon: Flame, title: '12-Day Streak', desc: 'Consistency champion', color: 'from-orange-400 to-red-500' },
+    { icon: Medal, title: 'Top 5% Rank', desc: 'Elite performer', color: 'from-purple-400 to-purple-600' },
+    { icon: Shield, title: 'ATS Score Above 85', desc: 'Resume ready', color: 'from-emerald-400 to-emerald-600' },
+  ];
 
   // Heatmap rows data matching Reference Image 1 grid
   const daysMon = [0,1,3,4,3,4,3,2,1,2,3,4,2,3,4,2,3,1,2,1];
@@ -57,20 +179,26 @@ const StudentDashboard = memo(() => {
 
             {/* Responsive Touch Action Buttons */}
             <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 pt-2">
-              <button
+              <motion.button
                 onClick={() => navigate('/courses')}
-                className="w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-3 rounded-2xl bg-gradient-to-r from-[#6E56CF] to-[#5B4E80] hover:from-[#5B4E80] hover:to-[#4C4070] text-white text-xs font-bold transition-all shadow-md active:scale-95 cursor-pointer"
+                className="w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-3 rounded-2xl bg-gradient-to-r from-[#6E56CF] to-[#5B4E80] hover:from-[#5B4E80] hover:to-[#4C4070] text-white text-xs font-bold shadow-md cursor-pointer"
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.95 }}
+                transition={{ duration: 0.15, ease: [0.16, 1, 0.3, 1] }}
               >
                 <Play className="w-4 h-4 fill-current" />
                 <span>Resume Learning Path</span>
-              </button>
-              <button
+              </motion.button>
+              <motion.button
                 onClick={() => navigate('/practice')}
-                className="w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-3 rounded-2xl border border-white/20 hover:bg-white/10 text-white text-xs font-bold transition-all active:scale-95 cursor-pointer backdrop-blur-xs"
+                className="w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-3 rounded-2xl border border-white/20 hover:bg-white/10 text-white text-xs font-bold backdrop-blur-xs cursor-pointer"
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.95 }}
+                transition={{ duration: 0.15, ease: [0.16, 1, 0.3, 1] }}
               >
                 <Code2 className="w-4 h-4" />
                 <span>Open Practice Sandbox</span>
-              </button>
+              </motion.button>
             </div>
           </div>
 
@@ -88,13 +216,112 @@ const StudentDashboard = memo(() => {
 
       {/* 
         ========================================================================
-        2. MIDDLE ROW: HEATMAP & AI SKILL INSIGHT
+        2. QUICK STATS SECTION
+        ========================================================================
+      */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        {quickStats.map((stat, idx) => (
+          <motion.div
+            key={idx}
+            className="bg-white dark:bg-slate-900 border border-[#EAEAEA] dark:border-slate-800 rounded-2xl p-4 shadow-xs hover:shadow-md transition-shadow"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: idx * 0.1, ease: [0.16, 1, 0.3, 1] }}
+            whileHover={{ y: -4, transition: { duration: 0.2 } }}
+          >
+            <div className="flex items-center justify-between mb-3">
+              <div className={`w-10 h-10 rounded-xl ${stat.bgColor} flex items-center justify-center`}>
+                <stat.icon className={`w-5 h-5 ${stat.color}`} />
+              </div>
+              <span className="text-[10px] font-semibold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">
+                {stat.trend}
+              </span>
+            </div>
+            <div className="font-display font-black text-2xl text-[#1F1B2D] dark:text-slate-100 mb-1">
+              <CountUp value={stat.value} duration={1.2} />
+            </div>
+            <div className="text-[10px] font-bold text-[#6B7280] dark:text-slate-400 uppercase tracking-wider">
+              {stat.label}
+            </div>
+          </motion.div>
+        ))}
+      </div>
+
+      {/* 
+        ========================================================================
+        3. MIDDLE ROW: XP PROGRESS, DAILY GOALS, HEATMAP & AI SKILL INSIGHT
         ========================================================================
       */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        
-        {/* 30-Day Activity & Submissions (Col 8) */}
-        <div className="lg:col-span-8 bg-white dark:bg-slate-900 border border-[#EAEAEA] dark:border-slate-800 rounded-3xl p-5 sm:p-6 shadow-xs flex flex-col justify-between transition-colors duration-300">
+
+        {/* XP & Level Progress Card (Col 3) */}
+        <motion.div
+          className="lg:col-span-3 bg-gradient-to-br from-[#5B4E80] to-[#6E56CF] rounded-3xl p-5 text-white shadow-lg"
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.5, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
+          whileHover={{ scale: 1.02, transition: { duration: 0.2 } }}
+        >
+          <div className="flex items-center justify-between mb-4">
+            <div>
+              <div className="text-[10px] font-bold uppercase tracking-wider text-purple-200">Level</div>
+              <div className="font-display font-black text-3xl">{xpProgress.level}</div>
+            </div>
+            <Zap className="w-8 h-8 text-amber-300" />
+          </div>
+          <div className="space-y-2">
+            <div className="flex justify-between text-xs">
+              <span className="text-purple-200">{xpProgress.current} XP</span>
+              <span className="text-purple-200">{xpProgress.next} XP</span>
+            </div>
+            <div className="h-3 bg-white/20 rounded-full overflow-hidden">
+              <motion.div
+                className="h-full bg-gradient-to-r from-amber-400 to-amber-500 rounded-full"
+                initial={{ width: 0 }}
+                animate={{ width: `${(xpProgress.current / xpProgress.next) * 100}%` }}
+                transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
+              />
+            </div>
+            <div className="text-[10px] text-purple-200 text-center">
+              {xpProgress.next - xpProgress.current} XP to next level
+            </div>
+          </div>
+        </motion.div>
+
+        {/* Daily Goals Card (Col 3) */}
+        <motion.div
+          className="lg:col-span-3 bg-white dark:bg-slate-900 border border-[#EAEAEA] dark:border-slate-800 rounded-3xl p-5 shadow-xs"
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.5, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
+        >
+          <div className="flex items-center justify-between mb-4">
+            <h4 className="font-display font-bold text-sm text-[#1F1B2D] dark:text-slate-100">Daily Goals</h4>
+            <Target className="w-4 h-4 text-[#5B4E80]" />
+          </div>
+          <div className="flex items-center gap-4">
+            <CircularProgress percentage={67} size={70} strokeWidth={6}>
+              <span className="font-display font-black text-sm text-[#1F1B2D] dark:text-slate-100">67%</span>
+            </CircularProgress>
+            <div className="flex-1 space-y-2">
+              {dailyGoals.map((goal) => (
+                <div key={goal.id} className="flex items-center gap-2 text-xs">
+                  {goal.completed ? (
+                    <Check className="w-4 h-4 text-emerald-600" />
+                  ) : (
+                    <X className="w-4 h-4 text-[#9CA3AF]" />
+                  )}
+                  <span className={goal.completed ? 'text-[#1F1B2D] dark:text-slate-100 line-through' : 'text-[#6B7280] dark:text-slate-400'}>
+                    {goal.text}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </motion.div>
+
+        {/* 30-Day Activity & Submissions (Col 6) */}
+        <div className="lg:col-span-6 bg-white dark:bg-slate-900 border border-[#EAEAEA] dark:border-slate-800 rounded-3xl p-5 sm:p-6 shadow-xs flex flex-col justify-between transition-colors duration-300">
           <div>
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-2">
               <div>
@@ -146,40 +373,125 @@ const StudentDashboard = memo(() => {
             </div>
           </div>
         </div>
-
-        {/* AI SKILL INSIGHT Card (Col 4) */}
-        <div className="lg:col-span-4 bg-[#F4F0FA] dark:bg-slate-900/80 border border-[#EAE5F5] dark:border-slate-800 rounded-3xl p-5 sm:p-6 shadow-xs flex flex-col justify-between transition-colors duration-300">
-          <div>
-            <div className="flex items-center gap-1.5 mb-3">
-              <Sparkles className="w-4 h-4 text-[#5B4E80] dark:text-purple-400" />
-              <span className="text-[10px] font-bold tracking-widest text-[#5B4E80] dark:text-purple-300 uppercase">
-                AI SKILL INSIGHT
-              </span>
-            </div>
-            <p className="text-xs text-[#4B5563] dark:text-slate-300 leading-relaxed">
-              Your recent sandbox telemetry indicates high efficiency in <strong className="text-[#1F1B2D] dark:text-purple-200">Recursion & Trees</strong>. We recommend taking on Dynamic Programming challenge sets next.
-            </p>
-          </div>
-
-          <button
-            onClick={() => {
-              showToast('Generated new Dynamic Programming sandbox challenge!', 'info');
-              navigate('/practice');
-            }}
-            className="w-full mt-4 py-2.5 rounded-xl bg-white dark:bg-slate-800 border border-[#E5E7EB] dark:border-slate-700 hover:border-[#5B4E80] dark:hover:border-purple-400 text-[#5B4E80] dark:text-purple-300 text-xs font-bold transition-all text-center shadow-xs cursor-pointer active:scale-95"
-          >
-            Generate Challenge
-          </button>
-        </div>
       </div>
 
       {/* 
         ========================================================================
-        3. BOTTOM ROW: ENROLLED LEARNING MODULES & STATS
+        4. WEEKLY ACTIVITY CHART & RECENT ACTIVITY
         ========================================================================
       */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        
+
+        {/* Weekly Coding Activity Chart (Col 8) */}
+        <motion.div
+          className="lg:col-span-8 bg-white dark:bg-slate-900 border border-[#EAEAEA] dark:border-slate-800 rounded-3xl p-5 sm:p-6 shadow-xs"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
+        >
+          <div className="flex justify-between items-center mb-4">
+            <div>
+              <h3 className="font-display font-bold text-base text-[#1F1B2D] dark:text-slate-100">
+                Weekly Coding Activity
+              </h3>
+              <p className="text-xs text-[#6B7280] dark:text-slate-400">
+                Problems solved this week
+              </p>
+            </div>
+            <div className="flex items-center gap-2 text-xs text-[#6B7280] dark:text-slate-400">
+              <Activity className="w-4 h-4" />
+              <span>35 Total</span>
+            </div>
+          </div>
+          <ResponsiveContainer width="100%" height={200}>
+            <BarChart data={weeklyActivity}>
+              <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E5E7EB" />
+              <XAxis dataKey="day" tick={{ fontSize: 11, fill: '#6B7280' }} axisLine={false} tickLine={false} />
+              <YAxis tick={{ fontSize: 11, fill: '#6B7280' }} axisLine={false} tickLine={false} />
+              <Tooltip
+                contentStyle={{
+                  backgroundColor: '#1F1B2D',
+                  border: 'none',
+                  borderRadius: '8px',
+                  color: '#fff',
+                  fontSize: '12px',
+                }}
+              />
+              <Bar dataKey="problems" radius={[4, 4, 0, 0]}>
+                {weeklyActivity.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={index === 3 ? '#5B4E80' : '#C4B5FD'} />
+                ))}
+              </Bar>
+            </BarChart>
+          </ResponsiveContainer>
+        </motion.div>
+
+        {/* Recent Activity Timeline (Col 4) */}
+        <motion.div
+          className="lg:col-span-4 bg-white dark:bg-slate-900 border border-[#EAEAEA] dark:border-slate-800 rounded-3xl p-5 sm:p-6 shadow-xs"
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.5, delay: 0.6, ease: [0.16, 1, 0.3, 1] }}
+        >
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="font-display font-bold text-sm text-[#1F1B2D] dark:text-slate-100">Recent Activity</h3>
+            <Clock className="w-4 h-4 text-[#5B4E80]" />
+          </div>
+          <div className="space-y-4">
+            {recentActivities.map((activity, idx) => (
+              <div key={idx} className="flex items-start gap-3">
+                <div className={`w-8 h-8 rounded-full ${activity.color === 'text-emerald-600' ? 'bg-emerald-50' : activity.color === 'text-[#5B4E80]' ? 'bg-[#F0EBFA]' : 'bg-blue-50'} ${activity.color} flex items-center justify-center shrink-0`}>
+                  <activity.icon className="w-4 h-4" />
+                </div>
+                <div className="flex-1">
+                  <h4 className="font-bold text-xs text-[#1F1B2D] dark:text-slate-100">{activity.title}</h4>
+                  <p className="text-[10px] text-[#6B7280] dark:text-slate-400">{activity.time}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </motion.div>
+      </div>
+
+      {/* 
+        ========================================================================
+        5. ACHIEVEMENTS SECTION
+        ========================================================================
+      */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.7, ease: [0.16, 1, 0.3, 1] }}
+      >
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="font-display font-bold text-base text-[#1F1B2D] dark:text-slate-100">Achievements</h3>
+          <Award className="w-5 h-5 text-[#5B4E80]" />
+        </div>
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+          {achievements.map((achievement, idx) => (
+            <motion.div
+              key={idx}
+              className="bg-gradient-to-br from-white to-[#F9FAFC] dark:from-slate-900 dark:to-slate-800 border border-[#EAEAEA] dark:border-slate-800 rounded-2xl p-4 shadow-xs hover:shadow-md transition-shadow group"
+              whileHover={{ y: -4, scale: 1.02 }}
+              transition={{ duration: 0.2 }}
+            >
+              <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${achievement.color} flex items-center justify-center mb-3 group-hover:scale-110 transition-transform`}>
+                <achievement.icon className="w-6 h-6 text-white" />
+              </div>
+              <h4 className="font-display font-bold text-xs text-[#1F1B2D] dark:text-slate-100 mb-1">{achievement.title}</h4>
+              <p className="text-[10px] text-[#6B7280] dark:text-slate-400">{achievement.desc}</p>
+            </motion.div>
+          ))}
+        </div>
+      </motion.div>
+
+      {/* 
+        ========================================================================
+        6. BOTTOM ROW: ENROLLED LEARNING MODULES & AI RECOMMENDATION
+        ========================================================================
+      */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+
         {/* Enrolled Learning Modules (Col 8) */}
         <div className="lg:col-span-8 bg-white dark:bg-slate-900 border border-[#EAEAEA] dark:border-slate-800 rounded-3xl p-5 sm:p-6 shadow-xs space-y-4 transition-colors duration-300">
           <div className="flex justify-between items-center pb-2 border-b border-[#F3F4F6] dark:border-slate-800">
@@ -200,10 +512,12 @@ const StudentDashboard = memo(() => {
               { id: 'dbms-internals', title: 'Database Management Systems & SQL Scaling', desc: 'SQL, Indexing, and Query Optimization', progress: 40, color: 'bg-[#10B981]' },
               { id: 'system-design', title: 'System Design for High Scale Applications', desc: 'Microservices, Caching, Load Balancing', progress: 15, color: 'bg-[#9333EA]' },
             ].map((mod, i) => (
-              <div 
-                key={i} 
+              <motion.div
+                key={i}
                 onClick={() => navigate(`/courses/${mod.id}`)}
-                className="p-4 rounded-2xl border border-[#E5E7EB] dark:border-slate-800 bg-white dark:bg-slate-800/50 hover:border-[#5B4E80] dark:hover:border-purple-500 hover:shadow-md transition-all cursor-pointer space-y-3"
+                className="p-4 rounded-2xl border border-[#E5E7EB] dark:border-slate-800 bg-white dark:bg-slate-800/50 hover:border-[#5B4E80] dark:hover:border-purple-500 cursor-pointer space-y-3"
+                whileHover={{ y: -4, boxShadow: '0 12px 24px -8px rgba(91, 78, 128, 0.15)' }}
+                transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
               >
                 <div className="flex justify-between items-center">
                   <div className="flex items-center gap-3">
@@ -219,59 +533,67 @@ const StudentDashboard = memo(() => {
                 </div>
 
                 <div className="h-1.5 w-full bg-[#F3F4F6] dark:bg-slate-700 rounded-full overflow-hidden">
-                  <div className={`h-full ${mod.color} rounded-full`} style={{ width: `${mod.progress}%` }} />
+                  <motion.div
+                    className={`h-full ${mod.color} rounded-full`}
+                    initial={{ width: 0 }}
+                    animate={{ width: `${mod.progress}%` }}
+                    transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
+                  />
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>
 
-        {/* Right Metric Cards & Upcoming Focus (Col 4) */}
-        <div className="lg:col-span-4 space-y-6">
-          
-          {/* Two Metric Cards Side-by-Side */}
-          <div className="grid grid-cols-2 gap-3 sm:gap-4">
-            <div className="bg-white dark:bg-slate-900 border border-[#EAEAEA] dark:border-slate-800 rounded-2xl p-4 text-center shadow-xs flex flex-col items-center justify-center transition-colors duration-300">
-              <Code2 className="w-5 h-5 text-[#5B4E80] dark:text-purple-400 mb-1" />
-              <span className="font-display font-black text-xl sm:text-2xl text-[#1F1B2D] dark:text-slate-100">142</span>
-              <span className="text-[9px] font-bold text-[#6B7280] dark:text-slate-400 uppercase tracking-wider mt-1">PROBLEMS SOLVED</span>
+        {/* AI Recommendation Card (Col 4) */}
+        <motion.div
+          className="lg:col-span-4 bg-gradient-to-br from-[#F4F0FA] to-white dark:from-slate-900/80 dark:to-slate-900 border border-[#EAE5F5] dark:border-slate-800 rounded-3xl p-5 sm:p-6 shadow-xs space-y-4"
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.5, delay: 0.8, ease: [0.16, 1, 0.3, 1] }}
+          whileHover={{ scale: 1.02, transition: { duration: 0.2 } }}
+        >
+          <div className="flex items-center gap-2 mb-3">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#5B4E80] to-[#6E56CF] flex items-center justify-center">
+              <Brain className="w-5 h-5 text-white" />
             </div>
-
-            <div className="bg-white dark:bg-slate-900 border border-[#EAEAEA] dark:border-slate-800 rounded-2xl p-4 text-center shadow-xs flex flex-col items-center justify-center transition-colors duration-300">
-              <Trophy className="w-5 h-5 text-amber-500 mb-1" />
-              <span className="font-display font-black text-xl sm:text-2xl text-[#1F1B2D] dark:text-slate-100">Top 5%</span>
-              <span className="text-[9px] font-bold text-[#6B7280] dark:text-slate-400 uppercase tracking-wider mt-1 font-mono">GLOBAL RANK</span>
-            </div>
-          </div>
-
-          {/* Upcoming Focus Card */}
-          <div className="bg-white dark:bg-slate-900 border border-[#EAEAEA] dark:border-slate-800 rounded-3xl p-5 sm:p-6 shadow-xs space-y-4 transition-colors duration-300">
-            <h4 className="font-display font-bold text-sm text-[#1F1B2D] dark:text-slate-100">Upcoming Focus</h4>
-            
-            <div className="space-y-3">
-              <div className="flex items-start gap-3 text-xs">
-                <div className="w-7 h-7 rounded-full bg-rose-50 dark:bg-rose-950/40 text-rose-600 dark:text-rose-400 flex items-center justify-center mt-0.5 shrink-0">
-                  <Clock className="w-3.5 h-3.5" />
-                </div>
-                <div>
-                  <h5 className="font-bold text-[#1F1B2D] dark:text-slate-100">Weekly Coding Contest</h5>
-                  <p className="text-[11px] text-[#6B7280] dark:text-slate-400">Starts in 2 days (Sat, 10 AM)</p>
-                </div>
-              </div>
-
-              <div className="flex items-start gap-3 text-xs">
-                <div className="w-7 h-7 rounded-full bg-[#F0EBFA] dark:bg-purple-950/60 text-[#5B4E80] dark:text-purple-300 flex items-center justify-center mt-0.5 shrink-0">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-[#5B4E80] dark:text-purple-300" />
-                </div>
-                <div>
-                  <h5 className="font-bold text-[#1F1B2D] dark:text-slate-100">Submit DBMS Capstone</h5>
-                  <p className="text-[11px] text-[#6B7280] dark:text-slate-400">Due Next Wednesday</p>
-                </div>
-              </div>
+            <div>
+              <h4 className="font-display font-bold text-sm text-[#1F1B2D] dark:text-slate-100">AI Recommendation</h4>
+              <p className="text-[10px] text-[#6B7280] dark:text-slate-400">Personalized for you</p>
             </div>
           </div>
 
-        </div>
+          <div className="space-y-3">
+            <div className="flex items-center justify-between text-xs">
+              <span className="text-[#6B7280] dark:text-slate-400">Topic</span>
+              <span className="font-bold text-[#1F1B2D] dark:text-slate-100">Dynamic Programming</span>
+            </div>
+            <div className="flex items-center justify-between text-xs">
+              <span className="text-[#6B7280] dark:text-slate-400">Difficulty</span>
+              <span className="font-bold text-amber-600">Medium</span>
+            </div>
+            <div className="flex items-center justify-between text-xs">
+              <span className="text-[#6B7280] dark:text-slate-400">Est. Time</span>
+              <span className="font-bold text-[#1F1B2D] dark:text-slate-100 flex items-center gap-1">
+                <Timer className="w-3 h-3" />
+                45 min
+              </span>
+            </div>
+          </div>
+
+          <motion.button
+            onClick={() => {
+              showToast('Starting Dynamic Programming challenge!', 'info');
+              navigate('/practice');
+            }}
+            className="w-full py-3 rounded-xl bg-gradient-to-r from-[#5B4E80] to-[#6E56CF] hover:from-[#4C4070] hover:to-[#5B4E80] text-white text-xs font-bold shadow-md cursor-pointer"
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.95 }}
+            transition={{ duration: 0.15, ease: [0.16, 1, 0.3, 1] }}
+          >
+            Start Challenge
+          </motion.button>
+        </motion.div>
       </div>
 
     </div>

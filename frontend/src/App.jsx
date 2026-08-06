@@ -1,5 +1,6 @@
 import React, { memo } from 'react';
-import { Routes, Route, Navigate, Outlet } from 'react-router-dom';
+import { Routes, Route, Navigate, Outlet, useLocation } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
 import ProtectedRoute from './components/ProtectedRoute';
 import Sidebar from './components/Sidebar';
 import Header from './components/Header';
@@ -14,6 +15,22 @@ import ResumeAIOptimizer from './components/ResumeAIOptimizer';
 import Leaderboard from './components/Leaderboard';
 import AIChatbotWidget from './components/AIChatbotWidget';
 import Toast from './components/Toast';
+
+// Page transition wrapper for smooth route animations
+const PageTransition = memo(({ children }) => {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 8 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -8 }}
+      transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+    >
+      {children}
+    </motion.div>
+  );
+});
+
+PageTransition.displayName = 'PageTransition';
 
 // Layout shell for protected workspace routes
 const ProtectedShellLayout = memo(() => {
@@ -41,30 +58,34 @@ const ProtectedShellLayout = memo(() => {
 ProtectedShellLayout.displayName = 'ProtectedShellLayout';
 
 const AppContent = memo(() => {
+  const location = useLocation();
+
   return (
     <div className="relative min-h-screen bg-[#F9FAFC] dark:bg-[#090D16] text-[#1F1B2D] dark:text-slate-100 transition-colors duration-300">
-      <Routes>
-        {/* Public Unauthenticated Routes */}
-        <Route path="/" element={<LandingPage />} />
-        <Route path="/signin" element={<SignInModal />} />
-        <Route path="/signup" element={<SignUpModal />} />
+      <AnimatePresence mode="wait">
+        <Routes location={location} key={location.pathname}>
+          {/* Public Unauthenticated Routes */}
+          <Route path="/" element={<PageTransition><LandingPage /></PageTransition>} />
+          <Route path="/signin" element={<PageTransition><SignInModal /></PageTransition>} />
+          <Route path="/signup" element={<PageTransition><SignUpModal /></PageTransition>} />
 
-        {/* Protected Routes nested in ProtectedRoute & ProtectedShellLayout */}
-        <Route element={<ProtectedRoute />}>
-          <Route element={<ProtectedShellLayout />}>
-            <Route path="/dashboard" element={<StudentDashboard />} />
-            <Route path="/courses" element={<CourseCatalog />} />
-            <Route path="/courses/:courseId" element={<CourseDetailPage />} />
-            <Route path="/practice" element={<PracticeSandbox />} />
-            <Route path="/resume-ai" element={<ResumeAIOptimizer />} />
-            <Route path="/profile" element={<ResumeAIOptimizer />} />
-            <Route path="/leaderboard" element={<Leaderboard />} />
+          {/* Protected Routes nested in ProtectedRoute & ProtectedShellLayout */}
+          <Route element={<ProtectedRoute />}>
+            <Route element={<ProtectedShellLayout />}>
+              <Route path="/dashboard" element={<PageTransition><StudentDashboard /></PageTransition>} />
+              <Route path="/courses" element={<PageTransition><CourseCatalog /></PageTransition>} />
+              <Route path="/courses/:courseId" element={<PageTransition><CourseDetailPage /></PageTransition>} />
+              <Route path="/practice" element={<PageTransition><PracticeSandbox /></PageTransition>} />
+              <Route path="/resume-ai" element={<PageTransition><ResumeAIOptimizer /></PageTransition>} />
+              <Route path="/profile" element={<PageTransition><ResumeAIOptimizer /></PageTransition>} />
+              <Route path="/leaderboard" element={<PageTransition><Leaderboard /></PageTransition>} />
+            </Route>
           </Route>
-        </Route>
 
-        {/* Catch-all redirect to Landing Page */}
-        <Route path="*" element={<Navigate to="/" replace />} />
-      </Routes>
+          {/* Catch-all redirect to Landing Page */}
+          <Route path="*" element={<PageTransition><Navigate to="/" replace /></PageTransition>} />
+        </Routes>
+      </AnimatePresence>
 
       {/* Global Persistent AI Assistant Floating Widget (Bottom-Right Viewport Fixed) */}
       <AIChatbotWidget />

@@ -1,5 +1,6 @@
 import React, { useState, useMemo, memo } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import { 
   Search, 
   LayoutGrid, 
@@ -357,13 +358,15 @@ const CourseCatalog = memo(() => {
             const total = course.modulesCount || course.total || 20;
 
             return (
-              <div
+              <motion.div
                 key={course.id}
                 onClick={() => {
                   setSelectedCourse(course);
                   navigate(`/courses/${course.id}`);
                 }}
-                className={`group relative bg-white border border-[#E5E7EB] rounded-3xl p-6 shadow-xs hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between cursor-pointer ${styles.topBorder}`}
+                className={`group relative bg-white border border-[#E5E7EB] rounded-3xl p-6 shadow-xs flex flex-col justify-between cursor-pointer ${styles.topBorder}`}
+                whileHover={{ y: -4, boxShadow: '0 16px 32px -12px rgba(91, 78, 128, 0.2)' }}
+                transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
               >
                 <div>
                   {/* Category Badge & Bookmark Button */}
@@ -431,9 +434,11 @@ const CourseCatalog = memo(() => {
                       <span className="font-bold text-[#5B4E80]">{course.progress || 0}%</span>
                     </div>
                     <div className="h-2 w-full bg-[#F3F4F6] rounded-full overflow-hidden">
-                      <div
-                        className={`h-full ${styles.progressBar} rounded-full transition-all duration-500`}
-                        style={{ width: `${course.progress || 0}%` }}
+                      <motion.div
+                        className={`h-full ${styles.progressBar} rounded-full`}
+                        initial={{ width: 0 }}
+                        animate={{ width: `${course.progress || 0}%` }}
+                        transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
                       />
                     </div>
                   </div>
@@ -465,7 +470,7 @@ const CourseCatalog = memo(() => {
                     </button>
                   </div>
                 </div>
-              </div>
+              </motion.div>
             );
           })}
         </div>
@@ -477,13 +482,15 @@ const CourseCatalog = memo(() => {
             const isBookmarked = bookmarkedIds.includes(course.id);
 
             return (
-              <div
+              <motion.div
                 key={course.id}
                 onClick={() => {
                   setSelectedCourse(course);
                   navigate(`/courses/${course.id}`);
                 }}
-                className={`bg-white border border-[#E5E7EB] rounded-2xl p-4 md:p-5 shadow-xs hover:shadow-md transition-all flex flex-col md:flex-row md:items-center justify-between gap-4 cursor-pointer ${styles.topBorder}`}
+                className={`bg-white border border-[#E5E7EB] rounded-2xl p-4 md:p-5 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4 cursor-pointer ${styles.topBorder}`}
+                whileHover={{ y: -2, boxShadow: '0 8px 20px -6px rgba(91, 78, 128, 0.15)' }}
+                transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
               >
                 <div className="space-y-1.5 flex-1">
                   <div className="flex items-center gap-3">
@@ -506,9 +513,11 @@ const CourseCatalog = memo(() => {
                       <span>{course.progress || 0}%</span>
                     </div>
                     <div className="h-1.5 w-full bg-[#F3F4F6] rounded-full overflow-hidden">
-                      <div
+                      <motion.div
                         className={`h-full ${styles.progressBar} rounded-full`}
-                        style={{ width: `${course.progress || 0}%` }}
+                        initial={{ width: 0 }}
+                        animate={{ width: `${course.progress || 0}%` }}
+                        transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
                       />
                     </div>
                   </div>
@@ -543,7 +552,7 @@ const CourseCatalog = memo(() => {
                     <ChevronRight className="w-4 h-4" />
                   </button>
                 </div>
-              </div>
+              </motion.div>
             );
           })}
         </div>
