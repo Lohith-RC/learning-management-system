@@ -1,5 +1,6 @@
 import React, { useState, memo } from 'react';
 import { LEADERBOARD_USERS } from '../data/mockData';
+import { motion } from 'framer-motion';
 
 const Leaderboard = memo(() => {
   const [timeframe, setTimeframe] = useState('Weekly');
@@ -28,17 +29,20 @@ const Leaderboard = memo(() => {
         {/* Timeframe selector */}
         <div className="flex items-center gap-2 bg-white p-1 rounded-2xl border border-slate-200 shadow-sm">
           {['Weekly', 'Monthly', 'All Time'].map((tf) => (
-            <button
+            <motion.button
               key={tf}
               onClick={() => setTimeframe(tf)}
-              className={`px-4 py-1.5 rounded-xl text-xs font-bold transition-all ${
+              className={`px-4 py-1.5 rounded-xl text-xs font-bold ${
                 timeframe === tf
                   ? 'bg-indigo-600 text-white shadow-sm'
                   : 'text-slate-600 hover:text-slate-900'
               }`}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              transition={{ duration: 0.15, ease: [0.16, 1, 0.3, 1] }}
             >
               {tf}
-            </button>
+            </motion.button>
           ))}
         </div>
       </div>
@@ -46,7 +50,13 @@ const Leaderboard = memo(() => {
       {/* Top 3 Podium */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-4">
         {/* 2nd Place */}
-        <div className="glass-panel rounded-3xl p-6 border border-white/80 shadow-liquid flex flex-col items-center text-center relative order-2 md:order-1 mt-4 md:mt-6">
+        <motion.div
+          className="glass-panel rounded-3xl p-6 border border-white/80 shadow-liquid flex flex-col items-center text-center relative order-2 md:order-1 mt-4 md:mt-6"
+          whileHover={{ y: -4, boxShadow: '0 16px 32px -12px rgba(99, 102, 241, 0.2)' }}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+        >
           <span className="absolute -top-4 px-3.5 py-1 rounded-full bg-slate-200 text-slate-800 text-xs font-extrabold shadow-sm">
             🥈 2nd Place
           </span>
@@ -59,10 +69,16 @@ const Leaderboard = memo(() => {
             <span className="font-bold text-indigo-600">{top3[1].points} PTS</span>
             <span className="text-amber-600 font-medium">🔥 {top3[1].streak} Days</span>
           </div>
-        </div>
+        </motion.div>
 
         {/* 1st Place (Gold) */}
-        <div className="bg-gradient-to-b from-amber-50 to-white/90 rounded-3xl p-6 border-2 border-amber-300 shadow-xl flex flex-col items-center text-center relative order-1 md:order-2 transform md:-translate-y-3">
+        <motion.div
+          className="bg-gradient-to-b from-amber-50 to-white/90 rounded-3xl p-6 border-2 border-amber-300 shadow-xl flex flex-col items-center text-center relative order-1 md:order-2 transform md:-translate-y-3"
+          whileHover={{ y: -6, boxShadow: '0 24px 48px -12px rgba(251, 191, 36, 0.3)' }}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0, ease: [0.16, 1, 0.3, 1] }}
+        >
           <span className="absolute -top-4 px-4 py-1 rounded-full bg-amber-400 text-slate-950 text-xs font-black shadow-md">
             👑 1st Place Winner
           </span>
@@ -75,10 +91,16 @@ const Leaderboard = memo(() => {
             <span className="font-black text-indigo-600 text-sm">{top3[0].points} PTS</span>
             <span className="text-amber-600 font-bold">🔥 {top3[0].streak} Days</span>
           </div>
-        </div>
+        </motion.div>
 
         {/* 3rd Place */}
-        <div className="glass-panel rounded-3xl p-6 border border-white/80 shadow-liquid flex flex-col items-center text-center relative order-3 mt-4 md:mt-8">
+        <motion.div
+          className="glass-panel rounded-3xl p-6 border border-white/80 shadow-liquid flex flex-col items-center text-center relative order-3 mt-4 md:mt-8"
+          whileHover={{ y: -4, boxShadow: '0 16px 32px -12px rgba(251, 191, 36, 0.2)' }}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+        >
           <span className="absolute -top-4 px-3.5 py-1 rounded-full bg-amber-100 text-amber-900 text-xs font-extrabold shadow-sm">
             🥉 3rd Place
           </span>
@@ -91,7 +113,7 @@ const Leaderboard = memo(() => {
             <span className="font-bold text-indigo-600">{top3[2].points} PTS</span>
             <span className="text-amber-600 font-medium">🔥 {top3[2].streak} Days</span>
           </div>
-        </div>
+        </motion.div>
       </div>
 
       {/* Rankings Table */}

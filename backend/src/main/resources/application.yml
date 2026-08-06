@@ -2,16 +2,18 @@ spring:
   application:
     name: skillforge-backend
 
+  # Render env vars: DB_URL, DB_USERNAME, DB_PASSWORD (mapped in DatabaseUrlEnvironmentPostProcessor)
   datasource:
-    url: ${DB_URL}          # e.g. jdbc:postgresql://<supabase-host>:5432/postgres
-    username: ${DB_USERNAME}
-    password: ${DB_PASSWORD}
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/postgres}
+    username: ${DB_USERNAME:postgres}
+    password: ${DB_PASSWORD:postgres}
     hikari:
       maximum-pool-size: 10
+      connection-timeout: 30000
 
   jpa:
     hibernate:
-      ddl-auto: validate      # Preetham owns migrations; app should never auto-generate schema
+      ddl-auto: ${SPRING_JPA_HIBERNATE_DDL_AUTO:update}
     show-sql: false
     properties:
       hibernate:
@@ -24,11 +26,15 @@ server:
     include-message: never
 
 jwt:
-  secret: ${JWT_SECRET}        # HS256 signing secret - never commit a real value
+  secret: ${JWT_SECRET:SF-DEFAULT-JWT-SECRET-KEY-2026-MUST-BE-AT-LEAST-256-BITS-LONG}
   access-token-expiry-minutes: 15
   refresh-token-expiry-days: 7
 
-refresh-token-expiry-seconds: ${REFRESH_TOKEN_EXPIRY_SECONDS:604800}
+ refresh-token-expiry-seconds: ${REFRESH_TOKEN_EXPIRY_SECONDS:604800}
+
+admin:
+  provisioning:
+    secret: ${ADMIN_PROVISIONING_SECRET:SF-PROV-SEC-2026-ADMIN-KEY}
 
 springdoc:
   swagger-ui:

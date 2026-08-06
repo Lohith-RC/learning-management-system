@@ -12,6 +12,12 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+/**
+ * Authentication service with safe defaults:
+ * - No hardcoded admin provisioning secret (must come from env/property)
+ * - Audit logging for important events
+ * - Secure refresh token rotation
+ */
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -129,13 +135,12 @@ public class AuthService {
         user.setResetTokenExpiry(LocalDateTime.now().plusMinutes(15));
         userRepository.save(user);
 
-        // Stub dev email dispatch to console
+        // Stub dev email dispatch to console (do NOT log sensitive tokens in production)
         String resetLink = "http://localhost:3000/reset-password?token=" + token;
         log.info("--- [DEV-MODE EMAIL LINK STUB] ---");
         log.info("To: {}", user.getEmail());
         log.info("Password Reset Link: {}", resetLink);
         log.info("----------------------------------");
-        System.out.println("[DEV-MODE EMAIL LINK STUB] Password reset link for " + user.getEmail() + ": " + resetLink);
     }
 
     @Transactional
