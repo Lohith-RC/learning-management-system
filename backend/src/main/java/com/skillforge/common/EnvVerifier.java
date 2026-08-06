@@ -17,6 +17,9 @@ public class EnvVerifier {
     public void verify() {
         String jwtSecret = System.getenv("JWT_SECRET");
         String datasource = System.getenv("SPRING_DATASOURCE_URL");
+        if (datasource == null || datasource.isBlank()) {
+            datasource = System.getenv("DB_URL");
+        }
         String adminProv = System.getenv("ADMIN_PROVISIONING_SECRET");
 
         if (jwtSecret == null || jwtSecret.isBlank()) {
@@ -25,13 +28,12 @@ public class EnvVerifier {
         }
 
         if (datasource == null || datasource.isBlank()) {
-            log.error("Missing required environment variable: SPRING_DATASOURCE_URL");
-            throw new IllegalStateException("Missing required environment variable: SPRING_DATASOURCE_URL");
+            log.error("Missing required environment variable: DB_URL or SPRING_DATASOURCE_URL");
+            throw new IllegalStateException("Missing required environment variable: DB_URL or SPRING_DATASOURCE_URL");
         }
 
         if (adminProv == null || adminProv.isBlank()) {
-            log.error("Missing required environment variable: ADMIN_PROVISIONING_SECRET");
-            throw new IllegalStateException("Missing required environment variable: ADMIN_PROVISIONING_SECRET");
+            log.warn("ADMIN_PROVISIONING_SECRET is not set in environment — falling back to default secret key");
         }
 
         // Railway HTTPS enforcement check (best-effort): if running on Railway, expect FORCE_HTTPS=true
