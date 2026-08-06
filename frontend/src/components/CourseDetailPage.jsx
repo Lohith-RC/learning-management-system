@@ -164,7 +164,7 @@ const CourseDetailPage = memo(() => {
 
   const enrolledRoster = course.enrolledStudentsList || [
     'Preetham S Gowda',
-    'Lohith R C',
+    'Rakshith Y B',
     'Avani J C',
     'Rakshith Y B'
   ];
