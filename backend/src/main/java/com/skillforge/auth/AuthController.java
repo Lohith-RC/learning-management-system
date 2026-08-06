@@ -1,4 +1,4 @@
-﻿package com.skillforge.auth;
+package com.skillforge.auth;
 
 import com.skillforge.auth.dto.*;
 import jakarta.validation.Valid;
@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 @Slf4j
 @RestController
@@ -21,28 +21,18 @@ public class AuthController {
     private final HttpServletRequest request;
 
     @PostMapping("/register")
-<<<<<<< HEAD
     public ResponseEntity<AuthResponse> register(@Valid @RequestBody RegisterRequest requestBody) {
         log.info("Auth register attempt from IP={}", request.getRemoteAddr());
         AuthResponse response = authService.registerStudent(requestBody);
         log.info("Auth register succeeded for email={}", response.email());
-=======
-    public ResponseEntity<AuthResponse> register(@Valid @RequestBody RegisterRequest request) {
-        AuthResponse response = authService.registerStudent(request);
->>>>>>> fba9bbc1fddd5f0ee2eb8b1e79cfc2af5a58028f
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @PostMapping("/login")
-<<<<<<< HEAD
     public ResponseEntity<AuthResponse> login(@Valid @RequestBody LoginRequest requestBody) {
         log.info("Auth login attempt for email={} from IP={}", requestBody.email(), request.getRemoteAddr());
         AuthResponse response = authService.login(requestBody);
         log.info("Auth login succeeded for email={}", response.email());
-=======
-    public ResponseEntity<AuthResponse> login(@Valid @RequestBody LoginRequest request) {
-        AuthResponse response = authService.login(request);
->>>>>>> fba9bbc1fddd5f0ee2eb8b1e79cfc2af5a58028f
         return ResponseEntity.ok(response);
     }
 

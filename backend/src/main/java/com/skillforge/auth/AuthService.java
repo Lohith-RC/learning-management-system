@@ -1,4 +1,4 @@
-﻿package com.skillforge.auth;
+package com.skillforge.auth;
 
 import com.skillforge.auth.dto.*;
 import lombok.RequiredArgsConstructor;
@@ -28,13 +28,8 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
 
-<<<<<<< HEAD
-    @Value("${admin.provisioning.secret}")
-    private String adminProvisioningSecret; // required - no default allowed
-=======
     @Value("${admin.provisioning.secret:SF-PROV-SEC-2026-ADMIN-KEY}")
     private String adminProvisioningSecret;
->>>>>>> fba9bbc1fddd5f0ee2eb8b1e79cfc2af5a58028f
 
     @Value("${jwt.refresh-token-expiry-days:7}")
     private long refreshTokenExpiryDays;

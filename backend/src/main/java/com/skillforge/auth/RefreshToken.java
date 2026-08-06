@@ -1,4 +1,4 @@
-﻿package com.skillforge.auth;
+package com.skillforge.auth;
 
 import jakarta.persistence.*;
 import lombok.*;

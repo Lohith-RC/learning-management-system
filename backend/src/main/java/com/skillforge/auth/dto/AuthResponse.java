@@ -1,4 +1,4 @@
-﻿package com.skillforge.auth.dto;
+package com.skillforge.auth.dto;
 
 import com.skillforge.auth.User;
 

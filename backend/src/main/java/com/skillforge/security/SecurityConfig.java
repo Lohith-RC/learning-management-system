@@ -1,4 +1,4 @@
-﻿package com.skillforge.security;
+package com.skillforge.security;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -17,12 +17,9 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.List;
 
-<<<<<<< HEAD
 /**
  * Security configuration: stateless JWT with method security.
  */
-=======
->>>>>>> fba9bbc1fddd5f0ee2eb8b1e79cfc2af5a58028f
 @Configuration
 @EnableMethodSecurity
 @RequiredArgsConstructor
@@ -54,13 +51,7 @@ public class SecurityConfig {
                                 "/v3/api-docs/**",
                                 "/api/auth/**"
                         ).permitAll()
-<<<<<<< HEAD
-                        .requestMatchers(HttpMethod.GET, "/api/courses").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/courses/{id}").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/courses/{courseId}/modules").permitAll()
-=======
                         .requestMatchers(HttpMethod.GET, "/api/courses/**").permitAll()
->>>>>>> fba9bbc1fddd5f0ee2eb8b1e79cfc2af5a58028f
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
