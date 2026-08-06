@@ -8,7 +8,7 @@ const SignInModal = memo(() => {
   const { showToast } = useUI();
   const navigate = useNavigate();
 
-  const [email, setEmail] = useState('lohith_test@oralai.com');
+  const [email, setEmail] = useState('rakshith_test@oralai.com');
   const [password, setPassword] = useState('••••••••');
   const [rememberMe, setRememberMe] = useState(true);
   const [loading, setLoading] = useState(false);
@@ -26,7 +26,7 @@ const SignInModal = memo(() => {
     setLoading(true);
     setTimeout(() => {
       setLoading(false);
-      login('lohith.google@skillforge.edu', 'google_auth');
+      login('rakshith.google@skillforge.edu', 'google_auth');
       showToast('Signed in via Google OAuth successfully!', 'success');
     }, 500);
   };
@@ -112,7 +112,7 @@ const SignInModal = memo(() => {
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="lohith_test@oralai.com"
+                placeholder="rakshith_test@oralai.com"
                 className="w-full px-4 py-3 rounded-xl bg-[#F3F4F6] border-none text-xs text-[#1F1B2D] focus:outline-none focus:ring-2 focus:ring-[#5B4E80]"
               />
             </div>

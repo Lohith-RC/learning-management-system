@@ -1,7 +1,7 @@
 export const INITIAL_USER = {
-  name: "Lohith R C",
-  email: "lohith.rc@skillforge.edu",
-  avatar: "LR",
+  name: "Rakshith Y B",
+  email: "rakshith.yb@skillforge.edu",
+  avatar: "RY",
   role: "Aspiring SDE-1 / CS Senior",
   targetRole: "Full Stack Engineer",
   streak: 12,
@@ -118,7 +118,7 @@ export const COURSES_DATA = [
     duration: "40 Hours",
     rating: 4.9,
     studentsCount: 21000,
-    instructor: "Lohith R C & Dev Team",
+    instructor: "Rakshith Y B & Dev Team",
     image: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=600&q=80",
     tags: ["React.js", "Node.js", "TypeScript", "Docker"],
     description: "Build, containerize, and deploy full stack web applications with modern CI/CD pipelines.",
@@ -144,7 +144,7 @@ export const COURSES_DATA = [
     tags: ["Distributed Systems", "Raft", "Paxos", "Fault Tolerance"],
     description: "Deep dive into distributed consensus protocols, leader election, log replication, and Byzantine fault tolerance.",
     status: "New",
-    enrolledStudentsList: ["Lohith R C", "Preetham S Gowda", "Rakshith Y B"],
+    enrolledStudentsList: ["Rakshith Y B", "Preetham S Gowda", "Lohith R C"],
     modules: [
       { id: 1, title: "State Machine Replication Foundations", duration: "2h 30m", completed: false },
       { id: 2, title: "Raft Leader Election & Term Monotonic Counters", duration: "3h 45m", completed: false },
@@ -189,7 +189,7 @@ export const COURSES_DATA = [
     tags: ["Quantum Gates", "Qiskit", "Shor's Algorithm", "Grover Search"],
     description: "Explore quantum mechanical principles, qubit entanglement, quantum circuits, and Grover's search algorithm.",
     status: "New",
-    enrolledStudentsList: ["Shwetha B G", "Kanya V P", "Lohith R C"],
+    enrolledStudentsList: ["Shwetha B G", "Kanya V P", "Rakshith Y B"],
     modules: [
       { id: 1, title: "Qubits, Superposition & Bloch Sphere", duration: "2h 30m", completed: false },
       { id: 2, title: "Quantum Teleportation & Phase Estimation", duration: "3h 40m", completed: false }
@@ -253,7 +253,7 @@ export const COURSES_DATA = [
     tags: ["MLOps", "Kubeflow", "MLflow", "Model Monitoring"],
     description: "Build automated ML pipelines for feature stores, continuous training, model registries, and drift detection.",
     status: "New",
-    enrolledStudentsList: ["Lohith R C", "Kanya V P", "Preetham S Gowda"],
+    enrolledStudentsList: ["Rakshith Y B", "Kanya V P", "Preetham S Gowda"],
     modules: [
       { id: 1, title: "Feature Store Design & Data Lineage", duration: "2h 45m", completed: false }
     ]
@@ -316,7 +316,7 @@ export const COURSES_DATA = [
     tags: ["OAuth2", "OIDC", "JWT", "API Gateways"],
     description: "Implement zero-trust security architectures, token introspection, mTLS service communication, and PKCE auth flows.",
     status: "New",
-    enrolledStudentsList: ["Lohith R C", "Preetham S Gowda", "Shwetha B G"],
+    enrolledStudentsList: ["Rakshith Y B", "Preetham S Gowda", "Shwetha B G"],
     modules: [
       { id: 1, title: "OAuth2 Authorization Code Grant & PKCE Flow", duration: "2h 30m", completed: false }
     ]
@@ -358,7 +358,7 @@ export const COURSES_DATA = [
     tags: ["VLSI", "Verilog", "FPGA", "Static Timing Analysis"],
     description: "Design digital integrated circuits, synthesize hardware using Verilog HDL, and perform static timing analysis on FPGAs.",
     status: "New",
-    enrolledStudentsList: ["Kanya V P", "Monica KS", "Lohith R C"],
+    enrolledStudentsList: ["Kanya V P", "Monica KS", "Rakshith Y B"],
     modules: [
       { id: 1, title: "Combinational & Sequential Verilog Modeling", duration: "3h 15m", completed: false }
     ]
@@ -421,7 +421,7 @@ export const COURSES_DATA = [
     tags: ["Cryptography", "zk-SNARKs", "Elliptic Curves", "AES"],
     description: "Master modern cryptographic primitives, RSA/ECC mathematics, and non-interactive zero-knowledge proofs (zk-SNARKs).",
     status: "New",
-    enrolledStudentsList: ["Monica KS", "Lohith R C", "Preetham S Gowda"],
+    enrolledStudentsList: ["Monica KS", "Rakshith Y B", "Preetham S Gowda"],
     modules: [
       { id: 1, title: "Elliptic Curve Group Theory & Pairings", duration: "3h 20m", completed: false }
     ]
@@ -503,7 +503,7 @@ export const LEADERBOARD_USERS = [
   { rank: 3, name: "Rohan Mehta", avatar: "RM", college: "IIT Delhi", points: 4310, streak: 31, badge: "🥉 Master", problems: 198 },
   { rank: 4, name: "Sneha Reddy", avatar: "SR", college: "NIT Trichy", points: 3950, streak: 29, badge: "Expert", problems: 175 },
   { rank: 5, name: "Vikram Malhotra", avatar: "VM", college: "IIIT Hyderabad", points: 3810, streak: 24, badge: "Expert", problems: 162 },
-  { rank: 14, name: "Lohith R C (You)", avatar: "LR", college: "SkillForge Academy", points: 2450, streak: 12, badge: "Specialist", problems: 84, isCurrentUser: true }
+  { rank: 14, name: "Rakshith Y B (You)", avatar: "RY", college: "SkillForge Academy", points: 2450, streak: 12, badge: "Specialist", problems: 84, isCurrentUser: true }
 ];
 
 export const NOTIFICATIONS_DATA = [
